@@ -11,7 +11,10 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.example.smartlight.R;
+import com.example.smartlight.fragments.BoltFragment;
 import com.example.smartlight.fragments.HomeFragment;
+import com.example.smartlight.fragments.SettingFragment;
+import com.example.smartlight.fragments.UserFragment;
 import com.example.smartlight.interfaces.MyFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -43,17 +46,16 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.navigation_home:
-                Log.d("MinhLV", "Home tab");
                 loadFragment(new HomeFragment());
                 break;
             case R.id.navigation_setting:
-                Log.d("MinhLV", "Setting tab");
+                loadFragment(new SettingFragment());
                 break;
             case R.id.navigation_bolt:
-                Log.d("MinhLV", "Bolt tab");
+                loadFragment(new BoltFragment());
                 break;
             case R.id.navigation_user:
-                Log.d("MinhLV", "User tab");
+                loadFragment(new UserFragment());
                 break;
         }
         return true;

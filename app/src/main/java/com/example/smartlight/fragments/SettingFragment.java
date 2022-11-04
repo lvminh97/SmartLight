@@ -11,11 +11,11 @@ import android.view.ViewGroup;
 import com.example.smartlight.R;
 import com.example.smartlight.interfaces.MyFragment;
 
-public class UserFragment extends Fragment implements MyFragment {
+public class SettingFragment extends Fragment implements MyFragment {
 
     private View view;
 
-    public UserFragment() {
+    public SettingFragment() {
         // Required empty public constructor
     }
 
@@ -32,12 +32,12 @@ public class UserFragment extends Fragment implements MyFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_user, container, false);
+        view = inflater.inflate(R.layout.fragment_setting, container, false);
         return view;
     }
 
     @Override
     public String getTAG() {
-        return "User";
+        return "Setting";
     }
 }
