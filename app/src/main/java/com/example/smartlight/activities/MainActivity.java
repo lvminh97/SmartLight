@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private FrameLayout mainLayout;
     private BottomNavigationView bottomNavigationView;
 
-    private String FRAG_ID = "";
+    public static String FRAG_ID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
