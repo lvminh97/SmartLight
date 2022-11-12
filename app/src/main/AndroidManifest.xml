@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         <activity
-            android:name=".activitys.LoginActivity"
+            android:name=".activities.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,9 +18,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activitys.MainActivity"
-            android:exported="true">
-        </activity>
+            android:name=".activities.MainActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".activities.SettingActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>
