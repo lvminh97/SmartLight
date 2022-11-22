@@ -1,5 +1,6 @@
 package com.example.smartlight.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,10 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 
 import com.example.smartlight.R;
 import com.example.smartlight.activities.MainActivity;
+import com.example.smartlight.activities.SettingActivity;
 import com.example.smartlight.adapters.RoomAdapter;
 import com.example.smartlight.interfaces.MyFragment;
 import com.example.smartlight.models.Room;
@@ -21,10 +24,11 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment implements MyFragment, AdapterView.OnItemClickListener {
+public class HomeFragment extends Fragment implements MyFragment, AdapterView.OnItemClickListener, View.OnClickListener {
 
     private View view;
     private GridView gridview;
+    private Button settingBtn;
 
     private RoomAdapter roomAdapter;
 
@@ -49,6 +53,9 @@ public class HomeFragment extends Fragment implements MyFragment, AdapterView.On
         roomAdapter = new RoomAdapter(getActivity(), roomList);
         gridview.setAdapter(roomAdapter);
         gridview.setOnItemClickListener(this);
+
+        settingBtn = (Button) view.findViewById(R.id.btn_setting);
+        settingBtn.setOnClickListener(this);
     }
 
     @Override
@@ -67,5 +74,13 @@ public class HomeFragment extends Fragment implements MyFragment, AdapterView.On
         transaction.replace(R.id.layout_main, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view.getId() == R.id.btn_setting) {
+            Intent intent = new Intent(getActivity(), SettingActivity.class);
+            startActivity(intent);
+        }
     }
 }

@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import com.example.smartlight.R;
 import com.example.smartlight.fragments.BoltFragment;
 import com.example.smartlight.fragments.HomeFragment;
+import com.example.smartlight.fragments.SettingFragment;
 import com.example.smartlight.fragments.UserFragment;
 import com.example.smartlight.interfaces.MyFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -47,15 +48,14 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             case R.id.navigation_home:
                 loadFragment(new HomeFragment());
                 break;
+            case R.id.navigation_bolt:
+//                loadFragment(new BoltFragment());
+                break;
             case R.id.navigation_setting:
-//                loadFragment(new SettingFragment());
                 loadActivity(SettingActivity.class);
                 break;
-            case R.id.navigation_bolt:
-                loadFragment(new BoltFragment());
-                break;
             case R.id.navigation_user:
-                loadFragment(new UserFragment());
+//                loadFragment(new UserFragment());
                 break;
         }
         return true;
