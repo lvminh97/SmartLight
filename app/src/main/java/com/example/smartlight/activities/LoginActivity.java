@@ -7,9 +7,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.smartlight.R;
-
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.smartlight.R;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 

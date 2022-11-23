@@ -23,6 +23,8 @@
         <activity
             android:name=".activities.SettingActivity"
             android:exported="true"/>
+        <activity android:name=".activities.UserActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>

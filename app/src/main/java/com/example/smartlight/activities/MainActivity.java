@@ -1,20 +1,17 @@
 package com.example.smartlight.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.smartlight.R;
-import com.example.smartlight.fragments.BoltFragment;
 import com.example.smartlight.fragments.HomeFragment;
-import com.example.smartlight.fragments.SettingFragment;
-import com.example.smartlight.fragments.UserFragment;
 import com.example.smartlight.interfaces.MyFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -63,7 +60,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
+        if(FRAG_ID == "Home"){
+            loadActivity(LoginActivity.class);
+        }
     }
 
     private void loadFragment(Fragment fragment) {

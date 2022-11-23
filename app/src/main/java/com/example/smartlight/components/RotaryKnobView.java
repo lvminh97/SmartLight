@@ -5,25 +5,31 @@ import android.content.res.TypedArray;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
-import android.view.GestureDetector.OnGestureListener;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.ImageView.ScaleType;
+import android.widget.RelativeLayout;
+
 import androidx.core.view.GestureDetectorCompat;
+
 import com.example.smartlight.R;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class RotaryKnobView extends RelativeLayout implements OnGestureListener {
+    private View view;
     private GestureDetectorCompat gestureDetector;
     private int maxValue;
     private int minValue;
     @Nullable
     private RotaryKnobView.RotaryKnobListener listener;
     private int value;
+    private ImageView imgView;
     private Drawable knobDrawable;
     private float divider;
 
@@ -43,22 +49,23 @@ public final class RotaryKnobView extends RelativeLayout implements OnGestureLis
     }
 
     private void init(@NotNull Context context, @Nullable AttributeSet attrs) {
-        this.maxValue = 99;
-        this.value = 130;
+        this.maxValue = 100;
+        this.value = 0;
         this.divider = 300.0F / (float)(this.maxValue - this.minValue);
-        ++this.maxValue;
 
-        LayoutInflater.from(context).inflate(R.layout.rotary_knob_view, (ViewGroup)this, true);
+        view = LayoutInflater.from(context).inflate(R.layout.rotary_knob_view, (ViewGroup)this, true);
+        imgView = (ImageView)this.findViewById(R.id.knobImageView);
+        imgView.setScaleType(ScaleType.MATRIX);
+
         TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.RotaryKnobView, 0, 0);
-        TypedArray $this$apply = typedArray;
-
         try {
             this.minValue = typedArray.getInt(R.styleable.RotaryKnobView_minValue, 0);
             this.maxValue = typedArray.getInt(R.styleable.RotaryKnobView_maxValue, 100) + 1;
             this.divider = 300.0F / (float)(this.maxValue - this.minValue);
-            this.value = typedArray.getInt(R.styleable.RotaryKnobView_initialValue, 50);
+            this.value = typedArray.getInt(R.styleable.RotaryKnobView_initialValue, 0);
             this.knobDrawable = typedArray.getDrawable(R.styleable.RotaryKnobView_knobDrawable);
             ((ImageView)this.findViewById (R.id.knobImageView)).setImageDrawable(this.knobDrawable);
+            this.setKnobPosition ((this.value - this.minValue) * this.divider - 150);
         } finally {
             typedArray.recycle();
         }
@@ -79,8 +86,10 @@ public final class RotaryKnobView extends RelativeLayout implements OnGestureLis
         return this.value;
     }
 
-    public final void setValue(int var1) {
-        this.value = var1;
+    public final void setValue(int value) {
+        this.value = value;
+        float deg = (this.value - this.minValue) * this.divider - 150;
+        this.setKnobPosition (deg);
     }
 
     public boolean onScroll(@NotNull MotionEvent e1, @NotNull MotionEvent e2, float distanceX, float distanceY) {
@@ -99,8 +108,8 @@ public final class RotaryKnobView extends RelativeLayout implements OnGestureLis
     }
 
     private final float calculateAngle(float x, float y) {
-        double px = (double)(x / (float)this.getWidth()) - 0.5D;
-        double py = (double)((float)1 - y / (float)this.getHeight()) - 0.5D;
+        double px = (double)(x / (float)view.getWidth()) - 0.5D;
+        double py = (double)((float)1 - y / (float)view.getHeight()) - 0.5D;
         float angle = -((float)Math.toDegrees(Math.atan2(py, px))) + 90;
         if (angle > 180) {
             angle -= 360;
@@ -111,10 +120,10 @@ public final class RotaryKnobView extends RelativeLayout implements OnGestureLis
 
     private final void setKnobPosition(float deg) {
         Matrix matrix = new Matrix();
-        ImageView imgView = (ImageView)this.findViewById(R.id.knobImageView);
-        imgView.setScaleType(ScaleType.MATRIX);
-        matrix.postRotate(deg, this.getWidth() / 2, this.getHeight() / 2);
-        imgView = (ImageView)this.findViewById(R.id.knobImageView);
+        float w, h;
+        w = (getContext().getResources().getDimension(R.dimen.knob_width));
+        h = (getContext().getResources().getDimension(R.dimen.knob_height));
+        matrix.postRotate(deg, w / 2.0f, h / 2.0f);
         imgView.setImageMatrix(matrix);
     }
 

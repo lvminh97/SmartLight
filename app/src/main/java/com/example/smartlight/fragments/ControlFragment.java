@@ -4,24 +4,23 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.smartlight.R;
-import com.example.smartlight.adapters.RoomAdapter;
+import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.components.RotaryKnobView;
 import com.example.smartlight.interfaces.MyFragment;
-import com.example.smartlight.models.Room;
 
-import java.util.ArrayList;
-
-public class ControlFragment extends Fragment implements MyFragment, RotaryKnobView.RotaryKnobListener {
+public class ControlFragment extends Fragment implements MyFragment, View.OnClickListener, RotaryKnobView.RotaryKnobListener {
 
     private View view;
     RotaryKnobView tempKnob;
     TextView tempTv;
+    Button lightBtn, powerBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,7 +37,13 @@ public class ControlFragment extends Fragment implements MyFragment, RotaryKnobV
     private void initUI() {
         tempKnob = (RotaryKnobView) view.findViewById(R.id.knob);
         tempKnob.setListener(this);
+        tempKnob.setValue(30);
         tempTv = (TextView) view.findViewById(R.id.tv_temp);
+        tempTv.setText("30 oC");
+        lightBtn = (Button) view.findViewById(R.id.btn_light);
+        lightBtn.setOnClickListener(this);
+        powerBtn = (Button) view.findViewById(R.id.btn_power);
+        powerBtn.setOnClickListener(this);
     }
 
     @Override
@@ -47,7 +52,25 @@ public class ControlFragment extends Fragment implements MyFragment, RotaryKnobV
     }
 
     @Override
+    public void onClick(View view) {
+        if(view.getId() == R.id.btn_light) {
+            loadFragment(new LightFragment());
+        }
+        else if(view.getId() == R.id.btn_power){
+            loadFragment(new PowerFragment());
+        }
+    }
+
+    @Override
     public void onRotate(int value) {
-        tempTv.setText(value + "oC");
+        tempTv.setText(value + " oC");
+    }
+
+    private void loadFragment(Fragment fragment) {
+        MainActivity.FRAG_ID = ((MyFragment) fragment).getTAG();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.layout_main, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

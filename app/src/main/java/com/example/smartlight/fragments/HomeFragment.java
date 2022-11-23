@@ -2,11 +2,6 @@ package com.example.smartlight.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +9,15 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.smartlight.R;
 import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.activities.SettingActivity;
 import com.example.smartlight.adapters.RoomAdapter;
 import com.example.smartlight.interfaces.MyFragment;
 import com.example.smartlight.models.Room;
-import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
 
@@ -50,6 +47,7 @@ public class HomeFragment extends Fragment implements MyFragment, AdapterView.On
         roomList.add(new Room(1, null, "Meeting Room"));
         roomList.add(new Room(2, null, "Classroom"));
         roomList.add(new Room(3, null, "Conference Room"));
+        roomList.add(new Room(3, null, "Customize"));
         roomAdapter = new RoomAdapter(getActivity(), roomList);
         gridview.setAdapter(roomAdapter);
         gridview.setOnItemClickListener(this);

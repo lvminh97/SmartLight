@@ -54,14 +54,14 @@
 
         <com.example.smartlight.components.RotaryKnobView
             android:id="@+id/knob"
-            android:layout_width="0dp"
-            android:layout_height="150dp"
+            android:layout_width="@dimen/knob_width"
+            android:layout_height="@dimen/knob_height"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginLeft="20dp"
             app:knobDrawable="@drawable/ic_rotary_knob"
-            app:initialValue="50"
-            app:maxValue="100"
+            app:initialValue="0"
+            app:maxValue="70"
             app:minValue="0" />
 
         <TextView
@@ -78,7 +78,7 @@
             android:textColor="#FFEB3B"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:text="30 oC"/>
+            android:text="0 oC"/>
 
         <Button
             android:id="@+id/btn_light"
