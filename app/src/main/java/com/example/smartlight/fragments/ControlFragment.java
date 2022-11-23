@@ -1,5 +1,6 @@
 package com.example.smartlight.fragments;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,7 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
     private View view;
     RotaryKnobView tempKnob;
     TextView tempTv;
-    Button lightBtn, powerBtn;
+    Button lightBtn, powerBtn, setupBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,8 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         lightBtn.setOnClickListener(this);
         powerBtn = (Button) view.findViewById(R.id.btn_power);
         powerBtn.setOnClickListener(this);
+        setupBtn = (Button) view.findViewById(R.id.btn_setup);
+        setupBtn.setOnClickListener(this);
     }
 
     @Override
@@ -58,6 +61,13 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         }
         else if(view.getId() == R.id.btn_power){
             loadFragment(new PowerFragment());
+        }
+        else if(view.getId() == R.id.btn_setup){
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Thông báo")
+                    .setMessage("Cài đặt các thông số mặc định cho hệ thống thành công!")
+                    .setPositiveButton("OK", null)
+                    .show();
         }
     }
 
