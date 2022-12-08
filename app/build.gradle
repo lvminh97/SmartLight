@@ -29,6 +29,7 @@ android {
         viewBinding true
     }
     buildToolsVersion '31.0.0'
+    namespace 'com.example.smartlight'
 }
 
 dependencies {

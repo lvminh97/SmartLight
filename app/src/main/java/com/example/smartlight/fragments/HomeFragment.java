@@ -1,6 +1,5 @@
 package com.example.smartlight.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,13 +7,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.smartlight.R;
 import com.example.smartlight.activities.MainActivity;
-import com.example.smartlight.activities.SettingActivity;
 import com.example.smartlight.adapters.RoomAdapter;
 import com.example.smartlight.interfaces.MyFragment;
 import com.example.smartlight.models.Room;
@@ -26,6 +25,7 @@ public class HomeFragment extends Fragment implements MyFragment, AdapterView.On
     private View view;
     private GridView gridview;
     private Button settingBtn;
+    private ImageButton homeMenuBtn;
 
     private RoomAdapter roomAdapter;
 
@@ -41,7 +41,16 @@ public class HomeFragment extends Fragment implements MyFragment, AdapterView.On
         return view;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        homeMenuBtn.setImageResource(R.drawable.ic_baseline_home_24);
+    }
+
     private void initUI() {
+        homeMenuBtn = (ImageButton) getActivity().findViewById(R.id.btn_menu_home);
+        homeMenuBtn.setImageResource(R.drawable.ic_baseline_home_selected_24);
+
         gridview = (GridView) view.findViewById(R.id.grid_room);
         ArrayList<Room> roomList = new ArrayList<>();
         roomList.add(new Room(1, null, "Meeting Room"));
@@ -77,8 +86,7 @@ public class HomeFragment extends Fragment implements MyFragment, AdapterView.On
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.btn_setting) {
-            Intent intent = new Intent(getActivity(), SettingActivity.class);
-            startActivity(intent);
+            loadFragment(new SettingFragment());
         }
     }
 }

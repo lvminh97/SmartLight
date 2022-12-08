@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -19,9 +20,10 @@ import com.example.smartlight.interfaces.MyFragment;
 public class ControlFragment extends Fragment implements MyFragment, View.OnClickListener, RotaryKnobView.RotaryKnobListener {
 
     private View view;
-    RotaryKnobView tempKnob;
-    TextView tempTv;
-    Button lightBtn, powerBtn, setupBtn;
+    private RotaryKnobView tempKnob;
+    private TextView tempTv;
+    private Button lightBtn, powerBtn, setupBtn;
+    private ImageButton lightningMenuBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,7 +37,15 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         return view;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_24);
+    }
+
     private void initUI() {
+        lightningMenuBtn = getActivity().findViewById(R.id.btn_menu_lightning);
+        lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_selected_24);
         tempKnob = (RotaryKnobView) view.findViewById(R.id.knob);
         tempKnob.setListener(this);
         tempKnob.setValue(30);

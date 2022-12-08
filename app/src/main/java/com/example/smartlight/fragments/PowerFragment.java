@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ import java.util.List;
 public class PowerFragment extends Fragment implements MyFragment, SeekBar.OnSeekBarChangeListener {
 
     private View view;
+    private ImageButton lightningMenuBtn;
     private SeekBar powerSeek;
     private TextView powerTv;
     private BarChart powerGraph;
@@ -43,7 +45,16 @@ public class PowerFragment extends Fragment implements MyFragment, SeekBar.OnSee
         return view;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_24);
+    }
+
     private void initUI() throws ParseException {
+        lightningMenuBtn = getActivity().findViewById(R.id.btn_menu_lightning);
+        lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_selected_24);
+
         powerSeek = (SeekBar) view.findViewById(R.id.seek_power);
         powerSeek.setOnSeekBarChangeListener(this);
         powerTv = (TextView) view.findViewById(R.id.tv_power);
