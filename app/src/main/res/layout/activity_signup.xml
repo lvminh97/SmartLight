@@ -5,28 +5,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/background">
 
-    <ImageView
-        android:id="@+id/img_main_icon"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="80dp"
-        android:src="@drawable/lamp"
-        />
     <TextView
         android:id="@+id/tv_main_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/img_main_icon"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="100dp"
         android:textSize="30sp"
         android:textStyle="bold"
         android:textColor="#FFFFFF"
-        android:text="SMART LIGHT"/>
+        android:text="ĐĂNG KÝ"/>
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/layout_username"
         android:layout_width="match_parent"
@@ -62,12 +52,80 @@
             android:hint="Email"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/layout_password"
+        android:id="@+id/layout_fullname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_username"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/bg_login_edittext">
+        <ImageView
+            android:id="@+id/img_fullname"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/ic_baseline_person_24"/>
+        <EditText
+            android:id="@+id/ed_fullname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            app:layout_constraintLeft_toRightOf="@id/img_username"
+            app:layout_constraintTop_toBottomOf="@id/tv_main_title"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginRight="10dp"
+            android:paddingLeft="15dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:background="#FFFFFF"
+            android:hint="Họ tên"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/layout_mobile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_fullname"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/bg_login_edittext">
+        <ImageView
+            android:id="@+id/img_mobile"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/ic_baseline_phone_24"/>
+        <EditText
+            android:id="@+id/ed_mobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            app:layout_constraintLeft_toRightOf="@id/img_username"
+            app:layout_constraintTop_toBottomOf="@id/tv_main_title"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginRight="10dp"
+            android:paddingLeft="15dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:background="#FFFFFF"
+            android:hint="Số điện thoại"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/layout_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_mobile"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="20dp"
@@ -97,7 +155,7 @@
             android:inputType="textPassword"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
     <Button
-        android:id="@+id/btn_login"
+        android:id="@+id/btn_signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -110,40 +168,6 @@
         android:paddingBottom="12dp"
         android:background="@drawable/bg_login_button"
         android:textSize="16sp"
-        android:text="LOGIN"/>
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/layout_signup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layoutDirection="ltr"
-        android:weightSum="10"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginBottom="30dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:textAlignment="textEnd"
-            android:textColor="#FFFFFF"
-            android:text="Don't have an account?"/>
-        <Button
-            android:id="@+id/btn_signup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:paddingStart="20dp"
-            android:background="#00FFFFFF"
-            android:textAllCaps="false"
-            android:textAlignment="textStart"
-            android:textStyle="bold|italic"
-            android:textColor="#FFFFFF"
-            android:text="Sign up here"/>
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
+        android:text="Đăng ký"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

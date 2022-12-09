@@ -10,6 +10,9 @@
     $route->post("action", "setparam", "ActionController@setParamAction");
 
     $route->get("action", "get_devices", "ActionController@getDevices");
+    $route->get("action", "get_light", "ActionController@getLightData");
+
+    $route->post("action", "set_data", "ActionController@setDataAction");
 
     $route->process();
 ?>

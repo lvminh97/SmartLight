@@ -36,6 +36,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,6 +53,9 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
     private TextView lightTv;
     private LineChart lightGraph;
     private ImageButton lightningMenuBtn;
+
+    private List<String> times;
+    private List<Entry> entries;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,31 +97,13 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
         lightGraph.setDoubleTapToZoomEnabled(false);
         lightGraph.getAxisRight().setEnabled(false);
         lightGraph.getLegend().setEnabled(false);
-        
-        List<String> times = new ArrayList<String>();
-        times.add("21:30:00");
-        times.add("21:30:30");
-        times.add("21:31:00");
-        times.add("21:31:30");
-        times.add("21:32:00");
-        times.add("21:32:30");
-        times.add("21:33:00");
-        times.add("21:33:30");
-        times.add("21:34:00");
-        times.add("21:34:30");
+        lightGraph.getAxisLeft().setAxisMaximum(100);
+        lightGraph.getAxisLeft().setAxisMinimum(0);
 
-        List<Entry> entries = new ArrayList<Entry>();
-        entries.add(new Entry(0, 60));
-        entries.add(new Entry(1, 62));
-        entries.add(new Entry(2, 64));
-        entries.add(new Entry(3, 63));
-        entries.add(new Entry(4, 67));
-        entries.add(new Entry(5, 50));
-        entries.add(new Entry(6, 50));
-        entries.add(new Entry(7, 51));
-        entries.add(new Entry(8, 55));
-        entries.add(new Entry(9, 70));
+        getData();
+    }
 
+    private void updateChart(){
         LineDataSet dataSet = new LineDataSet(entries, "");
         LineData lineData = new LineData(dataSet);
         lightGraph.getXAxis().setValueFormatter(new ValueFormatter() {
@@ -130,31 +116,71 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
         lightGraph.invalidate();
     }
 
+    private void getData() {
+        RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.HOST + "/?action=get_light&id=" + Config.device.getId(),
+            new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONArray jsonArray = new JSONArray(response);
+                        times = new ArrayList<>();
+                        entries = new ArrayList<>();
+                        for(int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject json = jsonArray.getJSONObject(i);
+                            times.add(json.getString("time").split(" ")[1]);
+                            entries.add(new Entry(i, Integer.parseInt(json.getString("light"))));
+                            updateChart();
+                        }
+                    } catch (JSONException e) {
+                        if(Config.debug) {
+                            Log.d("MinhLV", e.getMessage());
+                        }
+                        e.printStackTrace();
+                    }
+                }
+            },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+//                    Log.d("MinhLV", error.getMessage());
+                }
+            })
+        {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+    }
+
     private void setControl(){
         RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.HOST + "/?action=setparam",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            if(Config.debug) {
-                                Log.d("MinhLV", response);
-                            }
-                            JSONObject jsonObject = new JSONObject(response);
-                        } catch (JSONException e) {
-                            if(Config.debug) {
-                                Log.d("MinhLV", e.getMessage());
-                            }
-                            e.printStackTrace();
+            new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        if(Config.debug) {
+                            Log.d("MinhLV", response);
                         }
+                        JSONObject jsonObject = new JSONObject(response);
+                    } catch (JSONException e) {
+                        if(Config.debug) {
+                            Log.d("MinhLV", e.getMessage());
+                        }
+                        e.printStackTrace();
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+                }
+            },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
 //                    Log.d("MinhLV", error.getMessage());
-                    }
-                })
+                }
+            })
         {
             @Override
             protected Map<String,String> getParams(){

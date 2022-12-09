@@ -33,7 +33,7 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     EditText usernameEd, passwordEd;
-    Button loginBtn;
+    Button loginBtn, signupBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +56,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             passwordEd.setText(password);
 
         loginBtn = (Button) findViewById(R.id.btn_login);
+        signupBtn = (Button) findViewById(R.id.btn_signup);
         loginBtn.setOnClickListener(this);
+        signupBtn.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.btn_login) {
             login();
+        }
+        else if(view.getId() == R.id.btn_signup) {
+            Intent intent = new Intent(this, SignupActivity.class);
+            startActivity(intent);
         }
     }
 

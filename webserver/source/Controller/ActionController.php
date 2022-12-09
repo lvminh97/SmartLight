@@ -37,5 +37,15 @@ class ActionController extends Controller{
         $deviceList = $this->deviceObj->getList($data["room_id"]);
         echo json_encode($deviceList);
     }
+
+    public function getLightData($data){
+        $lightData = $this->deviceObj->getLight($data["id"]);
+        echo json_encode($lightData);
+    }
+
+    public function setDataAction($data) {
+        $this->deviceObj->setData($data);
+        echo json_encode(["response" => "OK"]);
+    }
 }
 ?>

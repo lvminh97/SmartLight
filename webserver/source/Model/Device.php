@@ -33,5 +33,27 @@ class Device extends DB{
         ],
         "id='$id'");
     }
+
+    public function getLight($id){
+        $data = $this->execute("SELECT time,light FROM device_data WHERE id='$id' ORDER BY time DESC LIMIT 50");
+        $data = array_reverse($data);
+        return $data;
+    }
+
+    public function setData($data) {
+        if(!isset($data["time"]))
+            $data["time"] = date("Y-m-d H:i:s");
+        if(!isset($data["light"]))
+            $data["light"] = 0;
+        if(!isset($data["power"]))
+            $data["power"] = 0;
+
+        $this->insert("device_data", [
+            "id" => $data["id"],
+            "time" => $data["time"],
+            "light" => $data["light"],
+            "power" => $data["power"]
+        ]);
+    }
 }
 ?>

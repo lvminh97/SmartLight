@@ -72,9 +72,9 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_selected_24);
         tempKnob = (RotaryKnobView) view.findViewById(R.id.knob);
         tempKnob.setListener(this);
-        tempKnob.setValue(30);
+        tempKnob.setValue(0);
         tempTv = (TextView) view.findViewById(R.id.tv_temp);
-        tempTv.setText("30 oC");
+        tempTv.setText("0 oC");
         backBtn = (Button) view.findViewById(R.id.btn_back);
         backBtn.setOnClickListener(this);
         lightBtn = (Button) view.findViewById(R.id.btn_light);
