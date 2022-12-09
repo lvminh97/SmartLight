@@ -7,9 +7,7 @@ class ViewController extends Controller{
     }
 
     public function getIndex(){
-        getView("home", array('title' => "Home",
-                                'user' => array('fullname' => "User", 'role' => "Role_Host")
-                            ));
+        echo "index";
         return null;
     }
 }

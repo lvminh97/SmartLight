@@ -22,7 +22,7 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
     private View view;
     private RotaryKnobView tempKnob;
     private TextView tempTv;
-    private Button lightBtn, powerBtn, setupBtn;
+    private Button backBtn, lightBtn, powerBtn, setupBtn;
     private ImageButton lightningMenuBtn;
 
     @Override
@@ -51,6 +51,8 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         tempKnob.setValue(30);
         tempTv = (TextView) view.findViewById(R.id.tv_temp);
         tempTv.setText("30 oC");
+        backBtn = (Button) view.findViewById(R.id.btn_back);
+        backBtn.setOnClickListener(this);
         lightBtn = (Button) view.findViewById(R.id.btn_light);
         lightBtn.setOnClickListener(this);
         powerBtn = (Button) view.findViewById(R.id.btn_power);
@@ -66,7 +68,10 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.btn_light) {
+        if(view.getId() == R.id.btn_back){
+            loadFragment(new HomeFragment());
+        }
+        else if(view.getId() == R.id.btn_light) {
             loadFragment(new LightFragment());
         }
         else if(view.getId() == R.id.btn_power){

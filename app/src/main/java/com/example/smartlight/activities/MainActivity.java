@@ -3,6 +3,7 @@ package com.example.smartlight.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -103,6 +104,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .setPositiveButton("Đăng xuất", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            SharedPreferences prefs = getSharedPreferences("SMARTLIGHT", MODE_PRIVATE);
+                            prefs.edit().putStringSet("password", null).commit();
                             loadActivity(LoginActivity.class);
                         }
                     })

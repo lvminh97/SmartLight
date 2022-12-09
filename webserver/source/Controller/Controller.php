@@ -1,12 +1,12 @@
 <?php
 if(!defined('__CONTROLLER__')) define('__CONTROLLER__', 'true');
-require_once "Model/BaseModel.php";
+require_once "Model/User.php";
 
 class Controller{
-    protected $baseModelObj;
+    protected $userObj;
 
     public function __construct(){
-        $this->baseModelObj = new BaseModel;
+        $this->userObj = new User;
         //
         sessionInit();
         setTimeZone();

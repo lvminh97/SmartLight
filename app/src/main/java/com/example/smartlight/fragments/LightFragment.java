@@ -4,12 +4,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.smartlight.R;
+import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.components.RotaryKnobView;
 import com.example.smartlight.interfaces.MyFragment;
 import com.github.mikephil.charting.charts.LineChart;
@@ -22,9 +25,10 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LightFragment extends Fragment implements MyFragment, RotaryKnobView.RotaryKnobListener {
+public class LightFragment extends Fragment implements MyFragment, View.OnClickListener, RotaryKnobView.RotaryKnobListener {
 
     private View view;
+    private Button backBtn;
     private RotaryKnobView lightKnob;
     private TextView lightTv;
     private LineChart lightGraph;
@@ -51,6 +55,9 @@ public class LightFragment extends Fragment implements MyFragment, RotaryKnobVie
     private void initUI() {
         lightningMenuBtn = getActivity().findViewById(R.id.btn_menu_lightning);
         lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_selected_24);
+
+        backBtn = (Button) view.findViewById(R.id.btn_back);
+        backBtn.setOnClickListener(this);
 
         lightKnob = (RotaryKnobView) view.findViewById(R.id.knob_light);
         lightKnob.setListener(this);
@@ -102,6 +109,21 @@ public class LightFragment extends Fragment implements MyFragment, RotaryKnobVie
         });
         lightGraph.setData(lineData);
         lightGraph.invalidate();
+    }
+
+    private void loadFragment(Fragment fragment) {
+        MainActivity.FRAG_ID = ((MyFragment) fragment).getTAG();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.layout_main, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.btn_back) {
+            loadFragment(new ControlFragment());
+        }
     }
 
     @Override

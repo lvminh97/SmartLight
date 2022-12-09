@@ -4,13 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.smartlight.R;
+import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.interfaces.MyFragment;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -23,9 +26,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PowerFragment extends Fragment implements MyFragment, SeekBar.OnSeekBarChangeListener {
+public class PowerFragment extends Fragment implements MyFragment, View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
     private View view;
+    private Button backBtn;
     private ImageButton lightningMenuBtn;
     private SeekBar powerSeek;
     private TextView powerTv;
@@ -54,6 +58,9 @@ public class PowerFragment extends Fragment implements MyFragment, SeekBar.OnSee
     private void initUI() throws ParseException {
         lightningMenuBtn = getActivity().findViewById(R.id.btn_menu_lightning);
         lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_selected_24);
+
+        backBtn = (Button) view.findViewById(R.id.btn_back);
+        backBtn.setOnClickListener(this);
 
         powerSeek = (SeekBar) view.findViewById(R.id.seek_power);
         powerSeek.setOnSeekBarChangeListener(this);
@@ -110,6 +117,21 @@ public class PowerFragment extends Fragment implements MyFragment, SeekBar.OnSee
         });
 
         powerGraph.invalidate();
+    }
+
+    private void loadFragment(Fragment fragment) {
+        MainActivity.FRAG_ID = ((MyFragment) fragment).getTAG();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.layout_main, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.btn_back) {
+            loadFragment(new ControlFragment());
+        }
     }
 
     @Override

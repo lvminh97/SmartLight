@@ -6,8 +6,14 @@ class ActionController extends Controller{
         parent::__construct();
     }
     
+    public function signupAction($data) {
+        $resp = $this->userObj->signup($data);
+        echo json_encode($resp);
+    }
+
     public function loginAction($data){
-        echo json_encode($data);
+        $resp = $this->userObj->login($data);
+        echo json_encode($resp);
     }
 
 }
