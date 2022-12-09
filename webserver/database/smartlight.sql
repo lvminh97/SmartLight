@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Dec 08, 2022 at 01:02 PM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 7.4.33
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th12 09, 2022 lúc 04:57 PM
+-- Phiên bản máy phục vụ: 10.4.18-MariaDB
+-- Phiên bản PHP: 7.4.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,24 +18,24 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `smartlight`
+-- Cơ sở dữ liệu: `smartlight`
 --
-CREATE DATABASE IF NOT EXISTS `smartlight` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `smartlight`;
+--CREATE DATABASE IF NOT EXISTS `smartlight` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+--USE `smartlight`;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `device`
+-- Cấu trúc bảng cho bảng `device`
 --
--- Creation: Dec 08, 2022 at 11:55 AM
+-- Tạo: Th12 08, 2022 lúc 03:47 PM
 --
 
 CREATE TABLE `device` (
   `id` int(11) NOT NULL,
   `room_id` int(11) NOT NULL,
   `type` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- RELATIONSHIPS FOR TABLE `device`:
@@ -46,9 +46,9 @@ CREATE TABLE `device` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `device_control`
+-- Cấu trúc bảng cho bảng `device_control`
 --
--- Creation: Dec 08, 2022 at 11:55 AM
+-- Tạo: Th12 08, 2022 lúc 03:47 PM
 --
 
 CREATE TABLE `device_control` (
@@ -56,7 +56,7 @@ CREATE TABLE `device_control` (
   `temp` int(11) NOT NULL,
   `light` int(11) NOT NULL,
   `power` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- RELATIONSHIPS FOR TABLE `device_control`:
@@ -67,9 +67,9 @@ CREATE TABLE `device_control` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `device_data`
+-- Cấu trúc bảng cho bảng `device_data`
 --
--- Creation: Dec 08, 2022 at 11:56 AM
+-- Tạo: Th12 09, 2022 lúc 12:38 PM
 --
 
 CREATE TABLE `device_data` (
@@ -77,7 +77,7 @@ CREATE TABLE `device_data` (
   `time` datetime NOT NULL,
   `light` int(11) NOT NULL,
   `power` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- RELATIONSHIPS FOR TABLE `device_data`:
@@ -88,16 +88,16 @@ CREATE TABLE `device_data` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `room`
+-- Cấu trúc bảng cho bảng `room`
 --
--- Creation: Dec 08, 2022 at 11:55 AM
+-- Tạo: Th12 08, 2022 lúc 03:47 PM
 --
 
 CREATE TABLE `room` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- RELATIONSHIPS FOR TABLE `room`:
@@ -108,29 +108,30 @@ CREATE TABLE `room` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Cấu trúc bảng cho bảng `user`
 --
--- Creation: Dec 08, 2022 at 11:55 AM
+-- Tạo: Th12 09, 2022 lúc 12:38 PM
+-- Cập nhật lần cuối: Th12 09, 2022 lúc 12:38 PM
 --
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
-  `username` varchar(100) NOT NULL,
-  `mobile` varchar(11) NOT NULL,
   `email` varchar(255) NOT NULL,
+  `fullname` varchar(255) NOT NULL,
+  `mobile` varchar(11) NOT NULL,
   `password` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- RELATIONSHIPS FOR TABLE `user`:
 --
 
 --
--- Indexes for dumped tables
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `device`
+-- Chỉ mục cho bảng `device`
 --
 ALTER TABLE `device`
   ADD PRIMARY KEY (`id`),
@@ -138,21 +139,21 @@ ALTER TABLE `device`
   ADD KEY `room_id` (`room_id`);
 
 --
--- Indexes for table `device_control`
+-- Chỉ mục cho bảng `device_control`
 --
 ALTER TABLE `device_control`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
 
 --
--- Indexes for table `device_data`
+-- Chỉ mục cho bảng `device_data`
 --
 ALTER TABLE `device_data`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`id`,`time`),
   ADD KEY `id` (`id`);
 
 --
--- Indexes for table `room`
+-- Chỉ mục cho bảng `room`
 --
 ALTER TABLE `room`
   ADD PRIMARY KEY (`id`),
@@ -160,59 +161,59 @@ ALTER TABLE `room`
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indexes for table `user`
+-- Chỉ mục cho bảng `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `email` (`email`),
   ADD KEY `id` (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT cho các bảng đã đổ
 --
 
 --
--- AUTO_INCREMENT for table `device`
+-- AUTO_INCREMENT cho bảng `device`
 --
 ALTER TABLE `device`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `room`
+-- AUTO_INCREMENT cho bảng `room`
 --
 ALTER TABLE `room`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `user`
+-- AUTO_INCREMENT cho bảng `user`
 --
 ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Constraints for dumped tables
+-- Các ràng buộc cho các bảng đã đổ
 --
 
 --
--- Constraints for table `device`
+-- Các ràng buộc cho bảng `device`
 --
 ALTER TABLE `device`
   ADD CONSTRAINT `device_ibfk_1` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `device_control`
+-- Các ràng buộc cho bảng `device_control`
 --
 ALTER TABLE `device_control`
   ADD CONSTRAINT `device_control_ibfk_1` FOREIGN KEY (`id`) REFERENCES `device` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `device_data`
+-- Các ràng buộc cho bảng `device_data`
 --
 ALTER TABLE `device_data`
   ADD CONSTRAINT `device_data_ibfk_1` FOREIGN KEY (`id`) REFERENCES `device` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `room`
+-- Các ràng buộc cho bảng `room`
 --
 ALTER TABLE `room`
   ADD CONSTRAINT `room_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
