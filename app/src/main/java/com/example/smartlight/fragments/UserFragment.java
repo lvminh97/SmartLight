@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.smartlight.Config;
 import com.example.smartlight.R;
 import com.example.smartlight.interfaces.MyFragment;
 
@@ -15,6 +17,7 @@ public class UserFragment extends Fragment implements MyFragment {
 
     private View view;
     private ImageButton userMenuBtn;
+    private TextView fullnameTv, phoneTv, emailTv;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,14 @@ public class UserFragment extends Fragment implements MyFragment {
     private void initUI() {
         userMenuBtn = (ImageButton) getActivity().findViewById(R.id.btn_menu_user);
         userMenuBtn.setImageResource(R.drawable.ic_baseline_person_selected_24);
+
+        fullnameTv = (TextView) view.findViewById(R.id.tv_username);
+        emailTv = (TextView) view.findViewById(R.id.tv_email);
+        phoneTv = (TextView) view.findViewById(R.id.tv_phone);
+
+        fullnameTv.setText(Config.user.getFullname());
+        emailTv.setText(Config.user.getEmail());
+        phoneTv.setText(Config.user.getMobile());
     }
 
     @Override

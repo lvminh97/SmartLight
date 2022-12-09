@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -128,6 +129,10 @@ public final class RotaryKnobView extends RelativeLayout implements OnGestureLis
     }
 
     public boolean onTouchEvent(@NotNull MotionEvent event) {
+        if(this.listener != null){
+            RotaryKnobView.RotaryKnobListener listener = this.listener;
+            listener.onTouch(event);
+        }
         return this.gestureDetector.onTouchEvent(event) ? true : super.onTouchEvent(event);
     }
 
@@ -151,5 +156,6 @@ public final class RotaryKnobView extends RelativeLayout implements OnGestureLis
 
     public interface RotaryKnobListener {
         void onRotate(int var1);
+        void onTouch(@NotNull MotionEvent e);
     }
 }

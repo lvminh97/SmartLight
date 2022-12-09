@@ -15,11 +15,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.smartlight.Config;
 import com.example.smartlight.R;
 import com.example.smartlight.fragments.ControlFragment;
 import com.example.smartlight.fragments.HomeFragment;
 import com.example.smartlight.fragments.SettingFragment;
 import com.example.smartlight.interfaces.MyFragment;
+import com.example.smartlight.models.User;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
@@ -106,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         public void onClick(DialogInterface dialog, int which) {
                             SharedPreferences prefs = getSharedPreferences("SMARTLIGHT", MODE_PRIVATE);
                             prefs.edit().putStringSet("password", null).commit();
+                            Config.user = null;
                             loadActivity(LoginActivity.class);
                         }
                     })

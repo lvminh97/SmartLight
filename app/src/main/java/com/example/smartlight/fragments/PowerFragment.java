@@ -1,6 +1,7 @@
 package com.example.smartlight.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,13 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.smartlight.Config;
 import com.example.smartlight.R;
 import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.interfaces.MyFragment;
@@ -22,9 +30,14 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PowerFragment extends Fragment implements MyFragment, View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
@@ -66,8 +79,8 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
         powerSeek.setOnSeekBarChangeListener(this);
         powerTv = (TextView) view.findViewById(R.id.tv_power);
 
-        powerSeek.setProgress(20);
-        powerTv.setText("20W");
+        powerSeek.setProgress(Config.device.getPower());
+        powerTv.setText(Config.device.getPower() + "W");
 
         powerGraph = (BarChart) view.findViewById(R.id.graph_power);
         powerGraph.getDescription().setEnabled(false);
@@ -119,6 +132,44 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
         powerGraph.invalidate();
     }
 
+    private void setControl(int power){
+        RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.HOST + "/?action=setparam",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            if(Config.debug) {
+                                Log.d("MinhLV", response);
+                            }
+                            JSONObject jsonObject = new JSONObject(response);
+                        } catch (JSONException e) {
+                            if(Config.debug) {
+                                Log.d("MinhLV", e.getMessage());
+                            }
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+//                    Log.d("MinhLV", error.getMessage());
+                    }
+                })
+        {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("id", "" + Config.device.getId());
+                params.put("param", "power");
+                params.put("value", "" + power);
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+    }
+
     private void loadFragment(Fragment fragment) {
         MainActivity.FRAG_ID = ((MyFragment) fragment).getTAG();
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -153,5 +204,6 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         int progress = seekBar.getProgress();
+        setControl(progress);
     }
 }

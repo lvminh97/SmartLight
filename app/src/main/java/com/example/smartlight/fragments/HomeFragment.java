@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.smartlight.Config;
 import com.example.smartlight.R;
 import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.adapters.RoomAdapter;
@@ -52,12 +53,7 @@ public class HomeFragment extends Fragment implements MyFragment, AdapterView.On
         homeMenuBtn.setImageResource(R.drawable.ic_baseline_home_selected_24);
 
         gridview = (GridView) view.findViewById(R.id.grid_room);
-        ArrayList<Room> roomList = new ArrayList<>();
-        roomList.add(new Room(1, null, "Meeting Room"));
-        roomList.add(new Room(2, null, "Classroom"));
-        roomList.add(new Room(3, null, "Conference Room"));
-        roomList.add(new Room(3, null, "Customize"));
-        roomAdapter = new RoomAdapter(getActivity(), roomList);
+        roomAdapter = new RoomAdapter(getActivity(), (ArrayList<Room>) Config.roomList);
         gridview.setAdapter(roomAdapter);
         gridview.setOnItemClickListener(this);
 
@@ -72,6 +68,7 @@ public class HomeFragment extends Fragment implements MyFragment, AdapterView.On
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Config.room = Config.roomList.get(i);
         loadFragment(new ControlFragment());
     }
 

@@ -7,8 +7,7 @@ class ViewController extends Controller{
     }
 
     public function getIndex(){
-        echo "index";
-        return null;
+        getView("home");
     }
 }
 ?>

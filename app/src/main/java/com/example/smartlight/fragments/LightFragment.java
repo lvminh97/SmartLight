@@ -1,20 +1,34 @@
 package com.example.smartlight.fragments;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.smartlight.Config;
 import com.example.smartlight.R;
 import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.components.RotaryKnobView;
 import com.example.smartlight.interfaces.MyFragment;
+import com.example.smartlight.models.User;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -22,8 +36,13 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LightFragment extends Fragment implements MyFragment, View.OnClickListener, RotaryKnobView.RotaryKnobListener {
 
@@ -61,10 +80,10 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
 
         lightKnob = (RotaryKnobView) view.findViewById(R.id.knob_light);
         lightKnob.setListener(this);
-        lightKnob.setValue(40);
+        lightKnob.setValue(Config.device.getLight());
 
         lightTv = (TextView) view.findViewById(R.id.tv_light);
-        lightTv.setText("40%");
+        lightTv.setText(Config.device.getLight() + "%");
 
         lightGraph = (LineChart) view.findViewById(R.id.graph_light);
         lightGraph.getDescription().setEnabled(false);
@@ -111,6 +130,44 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
         lightGraph.invalidate();
     }
 
+    private void setControl(){
+        RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.HOST + "/?action=setparam",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            if(Config.debug) {
+                                Log.d("MinhLV", response);
+                            }
+                            JSONObject jsonObject = new JSONObject(response);
+                        } catch (JSONException e) {
+                            if(Config.debug) {
+                                Log.d("MinhLV", e.getMessage());
+                            }
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+//                    Log.d("MinhLV", error.getMessage());
+                    }
+                })
+        {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("id", "" + Config.device.getId());
+                params.put("param", "light");
+                params.put("value", "" + lightKnob.getValue());
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+    }
+
     private void loadFragment(Fragment fragment) {
         MainActivity.FRAG_ID = ((MyFragment) fragment).getTAG();
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -129,6 +186,13 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
     @Override
     public void onRotate(int var1) {
         lightTv.setText(var1 + "%");
+    }
+
+    @Override
+    public void onTouch(@NonNull MotionEvent e) {
+        if(e.getAction() == MotionEvent.ACTION_UP) {
+            setControl();
+        }
     }
 
     @Override

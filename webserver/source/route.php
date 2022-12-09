@@ -7,5 +7,9 @@
     $route->post("action", "signup", "ActionController@signupAction");
     $route->post("action", "login", "ActionController@loginAction");
 
+    $route->post("action", "setparam", "ActionController@setParamAction");
+
+    $route->get("action", "get_devices", "ActionController@getDevices");
+
     $route->process();
 ?>

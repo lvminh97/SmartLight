@@ -19,10 +19,14 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.smartlight.Config;
 import com.example.smartlight.R;
+import com.example.smartlight.models.Room;
+import com.example.smartlight.models.User;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,6 +79,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             SharedPreferences prefs = getSharedPreferences("SMARTLIGHT", MODE_PRIVATE);
                             prefs.edit().putString("username", usernameEd.getText().toString()).commit();
                             prefs.edit().putString("password", passwordEd.getText().toString()).commit();
+
+                            JSONObject userData = jsonObject.getJSONObject("user");
+                            Config.user = new User(Integer.parseInt(userData.getString("id")),
+                                                    userData.getString("fullname"),
+                                                    userData.getString("mobile"),
+                                                    userData.getString("email"));
+
+                            JSONArray roomJsonArray = jsonObject.getJSONArray("roomList");
+                            Config.roomList = new ArrayList<Room>();
+                            for(int i = 0; i < roomJsonArray.length(); i++) {
+                                JSONObject roomJson = roomJsonArray.getJSONObject(i);
+                                Config.roomList.add(new Room(Integer.parseInt(roomJson.getString("id")), null, roomJson.getString("name")));
+                            }
                             Intent intent = new Intent(getBaseContext(), MainActivity.class);
                             startActivity(intent);
                         }
@@ -86,6 +103,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
 
                     } catch (JSONException e) {
+                        Log.d("MinhLV", e.getMessage());
                         e.printStackTrace();
                     }
                 }
@@ -93,7 +111,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-//                    Log.d("MinhLV", error.getMessage());
+                    Log.d("MinhLV", error.getMessage());
                 }
             })
         {
