@@ -10,7 +10,7 @@ public class Config {
 
     public static boolean debug = true;
 
-    public static String HOST = "https://smartlight02.000webhostapp.com";
+    public static String HOST = "http://smartlight.c1.biz";
     public static User user = null;
     public static List<Room> roomList = null;
     public static Room room = null;
