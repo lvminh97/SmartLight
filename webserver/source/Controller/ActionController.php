@@ -43,8 +43,28 @@ class ActionController extends Controller{
         echo json_encode($lightData);
     }
 
+    public function getPowerData($data){
+        $powerData = $this->deviceObj->getPower($data["id"]);
+        echo json_encode($powerData);
+    }
+
     public function setDataAction($data) {
         $this->deviceObj->setData($data);
+        echo json_encode(["response" => "OK"]);
+    }
+
+    public function generateData($data){
+        $start = strtotime($data["start"]);
+        $end = $start + 4 * 86400;
+        while($start < $end) {
+            $this->deviceObj->setData([
+                "id" => $data["id"],
+                "time" => date("Y-m-d H:i:s", $start),
+                "light" => rand($data["min_light"], $data["max_light"]),
+                "power" => rand($data["min_power"], $data["max_power"])
+            ]);
+            $start += 30;
+        }
         echo json_encode(["response" => "OK"]);
     }
 }

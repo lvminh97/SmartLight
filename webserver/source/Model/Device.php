@@ -40,6 +40,28 @@ class Device extends DB{
         return $data;
     }
 
+    public function getPower($id){
+        $last_day = $this->execute("SELECT time from device_data ORDER BY time DESC LIMIT 1");
+        if(count($last_day) > 0)
+            $last_day = strtotime($last_day[0]["time"]);
+        else 
+            $last_day = strtotime(date("Y-m-d"));
+        $start_day = date("Y-m-d", $last_day - 4 * 86400);
+        $data = [];
+        $buffer = $this->select("device_data", "time,power", "time >= '$start_day'");
+        foreach($buffer as $row){
+            $cur_day = explode(" ", $row["time"])[0];
+            if(!isset($data[$cur_day]))
+                $data[$cur_day] = 0;
+            $data[$cur_day] += $row["power"] * 30;
+        }
+        foreach(array_keys($data) as $key){
+            $data[$key] /= 3600000;
+        }
+        $data = array_reverse($data);
+        return $data;
+    }
+
     public function setData($data) {
         if(!isset($data["time"]))
             $data["time"] = date("Y-m-d H:i:s");

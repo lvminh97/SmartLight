@@ -11,8 +11,10 @@
 
     $route->get("action", "get_devices", "ActionController@getDevices");
     $route->get("action", "get_light", "ActionController@getLightData");
+    $route->get("action", "get_power", "ActionController@getPowerData");
 
     $route->post("action", "set_data", "ActionController@setDataAction");
+    $route->post("action", "generate", "ActionController@generateData");
 
     $route->process();
 ?>
