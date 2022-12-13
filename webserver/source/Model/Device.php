@@ -48,9 +48,10 @@ class Device extends DB{
             $last_day = strtotime(date("Y-m-d"));
         $start_day = date("Y-m-d", $last_day - 4 * 86400);
         $data = [];
-        $buffer = $this->select("device_data", "time,power", "time >= '$start_day'");
+        $buffer = $this->select("device_data", "time,power", "id='$id' AND time >= '$start_day'");
         foreach($buffer as $row){
             $cur_day = explode(" ", $row["time"])[0];
+            $cur_day = date("d/m/Y", strtotime($cur_day));
             if(!isset($data[$cur_day]))
                 $data[$cur_day] = 0;
             $data[$cur_day] += $row["power"] * 30;
@@ -58,7 +59,6 @@ class Device extends DB{
         foreach(array_keys($data) as $key){
             $data[$key] /= 3600000;
         }
-        $data = array_reverse($data);
         return $data;
     }
 

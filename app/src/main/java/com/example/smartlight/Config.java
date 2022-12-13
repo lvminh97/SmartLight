@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Config {
 
-    public static boolean debug = true;
+    public static boolean debug = false;
 
     public static String HOST = "http://smartlight.c1.biz";
     public static User user = null;

@@ -2,6 +2,7 @@ package com.example.smartlight.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -99,26 +100,30 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
         lightGraph.getLegend().setEnabled(false);
         lightGraph.getAxisLeft().setAxisMaximum(100);
         lightGraph.getAxisLeft().setAxisMinimum(0);
-
-        getData();
-    }
-
-    private void updateChart(){
-        LineDataSet dataSet = new LineDataSet(entries, "");
-        LineData lineData = new LineData(dataSet);
         lightGraph.getXAxis().setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
                 return times.get((int) value);
             }
         });
+
+        getData();
+    }
+
+    private void updateChart(){
+        LineDataSet dataSet = new LineDataSet(entries, "");
+        dataSet.setDrawValues(false);
+        dataSet.setDrawCircles(false);
+        dataSet.setLineWidth(2);
+        dataSet.setColor(Color.argb(255, 255, 0, 0));
+        LineData lineData = new LineData(dataSet);
         lightGraph.setData(lineData);
         lightGraph.invalidate();
     }
 
     private void getData() {
         RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.HOST + "/?action=get_light&id=" + Config.device.getId(),
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Config.HOST + "/?action=get_light&id=" + Config.device.getId(),
             new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {

@@ -1,5 +1,6 @@
 package com.example.smartlight.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,14 +29,19 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +53,9 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
     private SeekBar powerSeek;
     private TextView powerTv;
     private BarChart powerGraph;
+
+    private List<String> times;
+    private List<BarEntry> entries;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,36 +99,10 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
         powerGraph.setDoubleTapToZoomEnabled(false);
         powerGraph.getAxisRight().setEnabled(false);
         powerGraph.getLegend().setEnabled(false);
-
-        List<String> day = new ArrayList<String>();
-        day.add("15/11");
-        day.add("16/11");
-        day.add("17/11");
-        day.add("18/11");
-        day.add("19/11");
-        day.add("20/11");
-
-        List<BarEntry> entries = new ArrayList<BarEntry>();
-        entries.add(new BarEntry(0, 100));
-        entries.add(new BarEntry(1, 120));
-        entries.add(new BarEntry(2, 160));
-        entries.add(new BarEntry(3, 140));
-        entries.add(new BarEntry(4, 110));
-        entries.add(new BarEntry(5, 130));
-
-        BarDataSet dataSet = new BarDataSet(entries, "Lượng tiêu thụ điện");
-        dataSet.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                return "$" + value;
-            }
-        });
-        BarData barData = new BarData(dataSet);
-        powerGraph.setData(barData);
         powerGraph.getXAxis().setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                return day.get((int) value);
+                return times.get((int) value).substring(0, 5);
             }
         });
         powerGraph.getAxisLeft().setValueFormatter(new ValueFormatter() {
@@ -129,7 +112,67 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
             }
         });
 
+        getData();
+    }
+
+    private void updateChart(){
+        BarDataSet dataSet = new BarDataSet(entries, "Lượng tiêu thụ điện");
+        dataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return "$" + value;
+            }
+        });
+        dataSet.setValueTextSize(10);
+        dataSet.setColor(Color.argb(255, 0, 0, 255));
+        BarData barData = new BarData(dataSet);
+        powerGraph.setData(barData);
+
         powerGraph.invalidate();
+    }
+
+    private void getData() {
+        RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Config.HOST + "/?action=get_power&id=" + Config.device.getId(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            if(Config.debug){
+                                Log.d("MinhLV", response);
+                            }
+                            JSONObject jsonObject = new JSONObject(response);
+                            int i = 0;
+                            times = new ArrayList<>();
+                            entries = new ArrayList<>();
+                            for (Iterator<String> it = jsonObject.keys(); it.hasNext(); ) {
+                                String key = it.next();
+                                times.add(key);
+                                entries.add(new BarEntry(i++, (int) (jsonObject.getDouble(key) * 20)));
+                            }
+                            updateChart();
+                        } catch (JSONException e) {
+                            if(Config.debug) {
+                                Log.d("MinhLV", e.getMessage());
+                            }
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+//                    Log.d("MinhLV", error.getMessage());
+                    }
+                })
+        {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        queue.add(stringRequest);
     }
 
     private void setControl(int power){
