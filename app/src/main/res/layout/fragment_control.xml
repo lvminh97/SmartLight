@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_control_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/custom_header">
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="0dp"
+            android:background="@drawable/return_icon"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/btn_back"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:text="Meeting Room"/>
+
+        <Button
+            android:id="@+id/btn_add"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginRight="0dp"
+            android:background="@drawable/plus"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_control1"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_control_header"
+        android:layout_marginTop="100dp">
+
+        <com.example.smartlight.components.RotaryKnobView
+            android:id="@+id/knob"
+            android:layout_width="@dimen/knob_width"
+            android:layout_height="@dimen/knob_height"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="20dp"
+            app:knobDrawable="@drawable/ic_rotary_knob"
+            app:initialValue="0"
+            app:maxValue="70"
+            app:minValue="0" />
+
+        <TextView
+            android:id="@+id/tv_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="@id/knob"
+            app:layout_constraintTop_toTopOf="@id/knob"
+            app:layout_constraintRight_toRightOf="@id/knob"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="55dp"
+            android:layout_marginRight="0dp"
+            android:textAlignment="center"
+            android:textColor="#FFEB3B"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:text="0 oC"/>
+
+        <Button
+            android:id="@+id/btn_light"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintLeft_toRightOf="@id/knob"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/bg_login_button"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:text="Độ sáng của\nbóng đèn"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/btn_power"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintTop_toBottomOf="@id/layout_control1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/bg_login_button"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:text="Công suất"/>
+
+    <Button
+        android:id="@+id/btn_setup"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_power"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/bg_login_button"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:text="Hệ thống sắp xếp bóng đèn indoor"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
