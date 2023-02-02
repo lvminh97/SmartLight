@@ -47,13 +47,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         usernameEd = (EditText) findViewById(R.id.ed_username);
         passwordEd = (EditText) findViewById(R.id.ed_password);
 
-        SharedPreferences prefs = getSharedPreferences("SMARTLIGHT", MODE_PRIVATE);
-        String username = prefs.getString("username", null);
-        String password = prefs.getString("password", null);
-        if(username != null)
-            usernameEd.setText(username);
-        if(password != null)
-            passwordEd.setText(password);
+        if(this.getIntent().getStringExtra("email") != null) {
+            usernameEd.setText(this.getIntent().getStringExtra("email"));
+        }
+        else {
+            SharedPreferences prefs = getSharedPreferences("SMARTLIGHT", MODE_PRIVATE);
+            String username = prefs.getString("username", null);
+            String password = prefs.getString("password", null);
+            if (username != null)
+                usernameEd.setText(username);
+            if (password != null)
+                passwordEd.setText(password);
+        }
 
         loginBtn = (Button) findViewById(R.id.btn_login);
         signupBtn = (Button) findViewById(R.id.btn_signup);
