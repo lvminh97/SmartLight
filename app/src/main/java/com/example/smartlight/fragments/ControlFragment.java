@@ -74,7 +74,7 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         tempKnob.setListener(this);
         tempKnob.setValue(0);
         tempTv = (TextView) view.findViewById(R.id.tv_temp);
-        tempTv.setText("0 oC");
+        tempTv.setText("0 °C");
         backBtn = (Button) view.findViewById(R.id.btn_back);
         backBtn.setOnClickListener(this);
         lightBtn = (Button) view.findViewById(R.id.btn_light);
@@ -114,7 +114,7 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
 
     @Override
     public void onRotate(int value) {
-        tempTv.setText(value + " oC");
+        tempTv.setText(value + " °C");
     }
 
     @Override
@@ -143,7 +143,7 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
                             Config.device.setLight(Integer.parseInt(deviceJson.getString("light")));
                             Config.device.setPower(Integer.parseInt(deviceJson.getString("power")));
                             tempKnob.setValue(Config.device.getTemp());
-                            tempTv.setText(Config.device.getTemp() + " oC");
+                            tempTv.setText(Config.device.getTemp() + " °C");
 
                         } catch (JSONException e) {
                             if(Config.debug) {
