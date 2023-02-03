@@ -39,13 +39,15 @@ public class SettingFragment extends Fragment implements MyFragment, View.OnClic
         settingMenuBtn.setImageResource(R.drawable.ic_baseline_settings_24);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        settingMenuBtn.setImageResource(R.drawable.ic_baseline_settings_selected_24);
+    }
+
     private void initUI() {
         settingMenuBtn = (ImageButton) getActivity().findViewById(R.id.btn_menu_setting);
         settingMenuBtn.setImageResource(R.drawable.ic_baseline_settings_selected_24);
-
-        userBtn = view.findViewById(R.id.btn_account);
-        userBtn.setOnClickListener(this);
-
     }
 
     private void loadFragment(Fragment fragment) {
@@ -63,8 +65,6 @@ public class SettingFragment extends Fragment implements MyFragment, View.OnClic
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.btn_account) {
-            loadFragment(new UserFragment());
-        }
+
     }
 }

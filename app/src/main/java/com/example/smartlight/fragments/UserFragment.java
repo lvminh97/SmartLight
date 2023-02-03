@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.smartlight.Config;
+import com.example.smartlight.Factory;
 import com.example.smartlight.R;
 import com.example.smartlight.interfaces.MyFragment;
 
@@ -38,6 +38,12 @@ public class UserFragment extends Fragment implements MyFragment {
         userMenuBtn.setImageResource(R.drawable.ic_baseline_person_24);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        userMenuBtn.setImageResource(R.drawable.ic_baseline_person_selected_24);
+    }
+
     private void initUI() {
         userMenuBtn = (ImageButton) getActivity().findViewById(R.id.btn_menu_user);
         userMenuBtn.setImageResource(R.drawable.ic_baseline_person_selected_24);
@@ -46,9 +52,9 @@ public class UserFragment extends Fragment implements MyFragment {
         emailTv = (TextView) view.findViewById(R.id.tv_email);
         phoneTv = (TextView) view.findViewById(R.id.tv_phone);
 
-        fullnameTv.setText(Config.user.getFullname());
-        emailTv.setText(Config.user.getEmail());
-        phoneTv.setText(Config.user.getMobile());
+        fullnameTv.setText(Factory.user.getFullname());
+        emailTv.setText(Factory.user.getEmail());
+        phoneTv.setText(Factory.user.getMobile());
     }
 
     @Override

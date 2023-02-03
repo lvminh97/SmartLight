@@ -17,7 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.smartlight.Config;
+import com.example.smartlight.Factory;
 import com.example.smartlight.R;
 import com.example.smartlight.models.Room;
 import com.example.smartlight.models.User;
@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void login() {
         RequestQueue queue = Volley.newRequestQueue(getBaseContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.HOST + "/?action=login",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Factory.HOST + "/?action=login",
             new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -92,16 +92,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             prefs.edit().putString("password", passwordEd.getText().toString()).commit();
 
                             JSONObject userData = jsonObject.getJSONObject("user");
-                            Config.user = new User(Integer.parseInt(userData.getString("id")),
+                            Factory.user = new User(Integer.parseInt(userData.getString("id")),
                                                     userData.getString("fullname"),
                                                     userData.getString("mobile"),
                                                     userData.getString("email"));
 
                             JSONArray roomJsonArray = jsonObject.getJSONArray("roomList");
-                            Config.roomList = new ArrayList<Room>();
+                            Factory.roomList = new ArrayList<Room>();
                             for(int i = 0; i < roomJsonArray.length(); i++) {
                                 JSONObject roomJson = roomJsonArray.getJSONObject(i);
-                                Config.roomList.add(new Room(Integer.parseInt(roomJson.getString("id")), null, roomJson.getString("name")));
+                                Factory.roomList.add(new Room(Integer.parseInt(roomJson.getString("id")), null, roomJson.getString("name")));
                             }
                             Intent intent = new Intent(getBaseContext(), MainActivity.class);
                             startActivity(intent);

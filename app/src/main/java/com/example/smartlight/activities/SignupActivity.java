@@ -1,7 +1,6 @@
 package com.example.smartlight.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,16 +17,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.smartlight.Config;
+import com.example.smartlight.Factory;
 import com.example.smartlight.R;
-import com.example.smartlight.models.Room;
-import com.example.smartlight.models.User;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -74,7 +69,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         }
         //
         RequestQueue queue = Volley.newRequestQueue(getBaseContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.HOST + "/?action=signup",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Factory.HOST + "/?action=signup",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

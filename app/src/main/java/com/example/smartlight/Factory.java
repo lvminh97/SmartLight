@@ -6,7 +6,7 @@ import com.example.smartlight.models.User;
 
 import java.util.List;
 
-public class Config {
+public class Factory {
 
     public static boolean debug = false;
 

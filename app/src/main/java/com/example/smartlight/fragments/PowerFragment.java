@@ -20,7 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.smartlight.Config;
+import com.example.smartlight.Factory;
 import com.example.smartlight.R;
 import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.interfaces.MyFragment;
@@ -29,12 +29,8 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -77,6 +73,12 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
         lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_24);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_selected_24);
+    }
+
     private void initUI() throws ParseException {
         lightningMenuBtn = getActivity().findViewById(R.id.btn_menu_lightning);
         lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_selected_24);
@@ -88,8 +90,8 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
         powerSeek.setOnSeekBarChangeListener(this);
         powerTv = (TextView) view.findViewById(R.id.tv_power);
 
-        powerSeek.setProgress(Config.device.getPower());
-        powerTv.setText(Config.device.getPower() + "W");
+        powerSeek.setProgress(Factory.device.getPower());
+        powerTv.setText(Factory.device.getPower() + "W");
 
         powerGraph = (BarChart) view.findViewById(R.id.graph_power);
         powerGraph.getDescription().setEnabled(false);
@@ -133,12 +135,12 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
 
     private void getData() {
         RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Config.HOST + "/?action=get_power&id=" + Config.device.getId(),
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Factory.HOST + "/?action=get_power&id=" + Factory.device.getId(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            if(Config.debug){
+                            if(Factory.debug){
                                 Log.d("MinhLV", response);
                             }
                             JSONObject jsonObject = new JSONObject(response);
@@ -152,7 +154,7 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
                             }
                             updateChart();
                         } catch (JSONException e) {
-                            if(Config.debug) {
+                            if(Factory.debug) {
                                 Log.d("MinhLV", e.getMessage());
                             }
                             e.printStackTrace();
@@ -177,17 +179,17 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
 
     private void setControl(int power){
         RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.HOST + "/?action=setparam",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Factory.HOST + "/?action=setparam",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            if(Config.debug) {
+                            if(Factory.debug) {
                                 Log.d("MinhLV", response);
                             }
                             JSONObject jsonObject = new JSONObject(response);
                         } catch (JSONException e) {
-                            if(Config.debug) {
+                            if(Factory.debug) {
                                 Log.d("MinhLV", e.getMessage());
                             }
                             e.printStackTrace();
@@ -204,7 +206,7 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
-                params.put("id", "" + Config.device.getId());
+                params.put("id", "" + Factory.device.getId());
                 params.put("param", "power");
                 params.put("value", "" + power);
                 return params;

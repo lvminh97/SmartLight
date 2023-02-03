@@ -15,13 +15,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.smartlight.Config;
+import com.example.smartlight.Factory;
 import com.example.smartlight.R;
 import com.example.smartlight.fragments.ControlFragment;
 import com.example.smartlight.fragments.HomeFragment;
 import com.example.smartlight.fragments.SettingFragment;
+import com.example.smartlight.fragments.UserFragment;
 import com.example.smartlight.interfaces.MyFragment;
-import com.example.smartlight.models.User;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
@@ -48,9 +48,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         homeBtn.setOnClickListener(this);
         homeBtn.setOnTouchListener(this);
+        lightningBtn.setOnClickListener(this);
         lightningBtn.setOnTouchListener(this);
         settingBtn.setOnClickListener(this);
         settingBtn.setOnTouchListener(this);
+        userBtn.setOnClickListener(this);
         userBtn.setOnTouchListener(this);
 
         loadFragment(new HomeFragment());
@@ -61,9 +63,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(v.getId() == R.id.btn_menu_home) {
             loadFragment(new HomeFragment());
         }
-//        else if(v.getId() == R.id.btn_menu_setting) {
-//            loadFragment(new SettingFragment());
-//        }
+        else if(v.getId() == R.id.btn_menu_setting) {
+            loadFragment(new SettingFragment());
+        }
+        else if(v.getId() == R.id.btn_menu_user) {
+            loadFragment(new UserFragment());
+        }
     }
 
     @Override
@@ -75,24 +80,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 else if(event.getAction() == MotionEvent.ACTION_UP)
                     homeBtn.setBackgroundColor(Color.argb(255, 255, 255, 255));
                 break;
-//            case R.id.btn_menu_lightning:
-//                if(event.getAction() == MotionEvent.ACTION_DOWN)
-//                    lightningBtn.setBackgroundColor(Color.argb(255, 240, 240, 240));
-//                else if(event.getAction() == MotionEvent.ACTION_UP)
-//                    lightningBtn.setBackgroundColor(Color.argb(255, 255, 255, 255));
-//                break;
-//            case R.id.btn_menu_setting:
-//                if(event.getAction() == MotionEvent.ACTION_DOWN)
-//                    settingBtn.setBackgroundColor(Color.argb(255, 240, 240, 240));
-//                else if(event.getAction() == MotionEvent.ACTION_UP)
-//                    settingBtn.setBackgroundColor(Color.argb(255, 255, 255, 255));
-//                break;
-//            case R.id.btn_menu_user:
-//                if(event.getAction() == MotionEvent.ACTION_DOWN)
-//                    userBtn.setBackgroundColor(Color.argb(255, 240, 240, 240));
-//                else if(event.getAction() == MotionEvent.ACTION_UP)
-//                    userBtn.setBackgroundColor(Color.argb(255, 255, 255, 255));
-//                break;
+            case R.id.btn_menu_lightning:
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                    lightningBtn.setBackgroundColor(Color.argb(255, 240, 240, 240));
+                else if(event.getAction() == MotionEvent.ACTION_UP)
+                    lightningBtn.setBackgroundColor(Color.argb(255, 255, 255, 255));
+                break;
+            case R.id.btn_menu_setting:
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                    settingBtn.setBackgroundColor(Color.argb(255, 240, 240, 240));
+                else if(event.getAction() == MotionEvent.ACTION_UP)
+                    settingBtn.setBackgroundColor(Color.argb(255, 255, 255, 255));
+                break;
+            case R.id.btn_menu_user:
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                    userBtn.setBackgroundColor(Color.argb(255, 240, 240, 240));
+                else if(event.getAction() == MotionEvent.ACTION_UP)
+                    userBtn.setBackgroundColor(Color.argb(255, 255, 255, 255));
+                break;
         }
         return false;
     }
@@ -108,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         public void onClick(DialogInterface dialog, int which) {
                             SharedPreferences prefs = getSharedPreferences("SMARTLIGHT", MODE_PRIVATE);
                             prefs.edit().putStringSet("password", null).commit();
-                            Config.user = null;
+                            Factory.user = null;
                             loadActivity(LoginActivity.class);
                         }
                     })
