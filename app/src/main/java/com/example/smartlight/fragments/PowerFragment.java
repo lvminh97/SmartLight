@@ -1,5 +1,6 @@
 package com.example.smartlight.fragments;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,6 +44,7 @@ import java.util.Map;
 
 public class PowerFragment extends Fragment implements MyFragment, View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
+    private ProgressDialog loadingDialog = null;
     private View view;
     private Button backBtn;
     private ImageButton lightningMenuBtn;
@@ -114,6 +116,11 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
             }
         });
 
+        loadingDialog = new ProgressDialog(getActivity());
+        loadingDialog.setMessage("");
+        loadingDialog.setIndeterminate(true);
+        loadingDialog.show();
+
         getData();
     }
 
@@ -143,6 +150,7 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
                             if(Factory.debug){
                                 Log.d("MinhLV", response);
                             }
+                            loadingDialog.dismiss();
                             JSONObject jsonObject = new JSONObject(response);
                             int i = 0;
                             times = new ArrayList<>();

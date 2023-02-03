@@ -1,5 +1,6 @@
 package com.example.smartlight.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +31,7 @@ import java.util.regex.Pattern;
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private ProgressDialog loadingDialog = null;
     private EditText emailEd, fullnameEd, phoneEd, passwordEd;
     private Button signupBtn;
 
@@ -103,6 +105,10 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 return params;
             }
         };
+        loadingDialog = new ProgressDialog(this);
+        loadingDialog.setMessage("");
+        loadingDialog.setIndeterminate(true);
+        loadingDialog.show();
         queue.add(stringRequest);
     }
 

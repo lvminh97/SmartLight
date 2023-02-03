@@ -39,6 +39,7 @@ public class HomeFragment extends Fragment implements MyFragment, AdapterView.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
         initUI();
+        Factory.device = null;
         return view;
     }
 

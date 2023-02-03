@@ -1,6 +1,7 @@
 package com.example.smartlight.fragments;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ import java.util.Map;
 
 public class ControlFragment extends Fragment implements MyFragment, View.OnClickListener, RotaryKnobView.RotaryKnobListener {
 
+    private ProgressDialog loadingDialog = null;
     private View view;
     private RotaryKnobView tempKnob;
     private TextView tempTv;
@@ -84,6 +86,10 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         setupBtn = (Button) view.findViewById(R.id.btn_setup);
         setupBtn.setOnClickListener(this);
 
+        loadingDialog = new ProgressDialog(getActivity());
+        loadingDialog.setMessage("");
+        loadingDialog.setIndeterminate(true);
+
         getDevice();
     }
 
@@ -125,48 +131,55 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
     }
 
     private void getDevice() {
-        RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Factory.HOST + "/?action=get_devices&room_id=" + Factory.room.getId(),
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            if(Factory.debug) {
-                                Log.d("MinhLV", response);
-                            }
-                            JSONArray jsonArray = new JSONArray(response);
-                            JSONObject deviceJson = jsonArray.getJSONObject(0);
-                            Factory.device = new Device(Integer.parseInt(deviceJson.getString("id")),
-                                                        Integer.parseInt(deviceJson.getString("room_id")),
-                                                        Integer.parseInt(deviceJson.getString("type")));
-                            Factory.device.setTemp(Integer.parseInt(deviceJson.getString("temp")));
-                            Factory.device.setLight(Integer.parseInt(deviceJson.getString("light")));
-                            Factory.device.setPower(Integer.parseInt(deviceJson.getString("power")));
-                            tempKnob.setValue(Factory.device.getTemp());
-                            tempTv.setText(Factory.device.getTemp() + " °C");
+        if(Factory.device == null) {
+            RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, Factory.HOST + "/?action=get_devices&room_id=" + Factory.room.getId(),
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                loadingDialog.dismiss();
+                                if (Factory.debug) {
+                                    Log.d("MinhLV", response);
+                                }
+                                JSONArray jsonArray = new JSONArray(response);
+                                JSONObject deviceJson = jsonArray.getJSONObject(0);
+                                Factory.device = new Device(Integer.parseInt(deviceJson.getString("id")),
+                                        Integer.parseInt(deviceJson.getString("room_id")),
+                                        Integer.parseInt(deviceJson.getString("type")));
+                                Factory.device.setTemp(Integer.parseInt(deviceJson.getString("temp")));
+                                Factory.device.setLight(Integer.parseInt(deviceJson.getString("light")));
+                                Factory.device.setPower(Integer.parseInt(deviceJson.getString("power")));
+                                tempKnob.setValue(Factory.device.getTemp());
+                                tempTv.setText(Factory.device.getTemp() + " °C");
 
-                        } catch (JSONException e) {
-                            if(Factory.debug) {
-                                Log.d("MinhLV", e.getMessage());
+                            } catch (JSONException e) {
+                                if (Factory.debug) {
+                                    Log.d("MinhLV", e.getMessage());
+                                }
+                                e.printStackTrace();
                             }
-                            e.printStackTrace();
                         }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-//                    Log.d("MinhLV", error.getMessage());
-                    }
-                })
-        {
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                return params;
-            }
-        };
-        queue.add(stringRequest);
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //                    Log.d("MinhLV", error.getMessage());
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    return params;
+                }
+            };
+            loadingDialog.show();
+            queue.add(stringRequest);
+        }
+        else {
+            tempKnob.setValue(Factory.device.getTemp());
+            tempTv.setText(Factory.device.getTemp() + " °C");
+        }
     }
 
     private void setControl(){

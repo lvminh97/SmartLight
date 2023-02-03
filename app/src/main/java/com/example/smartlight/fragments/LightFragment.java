@@ -1,5 +1,6 @@
 package com.example.smartlight.fragments;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,6 +45,7 @@ import java.util.Map;
 
 public class LightFragment extends Fragment implements MyFragment, View.OnClickListener, RotaryKnobView.RotaryKnobListener {
 
+    private ProgressDialog loadingDialog = null;
     private View view;
     private Button backBtn;
     private RotaryKnobView lightKnob;
@@ -109,6 +111,10 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
             }
         });
 
+        loadingDialog = new ProgressDialog(getActivity());
+        loadingDialog.setMessage("");
+        loadingDialog.setIndeterminate(true);
+
         getData();
     }
 
@@ -130,6 +136,7 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
                 @Override
                 public void onResponse(String response) {
                     try {
+                        loadingDialog.dismiss();
                         JSONArray jsonArray = new JSONArray(response);
                         times = new ArrayList<>();
                         entries = new ArrayList<>();
@@ -160,6 +167,7 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
                 return params;
             }
         };
+        loadingDialog.show();
         queue.add(stringRequest);
     }
 
