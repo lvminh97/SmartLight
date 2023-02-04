@@ -8,10 +8,28 @@ class Device extends DB{
         parent::__construct();
     }
 
+    private function generateApiKey() {
+        $tmp = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        $res = "";
+        while(true){
+            $res = "";
+            for($i = 0; $i < 20; $i++) {
+                $id = rand(0, 61);
+                $res .= $tmp[$id];
+            }
+            $check = $this->select("device", "*", "api_key='$res'");
+            if(count($check) == 0){
+                break;
+            }
+        }
+        return $res;
+    }
+
     public function create($data) {
         $this->insert("device", [
             "room_id" => $data["room_id"],
-            "type" => $data["type"]
+            "type" => $data["type"],
+            "api_key" => $this->generateApiKey()
         ]);
         $check = $this->select("device", "*", "1", "id DESC");
         $this->insert("device_control", [
@@ -27,11 +45,15 @@ class Device extends DB{
         return $deviceList;
     }
 
-    public function setControl($id, $param, $value) {
-        $this->update("device_control", [
-            $param => $value
-        ],
-        "id='$id'");
+    public function setControl($apikey, $param, $value) {
+        $check = $this->select("device", "*", "api_key='$apikey'");
+        if(count($check) == 1){
+            $id = $check[0]["id"];
+            $this->update("device_control", [
+                $param => $value
+            ],
+            "id='$id'");
+        }
     }
 
     public function getLight($id){
@@ -63,19 +85,23 @@ class Device extends DB{
     }
 
     public function setData($data) {
-        if(!isset($data["time"]))
-            $data["time"] = date("Y-m-d H:i:s");
-        if(!isset($data["light"]))
-            $data["light"] = 0;
-        if(!isset($data["power"]))
-            $data["power"] = 0;
+        $check = $this->select("device", "*", "api_key='{$data['apikey']}'");
+        if(count($check) == 1) {
+            $id = $check[0]["id"];
+            if(!isset($data["time"]))
+                $data["time"] = date("Y-m-d H:i:s");
+            if(!isset($data["light"]))
+                $data["light"] = 0;
+            if(!isset($data["power"]))
+                $data["power"] = 0;
 
-        $this->insert("device_data", [
-            "id" => $data["id"],
-            "time" => $data["time"],
-            "light" => $data["light"],
-            "power" => $data["power"]
-        ]);
+            $this->insert("device_data", [
+                "id" => $data["id"],
+                "time" => $data["time"],
+                "light" => $data["light"],
+                "power" => $data["power"]
+            ]);
+        }
     }
 }
 ?>

@@ -40,17 +40,29 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginRight="0dp"
-            android:background="@drawable/plus"/>
+            android:background="@drawable/plus" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Spinner
+        android:id="@+id/spn_device"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginRight="50dp"
+        style="@style/DeviceSpinnerTextViewItem"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_control1"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_control_header"
-        android:layout_marginTop="100dp">
+        app:layout_constraintTop_toBottomOf="@id/spn_device"
+        android:layout_marginTop="50dp">
 
         <com.example.smartlight.components.RotaryKnobView
             android:id="@+id/knob"
@@ -75,10 +87,10 @@
             android:layout_marginTop="55dp"
             android:layout_marginRight="0dp"
             android:textAlignment="center"
-            android:textColor="#FFEB3B"
+            android:textColor="#F44336"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:text="0 oC"/>
+            android:text="0 °C"/>
 
         <Button
             android:id="@+id/btn_light"
@@ -89,7 +101,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="20dp"
-            android:background="@drawable/bg_login_button"
+            android:background="@drawable/bg_control_button"
             android:textAllCaps="false"
             android:textSize="16sp"
             android:textColor="@color/black"
@@ -105,7 +117,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="40dp"
         android:layout_marginRight="20dp"
-        android:background="@drawable/bg_login_button"
+        android:background="@drawable/bg_control_button"
         android:textAllCaps="false"
         android:textSize="16sp"
         android:textColor="@color/black"
@@ -119,7 +131,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="40dp"
         android:layout_marginRight="20dp"
-        android:background="@drawable/bg_login_button"
+        android:background="@drawable/bg_control_button"
         android:textAllCaps="false"
         android:textSize="16sp"
         android:textColor="@color/black"

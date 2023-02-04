@@ -1,18 +1,22 @@
 package com.example.smartlight.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -24,14 +28,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.smartlight.Config;
+import com.example.smartlight.Factory;
 import com.example.smartlight.R;
+import com.example.smartlight.activities.AddDeviceActivity;
 import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.components.RotaryKnobView;
 import com.example.smartlight.interfaces.MyFragment;
 import com.example.smartlight.models.Device;
-import com.example.smartlight.models.Room;
-import com.example.smartlight.models.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,12 +44,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ControlFragment extends Fragment implements MyFragment, View.OnClickListener, RotaryKnobView.RotaryKnobListener {
+public class ControlFragment extends Fragment implements MyFragment, View.OnClickListener, RotaryKnobView.RotaryKnobListener, AdapterView.OnItemSelectedListener {
 
+    private ProgressDialog loadingDialog = null;
     private View view;
     private RotaryKnobView tempKnob;
     private TextView tempTv;
-    private Button backBtn, lightBtn, powerBtn, setupBtn;
+    private Button backBtn, addBtn, lightBtn, powerBtn, setupBtn;
+    private Spinner deviceSpn;
     private ImageButton lightningMenuBtn;
 
     @Override
@@ -67,6 +72,12 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_24);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_selected_24);
+    }
+
     private void initUI() {
         lightningMenuBtn = getActivity().findViewById(R.id.btn_menu_lightning);
         lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_selected_24);
@@ -74,9 +85,11 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         tempKnob.setListener(this);
         tempKnob.setValue(0);
         tempTv = (TextView) view.findViewById(R.id.tv_temp);
-        tempTv.setText("0 oC");
+        tempTv.setText("0 °C");
         backBtn = (Button) view.findViewById(R.id.btn_back);
         backBtn.setOnClickListener(this);
+        addBtn = (Button) view.findViewById(R.id.btn_add);
+        addBtn.setOnClickListener(this);
         lightBtn = (Button) view.findViewById(R.id.btn_light);
         lightBtn.setOnClickListener(this);
         powerBtn = (Button) view.findViewById(R.id.btn_power);
@@ -84,7 +97,14 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         setupBtn = (Button) view.findViewById(R.id.btn_setup);
         setupBtn.setOnClickListener(this);
 
-        getDevice();
+        loadingDialog = new ProgressDialog(getActivity());
+        loadingDialog.setMessage("");
+        loadingDialog.setIndeterminate(true);
+
+        deviceSpn = (Spinner) view.findViewById(R.id.spn_device);
+        deviceSpn.setOnItemSelectedListener(this);
+
+        getDeviceList();
     }
 
     @Override
@@ -96,6 +116,11 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
     public void onClick(View view) {
         if(view.getId() == R.id.btn_back){
             loadFragment(new HomeFragment());
+        }
+        else if(view.getId() == R.id.btn_add) {
+            Intent intent = new Intent(getContext(), AddDeviceActivity.class);
+            intent.putExtra("room_id", Factory.room.getId());
+            startActivity(intent);
         }
         else if(view.getId() == R.id.btn_light) {
             loadFragment(new LightFragment());
@@ -114,7 +139,7 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
 
     @Override
     public void onRotate(int value) {
-        tempTv.setText(value + " oC");
+        tempTv.setText(value + " °C");
     }
 
     @Override
@@ -124,64 +149,101 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         }
     }
 
-    private void getDevice() {
-        RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Config.HOST + "/?action=get_devices&room_id=" + Config.room.getId(),
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            if(Config.debug) {
-                                Log.d("MinhLV", response);
-                            }
-                            JSONArray jsonArray = new JSONArray(response);
-                            JSONObject deviceJson = jsonArray.getJSONObject(0);
-                            Config.device = new Device(Integer.parseInt(deviceJson.getString("id")),
-                                                        Integer.parseInt(deviceJson.getString("room_id")),
-                                                        Integer.parseInt(deviceJson.getString("type")));
-                            Config.device.setTemp(Integer.parseInt(deviceJson.getString("temp")));
-                            Config.device.setLight(Integer.parseInt(deviceJson.getString("light")));
-                            Config.device.setPower(Integer.parseInt(deviceJson.getString("power")));
-                            tempKnob.setValue(Config.device.getTemp());
-                            tempTv.setText(Config.device.getTemp() + " oC");
+    private void getDeviceList() {
+        if(Factory.deviceList == null || Factory.deviceList.size() == 0) {
+            RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, Factory.HOST + "/?action=get_devices&room_id=" + Factory.room.getId(),
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                loadingDialog.dismiss();
+                                if (Factory.debug) {
+                                    Log.d("MinhLV", response);
+                                }
+                                JSONArray jsonArray = new JSONArray(response);
+                                String[] deviceNames = new String[jsonArray.length()];
+                                if(Factory.deviceList == null) {
+                                    Factory.deviceList = new ArrayList<>();
+                                }
+                                for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject deviceJson = jsonArray.getJSONObject(i);
+                                    Device device = new Device(Integer.parseInt(deviceJson.getString("id")),
+                                            Integer.parseInt(deviceJson.getString("room_id")),
+                                            Integer.parseInt(deviceJson.getString("type")));
 
-                        } catch (JSONException e) {
-                            if(Config.debug) {
-                                Log.d("MinhLV", e.getMessage());
+                                    device.setApiKey(deviceJson.getString("api_key"));
+                                    device.setTemp(Integer.parseInt(deviceJson.getString("temp")));
+                                    device.setLight(Integer.parseInt(deviceJson.getString("light")));
+                                    device.setPower(Integer.parseInt(deviceJson.getString("power")));
+                                    Factory.deviceList.add(device);
+                                    deviceNames[i] = device.getId() + " - " + Factory.types.get(device.getType()).getName();
+                                }
+
+                                Factory.device = Factory.deviceList.get(0);
+                                tempKnob.setValue(Factory.device.getTemp());
+                                tempTv.setText(Factory.device.getTemp() + " °C");
+
+                                ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, deviceNames);
+                                deviceSpn.setAdapter(adapter);
+                            } catch (JSONException e) {
+                                if (Factory.debug) {
+                                    Log.d("MinhLV", e.getMessage());
+                                }
+                                e.printStackTrace();
                             }
-                            e.printStackTrace();
                         }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-//                    Log.d("MinhLV", error.getMessage());
-                    }
-                })
-        {
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                return params;
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //                    Log.d("MinhLV", error.getMessage());
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    return params;
+                }
+            };
+            loadingDialog.show();
+            queue.add(stringRequest);
+        }
+        else {
+            if(Factory.device == null) {
+                Factory.device = Factory.deviceList.get(0);
             }
-        };
-        queue.add(stringRequest);
+            tempKnob.setValue(Factory.device.getTemp());
+            tempTv.setText(Factory.device.getTemp() + " °C");
+            String[] deviceNames = new String[Factory.deviceList.size()];
+            int id = 0;
+            int select = 0;
+            for(Device dev: Factory.deviceList) {
+                if(dev.getId() == Factory.device.getId()){
+                    select = id;
+                }
+                deviceNames[id++] = dev.getId() + " - " + Factory.types.get(dev.getType()).getName();
+            }
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, deviceNames);
+            deviceSpn.setAdapter(adapter);
+            deviceSpn.setSelection(select);
+        }
     }
 
     private void setControl(){
+        Factory.device.setTemp(tempKnob.getValue());
         RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.HOST + "/?action=setparam",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Factory.HOST + "/?action=setparam",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            if(Config.debug) {
+                            if(Factory.debug) {
                                 Log.d("MinhLV", response);
                             }
                             JSONObject jsonObject = new JSONObject(response);
                         } catch (JSONException e) {
-                            if(Config.debug) {
+                            if(Factory.debug) {
                                 Log.d("MinhLV", e.getMessage());
                             }
                             e.printStackTrace();
@@ -198,9 +260,9 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
-                params.put("id", "" + Config.device.getId());
+                params.put("apikey", "" + Factory.device.getApiKey());
                 params.put("param", "temp");
-                params.put("value", "" + tempKnob.getValue());
+                params.put("value", "" + Factory.device.getTemp());
                 return params;
             }
         };
@@ -213,5 +275,17 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         transaction.replace(R.id.layout_main, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        Factory.device = Factory.deviceList.get(i);
+        tempKnob.setValue(Factory.device.getTemp());
+        tempTv.setText(Factory.device.getTemp() + " °C");
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

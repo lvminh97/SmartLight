@@ -12,7 +12,7 @@ import android.widget.ImageButton;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.smartlight.Config;
+import com.example.smartlight.Factory;
 import com.example.smartlight.R;
 import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.adapters.RoomAdapter;
@@ -39,6 +39,8 @@ public class HomeFragment extends Fragment implements MyFragment, AdapterView.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
         initUI();
+        Factory.device = null;
+        Factory.deviceList = null;
         return view;
     }
 
@@ -48,12 +50,18 @@ public class HomeFragment extends Fragment implements MyFragment, AdapterView.On
         homeMenuBtn.setImageResource(R.drawable.ic_baseline_home_24);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        homeMenuBtn.setImageResource(R.drawable.ic_baseline_home_selected_24);
+    }
+
     private void initUI() {
         homeMenuBtn = (ImageButton) getActivity().findViewById(R.id.btn_menu_home);
         homeMenuBtn.setImageResource(R.drawable.ic_baseline_home_selected_24);
 
         gridview = (GridView) view.findViewById(R.id.grid_room);
-        roomAdapter = new RoomAdapter(getActivity(), (ArrayList<Room>) Config.roomList);
+        roomAdapter = new RoomAdapter(getActivity(), (ArrayList<Room>) Factory.roomList);
         gridview.setAdapter(roomAdapter);
         gridview.setOnItemClickListener(this);
 
@@ -68,7 +76,7 @@ public class HomeFragment extends Fragment implements MyFragment, AdapterView.On
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Config.room = Config.roomList.get(i);
+        Factory.room = Factory.roomList.get(i);
         loadFragment(new ControlFragment());
     }
 

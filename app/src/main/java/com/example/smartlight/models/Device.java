@@ -3,6 +3,7 @@ package com.example.smartlight.models;
 public class Device {
     private int id;
     private int room_id;
+    private String apiKey = "";
     private int type;
     private int light;
     private int temp;
@@ -28,6 +29,14 @@ public class Device {
 
     public void setRoom_id(int room_id) {
         this.room_id = room_id;
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 
     public int getType() {

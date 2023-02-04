@@ -1,12 +1,17 @@
 package com.example.smartlight.activities;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,9 +22,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.smartlight.Config;
+import com.example.smartlight.Factory;
 import com.example.smartlight.R;
 import com.example.smartlight.models.Room;
+import com.example.smartlight.models.Type;
 import com.example.smartlight.models.User;
 
 import org.json.JSONArray;
@@ -32,8 +38,9 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    EditText usernameEd, passwordEd;
-    Button loginBtn, signupBtn;
+    private ProgressDialog loadingDialog = null;
+    private EditText usernameEd, passwordEd;
+    private Button loginBtn, signupBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +54,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         usernameEd = (EditText) findViewById(R.id.ed_username);
         passwordEd = (EditText) findViewById(R.id.ed_password);
 
-        SharedPreferences prefs = getSharedPreferences("SMARTLIGHT", MODE_PRIVATE);
-        String username = prefs.getString("username", null);
-        String password = prefs.getString("password", null);
-        if(username != null)
-            usernameEd.setText(username);
-        if(password != null)
-            passwordEd.setText(password);
+        if(this.getIntent().getStringExtra("email") != null) {
+            usernameEd.setText(this.getIntent().getStringExtra("email"));
+        }
+        else {
+            SharedPreferences prefs = getSharedPreferences("SMARTLIGHT", MODE_PRIVATE);
+            String username = prefs.getString("username", null);
+            String password = prefs.getString("password", null);
+            if (username != null)
+                usernameEd.setText(username);
+            if (password != null)
+                passwordEd.setText(password);
+        }
 
         loginBtn = (Button) findViewById(R.id.btn_login);
         signupBtn = (Button) findViewById(R.id.btn_signup);
@@ -74,7 +86,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void login() {
         RequestQueue queue = Volley.newRequestQueue(getBaseContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.HOST + "/?action=login",
+        StringRequest loginRequest = new StringRequest(Request.Method.POST, Factory.HOST + "/?action=login",
             new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -87,16 +99,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             prefs.edit().putString("password", passwordEd.getText().toString()).commit();
 
                             JSONObject userData = jsonObject.getJSONObject("user");
-                            Config.user = new User(Integer.parseInt(userData.getString("id")),
+                            Factory.user = new User(Integer.parseInt(userData.getString("id")),
                                                     userData.getString("fullname"),
                                                     userData.getString("mobile"),
                                                     userData.getString("email"));
 
                             JSONArray roomJsonArray = jsonObject.getJSONArray("roomList");
-                            Config.roomList = new ArrayList<Room>();
+                            Factory.roomList = new ArrayList<Room>();
                             for(int i = 0; i < roomJsonArray.length(); i++) {
                                 JSONObject roomJson = roomJsonArray.getJSONObject(i);
-                                Config.roomList.add(new Room(Integer.parseInt(roomJson.getString("id")), null, roomJson.getString("name")));
+                                Factory.roomList.add(new Room(Integer.parseInt(roomJson.getString("id")), null, roomJson.getString("name")));
                             }
                             Intent intent = new Intent(getBaseContext(), MainActivity.class);
                             startActivity(intent);
@@ -129,6 +141,46 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 return params;
             }
         };
-        queue.add(stringRequest);
+        StringRequest getTypesRequest = new StringRequest(Request.Method.GET, Factory.HOST + "/?action=get_types",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            loadingDialog.dismiss();
+                            if (Factory.debug) {
+                                Log.d("MinhLV", response);
+                            }
+                            JSONArray jsonArray = new JSONArray(response);
+                            Factory.types = new ArrayList<>();
+                            for(int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject typeJson = jsonArray.getJSONObject(i);
+                                Factory.types.add(new Type(typeJson.getInt("id"), typeJson.getString("name")));
+                            }
+                        } catch (JSONException e) {
+                            if (Factory.debug) {
+                                Log.d("MinhLV", e.getMessage());
+                            }
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //                    Log.d("MinhLV", error.getMessage());
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        loadingDialog = new ProgressDialog(this);
+        loadingDialog.setMessage("");
+        loadingDialog.setIndeterminate(true);
+        loadingDialog.show();
+        queue.add(getTypesRequest);
+        queue.add(loginRequest);
     }
 }

@@ -29,7 +29,7 @@ class ActionController extends Controller{
     }
 
     public function setParamAction($data) {
-        $this->deviceObj->setControl($data["id"], $data["param"], $data["value"]);
+        $this->deviceObj->setControl($data["apikey"], $data["param"], $data["value"]);
         echo json_encode(["response" => "OK"]);
     }
 
@@ -65,6 +65,15 @@ class ActionController extends Controller{
             ]);
             $start += 30;
         }
+        echo json_encode(["response" => "OK"]);
+    }
+
+    public function getTypes(){
+        echo json_encode($this->typeObj->getList(), JSON_UNESCAPED_UNICODE);
+    }
+
+    public function addDevice($data) {
+        $this->deviceObj->create($data);
         echo json_encode(["response" => "OK"]);
     }
 }
