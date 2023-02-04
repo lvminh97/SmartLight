@@ -172,6 +172,7 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
     }
 
     private void setControl(){
+        Factory.device.setLight(lightKnob.getValue());
         RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Factory.HOST + "/?action=setparam",
             new Response.Listener<String>() {
@@ -200,9 +201,9 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
-                params.put("id", "" + Factory.device.getId());
+                params.put("apikey", "" + Factory.device.getApiKey());
                 params.put("param", "light");
-                params.put("value", "" + lightKnob.getValue());
+                params.put("value", "" + Factory.device.getLight());
                 return params;
             }
         };

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -24,6 +25,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.smartlight.Factory;
 import com.example.smartlight.R;
 import com.example.smartlight.models.Room;
+import com.example.smartlight.models.Type;
 import com.example.smartlight.models.User;
 
 import org.json.JSONArray;
@@ -84,7 +86,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void login() {
         RequestQueue queue = Volley.newRequestQueue(getBaseContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Factory.HOST + "/?action=login",
+        StringRequest loginRequest = new StringRequest(Request.Method.POST, Factory.HOST + "/?action=login",
             new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -139,10 +141,46 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 return params;
             }
         };
+        StringRequest getTypesRequest = new StringRequest(Request.Method.GET, Factory.HOST + "/?action=get_types",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            loadingDialog.dismiss();
+                            if (Factory.debug) {
+                                Log.d("MinhLV", response);
+                            }
+                            JSONArray jsonArray = new JSONArray(response);
+                            Factory.types = new ArrayList<>();
+                            for(int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject typeJson = jsonArray.getJSONObject(i);
+                                Factory.types.add(new Type(typeJson.getInt("id"), typeJson.getString("name")));
+                            }
+                        } catch (JSONException e) {
+                            if (Factory.debug) {
+                                Log.d("MinhLV", e.getMessage());
+                            }
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //                    Log.d("MinhLV", error.getMessage());
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
         loadingDialog = new ProgressDialog(this);
         loadingDialog.setMessage("");
         loadingDialog.setIndeterminate(true);
         loadingDialog.show();
-        queue.add(stringRequest);
+        queue.add(getTypesRequest);
+        queue.add(loginRequest);
     }
 }

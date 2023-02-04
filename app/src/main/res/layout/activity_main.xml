@@ -14,8 +14,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@id/menu_bottom"
-        android:background="@drawable/main_bg"
-        android:alpha="0.8"/>
+        android:background="#fee568" />
 
     <LinearLayout
         android:id="@+id/menu_bottom"

@@ -40,6 +40,7 @@ public class HomeFragment extends Fragment implements MyFragment, AdapterView.On
         view = inflater.inflate(R.layout.fragment_home, container, false);
         initUI();
         Factory.device = null;
+        Factory.deviceList = null;
         return view;
     }
 

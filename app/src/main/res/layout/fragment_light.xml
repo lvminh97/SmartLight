@@ -61,7 +61,7 @@
         android:layout_marginTop="55dp"
         android:layout_marginRight="0dp"
         android:textAlignment="center"
-        android:textColor="#FFEB3B"
+        android:textColor="#F44336"
         android:textSize="30sp"
         android:textStyle="bold"
         android:text="0%"/>

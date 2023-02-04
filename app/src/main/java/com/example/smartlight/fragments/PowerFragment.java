@@ -186,6 +186,7 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
     }
 
     private void setControl(int power){
+        Factory.device.setPower(powerSeek.getProgress());
         RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Factory.HOST + "/?action=setparam",
                 new Response.Listener<String>() {
@@ -214,9 +215,9 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
-                params.put("id", "" + Factory.device.getId());
+                params.put("apikey", "" + Factory.device.getApiKey());
                 params.put("param", "power");
-                params.put("value", "" + power);
+                params.put("value", "" + Factory.device.getPower());
                 return params;
             }
         };
