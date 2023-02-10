@@ -60,8 +60,10 @@ public class HomeFragment extends Fragment implements MyFragment, AdapterView.On
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Factory.room = Factory.roomList.get(i);
-        loadFragment(new ControlFragment());
+        if(Factory.roomList.get(i).getId() != 0) {
+            Factory.room = Factory.roomList.get(i);
+            loadFragment(new ControlFragment());
+        }
     }
 
     private void loadFragment(Fragment fragment) {

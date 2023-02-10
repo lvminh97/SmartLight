@@ -45,6 +45,16 @@ class Device extends DB{
         return $deviceList;
     }
 
+    public function getLastDevice($room_id) {
+        $deviceList = $this->execute("SELECT * from device JOIN device_control ON device.id=device_control.id WHERE device.room_id='$room_id' ORDER BY device.id DESC");
+        if(count($deviceList) > 0) {
+            return $deviceList[0];
+        }
+        else {
+            return null;
+        }
+    }
+
     public function setControl($apikey, $param, $value) {
         $check = $this->select("device", "*", "api_key='$apikey'");
         if(count($check) == 1){

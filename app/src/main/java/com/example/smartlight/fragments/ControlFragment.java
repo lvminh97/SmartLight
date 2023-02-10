@@ -50,7 +50,8 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
     private View view;
     private RotaryKnobView tempKnob;
     private TextView tempTv;
-    private Button backBtn, addBtn, lightBtn, powerBtn, setupBtn;
+    private Button backBtn, lightBtn, powerBtn, setupBtn;
+    private ImageButton addBtn;
     private Spinner deviceSpn;
 
     @Override
@@ -65,7 +66,6 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         return view;
     }
 
-
     private void initUI() {
         tempKnob = (RotaryKnobView) view.findViewById(R.id.knob);
         tempKnob.setListener(this);
@@ -74,7 +74,7 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         tempTv.setText("0 °C");
         backBtn = (Button) view.findViewById(R.id.btn_back);
         backBtn.setOnClickListener(this);
-        addBtn = (Button) view.findViewById(R.id.btn_add);
+        addBtn = (ImageButton) getActivity().findViewById(R.id.btn_add);
         addBtn.setOnClickListener(this);
         lightBtn = (Button) view.findViewById(R.id.btn_light);
         lightBtn.setOnClickListener(this);
@@ -104,9 +104,11 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
             loadFragment(new HomeFragment());
         }
         else if(view.getId() == R.id.btn_add) {
-            Intent intent = new Intent(getContext(), AddDeviceActivity.class);
-            intent.putExtra("room_id", Factory.room.getId());
-            startActivity(intent);
+            if(MainActivity.FRAG_ID.equals("Control")) {
+                Intent intent = new Intent(getContext(), AddDeviceActivity.class);
+                intent.putExtra("room_id", Factory.room.getId());
+                startActivity(intent);
+            }
         }
         else if(view.getId() == R.id.btn_light) {
             loadFragment(new LightFragment());

@@ -72,19 +72,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(event.getAction() == MotionEvent.ACTION_DOWN)
                     homeBtn.setBackgroundColor(Color.argb(255, 240, 240, 240));
                 else if(event.getAction() == MotionEvent.ACTION_UP)
-                    homeBtn.setBackgroundColor(Color.argb(255, 255, 255, 255));
+                    homeBtn.setBackgroundColor(Color.argb(255, 190, 222, 244));
                 break;
             case R.id.btn_add:
                 if(event.getAction() == MotionEvent.ACTION_DOWN)
                     addBtn.setBackgroundColor(Color.argb(255, 240, 240, 240));
                 else if(event.getAction() == MotionEvent.ACTION_UP)
-                    addBtn.setBackgroundColor(Color.argb(255, 255, 255, 255));
+                    addBtn.setBackgroundColor(Color.argb(255, 190, 222, 244));
                 break;
             case R.id.btn_menu_user:
                 if(event.getAction() == MotionEvent.ACTION_DOWN)
                     userBtn.setBackgroundColor(Color.argb(255, 240, 240, 240));
                 else if(event.getAction() == MotionEvent.ACTION_UP)
-                    userBtn.setBackgroundColor(Color.argb(255, 255, 255, 255));
+                    userBtn.setBackgroundColor(Color.argb(255, 190, 222, 244));
                 break;
         }
         return false;
@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             SharedPreferences prefs = getSharedPreferences("SMARTLIGHT", MODE_PRIVATE);
                             prefs.edit().putStringSet("password", null).commit();
                             Factory.user = null;
+                            FRAG_ID = "";
                             loadActivity(LoginActivity.class);
                         }
                     })

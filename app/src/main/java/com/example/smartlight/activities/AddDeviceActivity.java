@@ -133,6 +133,15 @@ public class AddDeviceActivity extends AppCompatActivity implements View.OnClick
                             loadingDialog.dismiss();
                             JSONObject jsonObject = new JSONObject(response);
                             if(jsonObject.getString("response").equals("OK")) {
+                                JSONObject devJson = jsonObject.getJSONObject("device");
+                                Device newDevice = new Device(Integer.parseInt(devJson.getString("id")),
+                                        Integer.parseInt(devJson.getString("room_id")),
+                                        Integer.parseInt(devJson.getString("type")));
+                                newDevice.setApiKey(devJson.getString("api_key"));
+                                newDevice.setTemp(0);
+                                newDevice.setLight(0);
+                                newDevice.setPower(0);
+                                Factory.deviceList.add(newDevice);
                                 Toast.makeText(getBaseContext(), "Thêm thiết bị thành công", Toast.LENGTH_SHORT).show();
                                 AddDeviceActivity.this.finish();
                             }

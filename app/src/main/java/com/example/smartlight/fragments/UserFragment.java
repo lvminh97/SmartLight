@@ -16,7 +16,6 @@ import com.example.smartlight.interfaces.MyFragment;
 public class UserFragment extends Fragment implements MyFragment {
 
     private View view;
-    private ImageButton userMenuBtn;
     private TextView fullnameTv, phoneTv, emailTv;
 
     @Override

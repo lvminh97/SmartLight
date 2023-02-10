@@ -74,7 +74,8 @@ class ActionController extends Controller{
 
     public function addDevice($data) {
         $this->deviceObj->create($data);
-        echo json_encode(["response" => "OK"]);
+        $device = $this->deviceObj->getLastDevice($data["room_id"]);
+        echo json_encode(["response" => "OK", "device" => $device]);
     }
 }
 ?>
