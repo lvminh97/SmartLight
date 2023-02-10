@@ -26,7 +26,7 @@ import com.example.smartlight.interfaces.MyFragment;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private FrameLayout mainLayout;
-    private ImageButton homeBtn, lightningBtn, settingBtn, userBtn;
+    private ImageButton homeBtn, addBtn, userBtn;
 
     public static String FRAG_ID = "";
 
@@ -42,16 +42,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainLayout = (FrameLayout) findViewById(R.id.layout_main);
 
         homeBtn = (ImageButton) findViewById(R.id.btn_menu_home);
-        lightningBtn = (ImageButton) findViewById(R.id.btn_menu_lightning);
-        settingBtn = (ImageButton) findViewById(R.id.btn_menu_setting);
+        addBtn = (ImageButton) findViewById(R.id.btn_add);
         userBtn = (ImageButton) findViewById(R.id.btn_menu_user);
 
         homeBtn.setOnClickListener(this);
         homeBtn.setOnTouchListener(this);
-        lightningBtn.setOnClickListener(this);
-        lightningBtn.setOnTouchListener(this);
-        settingBtn.setOnClickListener(this);
-        settingBtn.setOnTouchListener(this);
+        addBtn.setOnClickListener(this);
+        addBtn.setOnTouchListener(this);
         userBtn.setOnClickListener(this);
         userBtn.setOnTouchListener(this);
 
@@ -62,9 +59,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if(v.getId() == R.id.btn_menu_home) {
             loadFragment(new HomeFragment());
-        }
-        else if(v.getId() == R.id.btn_menu_setting) {
-            loadFragment(new SettingFragment());
         }
         else if(v.getId() == R.id.btn_menu_user) {
             loadFragment(new UserFragment());
@@ -80,17 +74,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 else if(event.getAction() == MotionEvent.ACTION_UP)
                     homeBtn.setBackgroundColor(Color.argb(255, 255, 255, 255));
                 break;
-            case R.id.btn_menu_lightning:
+            case R.id.btn_add:
                 if(event.getAction() == MotionEvent.ACTION_DOWN)
-                    lightningBtn.setBackgroundColor(Color.argb(255, 240, 240, 240));
+                    addBtn.setBackgroundColor(Color.argb(255, 240, 240, 240));
                 else if(event.getAction() == MotionEvent.ACTION_UP)
-                    lightningBtn.setBackgroundColor(Color.argb(255, 255, 255, 255));
-                break;
-            case R.id.btn_menu_setting:
-                if(event.getAction() == MotionEvent.ACTION_DOWN)
-                    settingBtn.setBackgroundColor(Color.argb(255, 240, 240, 240));
-                else if(event.getAction() == MotionEvent.ACTION_UP)
-                    settingBtn.setBackgroundColor(Color.argb(255, 255, 255, 255));
+                    addBtn.setBackgroundColor(Color.argb(255, 255, 255, 255));
                 break;
             case R.id.btn_menu_user:
                 if(event.getAction() == MotionEvent.ACTION_DOWN)

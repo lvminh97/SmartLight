@@ -33,21 +33,8 @@ public class SettingFragment extends Fragment implements MyFragment, View.OnClic
         return view;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        settingMenuBtn.setImageResource(R.drawable.ic_baseline_settings_24);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        settingMenuBtn.setImageResource(R.drawable.ic_baseline_settings_selected_24);
-    }
-
     private void initUI() {
-        settingMenuBtn = (ImageButton) getActivity().findViewById(R.id.btn_menu_setting);
-        settingMenuBtn.setImageResource(R.drawable.ic_baseline_settings_selected_24);
+
     }
 
     private void loadFragment(Fragment fragment) {

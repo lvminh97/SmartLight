@@ -27,7 +27,6 @@ public class HomeFragment extends Fragment implements MyFragment, AdapterView.On
     private GridView gridview;
     private Button settingBtn;
     private ImageButton homeMenuBtn;
-
     private RoomAdapter roomAdapter;
 
     @Override
@@ -44,22 +43,7 @@ public class HomeFragment extends Fragment implements MyFragment, AdapterView.On
         return view;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        homeMenuBtn.setImageResource(R.drawable.ic_baseline_home_24);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        homeMenuBtn.setImageResource(R.drawable.ic_baseline_home_selected_24);
-    }
-
     private void initUI() {
-        homeMenuBtn = (ImageButton) getActivity().findViewById(R.id.btn_menu_home);
-        homeMenuBtn.setImageResource(R.drawable.ic_baseline_home_selected_24);
-
         gridview = (GridView) view.findViewById(R.id.grid_room);
         roomAdapter = new RoomAdapter(getActivity(), (ArrayList<Room>) Factory.roomList);
         gridview.setAdapter(roomAdapter);

@@ -32,22 +32,8 @@ public class UserFragment extends Fragment implements MyFragment {
         return view;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        userMenuBtn.setImageResource(R.drawable.ic_baseline_person_24);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        userMenuBtn.setImageResource(R.drawable.ic_baseline_person_selected_24);
-    }
 
     private void initUI() {
-        userMenuBtn = (ImageButton) getActivity().findViewById(R.id.btn_menu_user);
-        userMenuBtn.setImageResource(R.drawable.ic_baseline_person_selected_24);
-
         fullnameTv = (TextView) view.findViewById(R.id.tv_username);
         emailTv = (TextView) view.findViewById(R.id.tv_email);
         phoneTv = (TextView) view.findViewById(R.id.tv_phone);

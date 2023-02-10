@@ -52,7 +52,6 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
     private TextView tempTv;
     private Button backBtn, addBtn, lightBtn, powerBtn, setupBtn;
     private Spinner deviceSpn;
-    private ImageButton lightningMenuBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,21 +65,8 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         return view;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_24);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_selected_24);
-    }
 
     private void initUI() {
-        lightningMenuBtn = getActivity().findViewById(R.id.btn_menu_lightning);
-        lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_selected_24);
         tempKnob = (RotaryKnobView) view.findViewById(R.id.knob);
         tempKnob.setListener(this);
         tempKnob.setValue(0);

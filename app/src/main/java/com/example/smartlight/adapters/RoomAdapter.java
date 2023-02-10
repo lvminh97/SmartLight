@@ -43,7 +43,7 @@ public class RoomAdapter extends BaseAdapter {
         View gridView = inflater.inflate(R.layout.item_room, null, true);
 
         ImageView img = gridView.findViewById(R.id.img_room);
-        img.setImageResource(R.drawable.ic_baseline_domain_24);
+        img.setImageResource(R.drawable.building);
 
         TextView name = gridView.findViewById(R.id.tv_room);
         name.setText(roomList.get(i).getName());

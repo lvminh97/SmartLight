@@ -68,22 +68,8 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
         return view;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_24);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_selected_24);
-    }
 
     private void initUI() {
-        lightningMenuBtn = getActivity().findViewById(R.id.btn_menu_lightning);
-        lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_selected_24);
-
         backBtn = (Button) view.findViewById(R.id.btn_back);
         backBtn.setOnClickListener(this);
 
