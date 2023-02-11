@@ -29,8 +29,6 @@
             android:exported="true" />
         <activity android:name=".activities.SignupActivity"
             android:exported="true"/>
-        <activity android:name=".activities.AddDeviceActivity"
-            android:exported="true"/>
     </application>
 
 </manifest>

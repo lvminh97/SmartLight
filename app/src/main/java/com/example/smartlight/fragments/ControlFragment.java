@@ -1,10 +1,8 @@
 package com.example.smartlight.fragments;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,7 +28,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.smartlight.Factory;
 import com.example.smartlight.R;
-import com.example.smartlight.activities.AddDeviceActivity;
 import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.components.RotaryKnobView;
 import com.example.smartlight.interfaces.MyFragment;
@@ -105,9 +102,7 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         }
         else if(view.getId() == R.id.btn_add) {
             if(MainActivity.FRAG_ID.equals("Control")) {
-                Intent intent = new Intent(getContext(), AddDeviceActivity.class);
-                intent.putExtra("room_id", Factory.room.getId());
-                startActivity(intent);
+                loadFragment(new AddDeviceFragment());
             }
         }
         else if(view.getId() == R.id.btn_light) {

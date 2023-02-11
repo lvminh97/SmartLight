@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if(FRAG_ID.equals("Control") || FRAG_ID.equals("Setting")){
             loadFragment(new HomeFragment());
         }
-        else if(FRAG_ID.equals("Light") || FRAG_ID.equals("Power")) {
+        else if(FRAG_ID.equals("Light") || FRAG_ID.equals("Power") || FRAG_ID.equals("AddDevice")) {
             loadFragment(new ControlFragment());
         }
         else if(FRAG_ID.equals("User")) {

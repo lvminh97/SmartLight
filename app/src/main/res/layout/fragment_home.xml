@@ -68,7 +68,7 @@
             android:textStyle="bold"
             android:textSize="20sp"
             android:textColor="#000"
-            android:text="My Location" />
+            android:text="Hà Nội, Việt Nam" />
 
         <ImageView
             android:id="@+id/img_weather"
@@ -107,7 +107,7 @@
             android:textStyle="bold"
             android:textSize="45sp"
             android:textColor="#000"
-            android:text="20°C"/>
+            android:text="26°C"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
