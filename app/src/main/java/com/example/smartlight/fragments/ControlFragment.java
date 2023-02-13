@@ -29,6 +29,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.smartlight.Factory;
 import com.example.smartlight.R;
 import com.example.smartlight.activities.MainActivity;
+import com.example.smartlight.adapters.DeviceAdapter;
 import com.example.smartlight.components.RotaryKnobView;
 import com.example.smartlight.interfaces.MyFragment;
 import com.example.smartlight.models.Device;
@@ -145,7 +146,6 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
                                     Log.d("MinhLV", response);
                                 }
                                 JSONArray jsonArray = new JSONArray(response);
-                                String[] deviceNames = new String[jsonArray.length()];
                                 if(Factory.deviceList == null) {
                                     Factory.deviceList = new ArrayList<>();
                                 }
@@ -160,14 +160,14 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
                                     device.setLight(Integer.parseInt(deviceJson.getString("light")));
                                     device.setPower(Integer.parseInt(deviceJson.getString("power")));
                                     Factory.deviceList.add(device);
-                                    deviceNames[i] = device.getId() + " - " + Factory.types.get(device.getType()).getName();
                                 }
 
                                 Factory.device = Factory.deviceList.get(0);
                                 tempKnob.setValue(Factory.device.getTemp());
                                 tempTv.setText(Factory.device.getTemp() + " °C");
 
-                                ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, deviceNames);
+                                DeviceAdapter adapter = new DeviceAdapter(getActivity(), (ArrayList<Device>) Factory.deviceList);
+//                                ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, deviceNames);
                                 deviceSpn.setAdapter(adapter);
                             } catch (JSONException e) {
                                 if (Factory.debug) {
@@ -198,16 +198,14 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
             }
             tempKnob.setValue(Factory.device.getTemp());
             tempTv.setText(Factory.device.getTemp() + " °C");
-            String[] deviceNames = new String[Factory.deviceList.size()];
             int id = 0;
             int select = 0;
             for(Device dev: Factory.deviceList) {
                 if(dev.getId() == Factory.device.getId()){
                     select = id;
                 }
-                deviceNames[id++] = dev.getId() + " - " + Factory.types.get(dev.getType()).getName();
             }
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, deviceNames);
+            DeviceAdapter adapter = new DeviceAdapter(getActivity(), (ArrayList<Device>) Factory.deviceList);
             deviceSpn.setAdapter(adapter);
             deviceSpn.setSelection(select);
         }
