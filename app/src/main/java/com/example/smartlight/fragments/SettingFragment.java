@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -34,7 +36,13 @@ public class SettingFragment extends Fragment implements MyFragment, View.OnClic
     }
 
     private void initUI() {
-
+        // rearrange the bottom menu
+        ConstraintSet set = new ConstraintSet();
+        set.clone((ConstraintLayout) getActivity().findViewById(R.id.menu_bottom));
+        set.constrainPercentWidth(R.id.btn_add, 0.0f);
+        set.constrainPercentWidth(R.id.btn_menu_home, 0.5f);
+        set.constrainPercentWidth(R.id.btn_menu_user, 0.5f);
+        set.applyTo((ConstraintLayout) getActivity().findViewById(R.id.menu_bottom));
     }
 
     private void loadFragment(Fragment fragment) {

@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         homeBtn.setOnClickListener(this);
         homeBtn.setOnTouchListener(this);
-        addBtn.setOnClickListener(this);
         addBtn.setOnTouchListener(this);
         userBtn.setOnClickListener(this);
         userBtn.setOnTouchListener(this);

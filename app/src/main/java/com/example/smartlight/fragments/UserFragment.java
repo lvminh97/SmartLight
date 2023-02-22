@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 
 import com.example.smartlight.Factory;
@@ -33,6 +35,14 @@ public class UserFragment extends Fragment implements MyFragment {
 
 
     private void initUI() {
+        // rearrange the bottom menu
+        ConstraintSet set = new ConstraintSet();
+        set.clone((ConstraintLayout) getActivity().findViewById(R.id.menu_bottom));
+        set.constrainPercentWidth(R.id.btn_add, 0.0f);
+        set.constrainPercentWidth(R.id.btn_menu_home, 0.5f);
+        set.constrainPercentWidth(R.id.btn_menu_user, 0.5f);
+        set.applyTo((ConstraintLayout) getActivity().findViewById(R.id.menu_bottom));
+
         fullnameTv = (TextView) view.findViewById(R.id.tv_username);
         emailTv = (TextView) view.findViewById(R.id.tv_email);
         phoneTv = (TextView) view.findViewById(R.id.tv_phone);

@@ -14,12 +14,12 @@
 
         <Button
             android:id="@+id/btn_back"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginLeft="0dp"
-            android:background="@drawable/return_icon"/>
+            android:background="@drawable/ic_baseline_back_24"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,9 +28,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginLeft="20dp"
             android:textStyle="bold"
-            android:textSize="16sp"
+            android:textSize="22sp"
             android:textColor="@color/black"
             android:text="Độ sáng của đèn"/>
 
@@ -58,12 +57,14 @@
         app:layout_constraintLeft_toLeftOf="@id/knob_light"
         app:layout_constraintTop_toTopOf="@id/knob_light"
         app:layout_constraintRight_toRightOf="@id/knob_light"
+        app:layout_constraintBottom_toBottomOf="@id/knob_light"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="0dp"
         android:layout_marginRight="0dp"
+        android:layout_marginBottom="0dp"
         android:textAlignment="center"
         android:textColor="#F44336"
-        android:textSize="30sp"
+        android:textSize="40sp"
         android:textStyle="bold"
         android:text="0%"/>
 

@@ -16,6 +16,8 @@ class ActionController extends Controller{
         $this->deviceObj->create(["room_id" => $roomResp["id"], "type" => "1"]);
         $roomResp = $this->roomObj->create(["name" => "Conference Room", "user_id" => $uid]);
         $this->deviceObj->create(["room_id" => $roomResp["id"], "type" => "1"]);
+        $roomResp = $this->roomObj->create(["name" => "Customize", "user_id" => $uid]);
+        $this->deviceObj->create(["room_id" => $roomResp["id"], "type" => "1"]);
         echo json_encode($resp);
     }
 

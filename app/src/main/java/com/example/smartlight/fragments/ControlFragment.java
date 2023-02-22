@@ -17,6 +17,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -47,9 +49,9 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
     private ProgressDialog loadingDialog = null;
     private View view;
     private RotaryKnobView tempKnob;
-    private TextView tempTv;
+    private TextView roomNameTv, tempTv;
     private Button backBtn, lightBtn, powerBtn, setupBtn;
-    private ImageButton addBtn;
+    private ImageButton homeBtn, addBtn, userBtn;
     private Spinner deviceSpn;
 
     @Override
@@ -65,6 +67,16 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
     }
 
     private void initUI() {
+        // rearrange the bottom menu
+        ConstraintSet set = new ConstraintSet();
+        set.clone((ConstraintLayout) getActivity().findViewById(R.id.menu_bottom));
+        set.constrainPercentWidth(R.id.btn_add, 0.34f);
+        set.constrainPercentWidth(R.id.btn_menu_home, 0.33f);
+        set.constrainPercentWidth(R.id.btn_menu_user, 0.33f);
+        set.applyTo((ConstraintLayout) getActivity().findViewById(R.id.menu_bottom));
+
+        roomNameTv = (TextView) view.findViewById(R.id.tv_room_name);
+        roomNameTv.setText(Factory.room.getName());
         tempKnob = (RotaryKnobView) view.findViewById(R.id.knob);
         tempKnob.setListener(this);
         tempKnob.setValue(0);
@@ -78,8 +90,6 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         lightBtn.setOnClickListener(this);
         powerBtn = (Button) view.findViewById(R.id.btn_power);
         powerBtn.setOnClickListener(this);
-        setupBtn = (Button) view.findViewById(R.id.btn_setup);
-        setupBtn.setOnClickListener(this);
 
         loadingDialog = new ProgressDialog(getActivity());
         loadingDialog.setMessage("");
@@ -111,13 +121,6 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         }
         else if(view.getId() == R.id.btn_power){
             loadFragment(new PowerFragment());
-        }
-        else if(view.getId() == R.id.btn_setup){
-            new AlertDialog.Builder(getContext())
-                    .setTitle("Thông báo")
-                    .setMessage("Cài đặt các thông số mặc định cho hệ thống thành công!")
-                    .setPositiveButton("OK", null)
-                    .show();
         }
     }
 
