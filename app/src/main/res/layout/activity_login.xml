@@ -7,12 +7,14 @@
 
     <ImageView
         android:id="@+id/img_main_icon"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="80dp"
+        app:layout_constraintBottom_toTopOf="@id/tv_main_title"
+        android:layout_marginTop="50dp"
         android:src="@drawable/lamp"
         />
     <TextView
@@ -22,6 +24,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/img_main_icon"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/layout_username"
         android:layout_marginTop="20dp"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -35,6 +38,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_main_title"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/layout_password"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="60dp"
         android:layout_marginRight="30dp"
@@ -59,7 +63,8 @@
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:background="#FFFFFF"
-            android:hint="Email"/>
+            android:hint="Email"
+            android:maxLines="1"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/layout_password"
@@ -69,8 +74,9 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_username"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_login"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_marginRight="30dp"
         android:background="@drawable/bg_login_edittext">
         <ImageView
@@ -94,7 +100,8 @@
             android:paddingBottom="15dp"
             android:background="#FFFFFF"
             android:hint="Password"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword"
+            android:maxLines="1"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
     <Button
         android:id="@+id/btn_login"
@@ -103,6 +110,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_password"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/layout_signup"
         android:layout_marginTop="30dp"
         android:paddingLeft="60dp"
         android:paddingTop="12dp"
@@ -118,9 +126,11 @@
         android:layoutDirection="ltr"
         android:weightSum="10"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_login"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginLeft="40dp"
+        android:layout_marginTop="30dp"
         android:layout_marginRight="40dp"
         android:layout_marginBottom="30dp">
 

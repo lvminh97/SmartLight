@@ -1,38 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_control_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/custom_header"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/custom_header">
+        app:layout_constraintRight_toRightOf="parent">
 
         <Button
             android:id="@+id/btn_back"
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_marginLeft="0dp"
-            android:background="@drawable/ic_baseline_back_24"/>
+            android:background="@drawable/ic_baseline_back_24"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_room_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:textStyle="bold"
-            android:textSize="24sp"
+            android:text="Meeting Room"
             android:textColor="@color/black"
-            android:text="Meeting Room"/>
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -40,24 +41,26 @@
         android:id="@+id/spn_device"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_control_header"
-        app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
-        android:spinnerMode="dialog"/>
+        android:spinnerMode="dialog"
+        app:layout_constraintBottom_toTopOf="@id/knob"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_control_header" />
 
     <com.example.smartlight.components.RotaryKnobView
         android:id="@+id/knob"
         android:layout_width="@dimen/knob_width"
         android:layout_height="@dimen/knob_height"
+        android:layout_marginTop="35dp"
+        app:initialValue="0"
+        app:knobDrawable="@drawable/ic_rotary_knob"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/spn_device"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="35dp"
-        app:knobDrawable="@drawable/ic_rotary_knob"
-        app:initialValue="0"
+        app:layout_constraintBottom_toTopOf="@id/btn_light"
         app:maxValue="70"
         app:minValue="0" />
 
@@ -65,58 +68,59 @@
         android:id="@+id/tv_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@id/knob"
-        app:layout_constraintTop_toTopOf="@id/knob"
-        app:layout_constraintRight_toRightOf="@id/knob"
-        app:layout_constraintBottom_toBottomOf="@id/knob"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="0dp"
         android:layout_marginRight="0dp"
         android:layout_marginBottom="0dp"
+        android:text="0 °C"
         android:textAlignment="center"
         android:textColor="#F44336"
         android:textSize="40sp"
         android:textStyle="bold"
-        android:text="0 °C"/>
+        app:layout_constraintBottom_toBottomOf="@id/knob"
+        app:layout_constraintLeft_toLeftOf="@id/knob"
+        app:layout_constraintRight_toRightOf="@id/knob"
+        app:layout_constraintTop_toTopOf="@id/knob" />
 
     <Button
         android:id="@+id/btn_light"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.12"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_control_button"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/knob"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_power"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        android:background="@drawable/bg_control_button"
+        android:layout_marginBottom="0dp"
+        android:paddingTop="25dp"
+        android:paddingBottom="25dp"
+        android:text="Độ sáng của bóng đèn"
         android:textAllCaps="false"
-        android:textSize="16sp"
         android:textColor="@color/black"
-        android:text="Độ sáng của bóng đèn"/>
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/btn_power"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.12"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/bg_control_button"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_light"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="25dp"
+        app:layout_goneMarginTop="10dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="40dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        android:background="@drawable/bg_control_button"
+        android:layout_marginBottom="10dp"
+        android:paddingTop="25dp"
+        android:paddingBottom="25dp"
+        android:text="Công suất tiêu thụ"
         android:textAllCaps="false"
-        android:textSize="16sp"
         android:textColor="@color/black"
-        android:text="Công suất tiêu thụ"/>
+        android:textSize="16sp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
