@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.smartlight.Factory;
+import com.example.smartlight.NukeSSLCerts;
 import com.example.smartlight.R;
 import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.interfaces.MyFragment;
@@ -84,6 +85,7 @@ public class AddDeviceFragment extends Fragment implements MyFragment, View.OnCl
     private void getTypes() {
         List<String> types = new ArrayList<>();
         if(Factory.types == null) {
+            new NukeSSLCerts().nuke();
             RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
             StringRequest stringRequest = new StringRequest(Request.Method.GET, Factory.HOST + "/?action=get_types",
                     new Response.Listener<String>() {
@@ -140,6 +142,7 @@ public class AddDeviceFragment extends Fragment implements MyFragment, View.OnCl
     }
 
     private void addDevice() {
+        new NukeSSLCerts().nuke();
         RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Factory.HOST + "/?action=add_device",
                 new Response.Listener<String>() {

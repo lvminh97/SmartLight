@@ -19,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.smartlight.Factory;
+import com.example.smartlight.NukeSSLCerts;
 import com.example.smartlight.R;
 
 import org.json.JSONException;
@@ -70,6 +71,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             return;
         }
         //
+        new NukeSSLCerts().nuke();
         RequestQueue queue = Volley.newRequestQueue(getBaseContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Factory.HOST + "/?action=signup",
                 new Response.Listener<String>() {

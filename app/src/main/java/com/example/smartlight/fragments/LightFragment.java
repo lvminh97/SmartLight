@@ -25,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.smartlight.Factory;
+import com.example.smartlight.NukeSSLCerts;
 import com.example.smartlight.R;
 import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.components.RotaryKnobView;
@@ -126,6 +127,7 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
     }
 
     private void getData() {
+        new NukeSSLCerts().nuke();
         RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Factory.HOST + "/?action=get_light&id=" + Factory.device.getId(),
             new Response.Listener<String>() {
@@ -169,6 +171,7 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
 
     private void setControl(){
         Factory.device.setLight(lightKnob.getValue());
+        new NukeSSLCerts().nuke();
         RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Factory.HOST + "/?action=setparam",
             new Response.Listener<String>() {
