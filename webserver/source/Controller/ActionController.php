@@ -55,6 +55,11 @@ class ActionController extends Controller{
         echo json_encode(["response" => "OK"]);
     }
 
+    public function getControlAction($data) {
+        $control = $this->deviceObj->getControl($data);
+        echo json_encode($control);
+    }
+
     public function generateData($data){
         $start = strtotime($data["start"]);
         $end = $start + 4 * 86400;

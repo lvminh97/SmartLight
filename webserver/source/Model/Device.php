@@ -113,5 +113,17 @@ class Device extends DB{
             ]);
         }
     }
+
+    public function getControl($data){
+        $check = $this->select("device", "*", "api_key='{$data['apikey']}'");
+        if(count($check) == 1) {
+            $id = $check[0]["id"];
+            $control = $this->select("device_control", "*", "id='$id'")[0];
+            return $control;
+        }
+        else{
+            return null;
+        }
+    }
 }
 ?>

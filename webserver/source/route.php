@@ -15,6 +15,7 @@
 
     $route->post("action", "set_data", "ActionController@setDataAction");
     $route->post("action", "generate", "ActionController@generateData");
+    $route->get("action", "get_control", "ActionController@getControlAction");
 
     $route->get("action", "get_types", "ActionController@getTypes");
     $route->post("action", "add_device", "ActionController@addDevice");
