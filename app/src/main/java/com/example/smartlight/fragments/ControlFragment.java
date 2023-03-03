@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -68,6 +69,9 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
     }
 
     private void initUI() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int px = (int) (displayMetrics.densityDpi / 160f);
         // rearrange the bottom menu
         ConstraintSet set = new ConstraintSet();
         set.clone((ConstraintLayout) getActivity().findViewById(R.id.menu_bottom));
@@ -91,6 +95,18 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         lightBtn.setOnClickListener(this);
         powerBtn = (Button) view.findViewById(R.id.btn_power);
         powerBtn.setOnClickListener(this);
+        if(displayMetrics.heightPixels < 1300){
+            ViewGroup.MarginLayoutParams lightBtnLayoutParam = (ViewGroup.MarginLayoutParams) lightBtn.getLayoutParams();
+            lightBtnLayoutParam.setMargins(20 * px, 10 * px, 20 * px, 10 * px);
+            ViewGroup.MarginLayoutParams powerBtnLayoutParam = (ViewGroup.MarginLayoutParams) powerBtn.getLayoutParams();
+            powerBtnLayoutParam.setMargins(20 * px, 0, 20* px, 10 * px);
+        }
+        else {
+            ViewGroup.MarginLayoutParams lightBtnLayoutParam = (ViewGroup.MarginLayoutParams) lightBtn.getLayoutParams();
+            lightBtnLayoutParam.setMargins(20 * px, 50 * px, 20 * px, 20 * px);
+            ViewGroup.MarginLayoutParams powerBtnLayoutParam = (ViewGroup.MarginLayoutParams) powerBtn.getLayoutParams();
+            powerBtnLayoutParam.setMargins(20 * px, 0, 20* px, 50 * px);
+        }
 
         loadingDialog = new ProgressDialog(getActivity());
         loadingDialog.setMessage("");
