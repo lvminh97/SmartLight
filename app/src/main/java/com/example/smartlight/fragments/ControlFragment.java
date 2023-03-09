@@ -69,9 +69,7 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
     }
 
     private void initUI() {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int px = (int) (displayMetrics.densityDpi / 160f);
+        int px = (int) (Factory.displayMetrics.densityDpi / 160f);
         // rearrange the bottom menu
         ConstraintSet set = new ConstraintSet();
         set.clone((ConstraintLayout) getActivity().findViewById(R.id.menu_bottom));
@@ -95,7 +93,7 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         lightBtn.setOnClickListener(this);
         powerBtn = (Button) view.findViewById(R.id.btn_power);
         powerBtn.setOnClickListener(this);
-        if(displayMetrics.heightPixels < 1300){
+        if(Factory.displayMetrics.heightPixels < 1600){
             ViewGroup.MarginLayoutParams lightBtnLayoutParam = (ViewGroup.MarginLayoutParams) lightBtn.getLayoutParams();
             lightBtnLayoutParam.setMargins(20 * px, 10 * px, 20 * px, 10 * px);
             ViewGroup.MarginLayoutParams powerBtnLayoutParam = (ViewGroup.MarginLayoutParams) powerBtn.getLayoutParams();

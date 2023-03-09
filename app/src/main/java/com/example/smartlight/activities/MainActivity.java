@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -39,6 +41,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initUI() {
+        Factory.displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(Factory.displayMetrics);
+        Log.d("MinhLV", "Screen size = " + Factory.displayMetrics.widthPixels + "x" + Factory.displayMetrics.heightPixels);
+
         mainLayout = (FrameLayout) findViewById(R.id.layout_main);
 
         homeBtn = (ImageButton) findViewById(R.id.btn_menu_home);

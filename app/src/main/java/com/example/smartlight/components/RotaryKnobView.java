@@ -94,11 +94,13 @@ public final class RotaryKnobView extends RelativeLayout implements OnGestureLis
     }
 
     public boolean onScroll(@NotNull MotionEvent e1, @NotNull MotionEvent e2, float distanceX, float distanceY) {
+        float startDegress = this.calculateAngle(e1.getX(), e2.getY());
         float rotationDegrees = this.calculateAngle(e2.getX(), e2.getY());
-        if (rotationDegrees >= -150 && rotationDegrees <= 150) {
-            this.setKnobPosition(rotationDegrees);
-            float valueRangeDegrees = rotationDegrees + 150;
-            this.value = (int)(valueRangeDegrees / this.divider + (float)this.minValue);
+        Log.d("MinhLV2", "Degree: " + startDegress + " -> " + rotationDegrees + " --- " + distanceX + ";" + distanceY);
+
+        if (rotationDegrees <= 300 && !(startDegress <= rotationDegrees && distanceX <= 0 || startDegress >= rotationDegrees && distanceX >= 0)) {
+            this.setKnobPosition(rotationDegrees - 150);
+            this.value = (int) (rotationDegrees / this.divider + (float) this.minValue);;
             if (this.listener != null) {
                 RotaryKnobView.RotaryKnobListener listener = this.listener;
                 listener.onRotate(this.value);
@@ -114,6 +116,12 @@ public final class RotaryKnobView extends RelativeLayout implements OnGestureLis
         float angle = -((float)Math.toDegrees(Math.atan2(py, px))) + 90;
         if (angle > 180) {
             angle -= 360;
+        }
+        if(angle >= -150) {
+            angle += 150;
+        }
+        else{
+            angle += 510;
         }
 
         return angle;

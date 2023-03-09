@@ -1,13 +1,17 @@
 package com.example.smartlight.adapters;
 
 import android.app.Activity;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.smartlight.Factory;
 import com.example.smartlight.R;
 import com.example.smartlight.models.Room;
 
@@ -44,8 +48,16 @@ public class RoomAdapter extends BaseAdapter {
 
         ImageView img = gridView.findViewById(R.id.img_room);
         img.setImageResource(R.drawable.building);
+        if(Factory.displayMetrics.heightPixels < 1600) {
+            img.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+        }
 
         TextView name = gridView.findViewById(R.id.tv_room);
+        if(Factory.displayMetrics.heightPixels < 1600) {
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) name.getLayoutParams();
+            layoutParams.setMargins(0, 0, 0, 0);
+            name.setLayoutParams(layoutParams);
+        }
         name.setText(roomList.get(i).getName());
 
         return gridView;

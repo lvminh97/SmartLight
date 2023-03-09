@@ -127,7 +127,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.d("MinhLV", error.getMessage());
+                    Log.d("MinhLV", "" + error.getMessage());
                 }
             })
         {
