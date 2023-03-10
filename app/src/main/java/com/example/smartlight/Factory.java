@@ -1,7 +1,6 @@
 package com.example.smartlight;
 
 import android.util.DisplayMetrics;
-import android.widget.ProgressBar;
 
 import com.example.smartlight.models.Device;
 import com.example.smartlight.models.Room;
