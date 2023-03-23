@@ -123,6 +123,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if(FRAG_ID.equals("User")) {
             loadFragment(new SettingFragment());
         }
+        else if(FRAG_ID.equals("UpdateInfo") || FRAG_ID.equals("ChangePass")) {
+            loadFragment(new UserFragment());
+        }
     }
 
     private void loadFragment(Fragment fragment) {

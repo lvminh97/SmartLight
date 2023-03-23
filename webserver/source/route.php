@@ -6,6 +6,8 @@
 
     $route->post("action", "signup", "ActionController@signupAction");
     $route->post("action", "login", "ActionController@loginAction");
+    $route->post("action", "update_info", "ActionController@updateInfoAction");
+    $route->post("action", "change_pass", "ActionController@changePassAction");
 
     $route->post("action", "setparam", "ActionController@setParamAction");
 

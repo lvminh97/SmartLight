@@ -38,7 +38,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/ic_baseline_settings_24"/>
+            android:background="@drawable/ic_baseline_settings_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     
@@ -116,7 +116,7 @@
             android:id="@+id/tv_weather_temp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.35"
+            app:layout_constraintWidth_percent="0.4"
             app:layout_constraintLeft_toRightOf="@id/tv_location"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"

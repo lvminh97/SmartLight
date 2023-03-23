@@ -1,5 +1,6 @@
 package com.example.smartlight.fragments;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.smartlight.Factory;
 import com.example.smartlight.R;
 import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.interfaces.MyFragment;
@@ -20,7 +22,7 @@ public class SettingFragment extends Fragment implements MyFragment, View.OnClic
 
     private View view;
     private ImageButton settingMenuBtn;
-    private Button userBtn;
+    private Button introBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,9 @@ public class SettingFragment extends Fragment implements MyFragment, View.OnClic
         set.constrainPercentWidth(R.id.btn_menu_home, 0.5f);
         set.constrainPercentWidth(R.id.btn_menu_user, 0.5f);
         set.applyTo((ConstraintLayout) getActivity().findViewById(R.id.menu_bottom));
+        //
+        introBtn = (Button) view.findViewById(R.id.btn_intro);
+        introBtn.setOnClickListener(this);
     }
 
     private void loadFragment(Fragment fragment) {
@@ -60,6 +65,11 @@ public class SettingFragment extends Fragment implements MyFragment, View.OnClic
 
     @Override
     public void onClick(View v) {
-
+        if(v.getId() == R.id.btn_intro) {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("")
+                    .setMessage("Smart Light\nVersion: " + Factory.version)
+                    .show();
+        }
     }
 }

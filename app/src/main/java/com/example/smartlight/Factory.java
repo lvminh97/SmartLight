@@ -11,6 +11,7 @@ import java.util.List;
 
 public class Factory {
 
+    public static String version = "1.0.7";
     public static boolean debug = true;
     public static DisplayMetrics displayMetrics = null;
 

@@ -4,20 +4,24 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.smartlight.Factory;
 import com.example.smartlight.R;
+import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.interfaces.MyFragment;
 
-public class UserFragment extends Fragment implements MyFragment {
+public class UserFragment extends Fragment implements MyFragment, View.OnClickListener {
 
     private View view;
     private TextView fullnameTv, phoneTv, emailTv;
+    private Button updateInfoBtn, changePassBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,10 +53,33 @@ public class UserFragment extends Fragment implements MyFragment {
         fullnameTv.setText(Factory.user.getFullname());
         emailTv.setText(Factory.user.getEmail());
         phoneTv.setText(Factory.user.getMobile());
+
+        updateInfoBtn = (Button) view.findViewById(R.id.btn_updateinfo);
+        updateInfoBtn.setOnClickListener(this);
+        changePassBtn = (Button) view.findViewById(R.id.btn_changepass);
+        changePassBtn.setOnClickListener(this);
     }
 
     @Override
     public String getTAG() {
         return "User";
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.btn_updateinfo){
+            loadFragment(new UpdateInfoFragment());
+        }
+        else if(v.getId() == R.id.btn_changepass){
+            loadFragment(new ChangePassFragment());
+        }
+    }
+
+    private void loadFragment(Fragment fragment) {
+        MainActivity.FRAG_ID = ((MyFragment) fragment).getTAG();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.layout_main, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

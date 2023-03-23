@@ -51,7 +51,9 @@
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:background="#FFFFFF"
-            android:hint="Email"/>
+            android:hint="Email"
+            android:singleLine="true"
+            android:maxLines="1"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/layout_fullname"
@@ -86,7 +88,9 @@
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:background="#FFFFFF"
-            android:hint="Họ tên"/>
+            android:hint="Họ tên"
+            android:singleLine="true"
+            android:maxLines="1"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/layout_mobile"
@@ -121,7 +125,9 @@
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:background="#FFFFFF"
-            android:hint="Số điện thoại"/>
+            android:hint="Số điện thoại"
+            android:singleLine="true"
+            android:maxLines="1"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/layout_password"
@@ -157,7 +163,9 @@
             android:paddingBottom="15dp"
             android:background="#FFFFFF"
             android:hint="Password"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:maxLines="1"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
     <Button
         android:id="@+id/btn_signup"
