@@ -1,6 +1,7 @@
 package com.example.smartlight.fragments;
 
 import android.app.AlertDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ import com.example.smartlight.Factory;
 import com.example.smartlight.R;
 import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.interfaces.MyFragment;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class SettingFragment extends Fragment implements MyFragment, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -84,6 +87,8 @@ public class SettingFragment extends Fragment implements MyFragment, View.OnClic
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if(buttonView.getId() == R.id.sw_control){
             Factory.isControl = isChecked;
+            SharedPreferences prefs = getActivity().getSharedPreferences("SMARTLIGHT", MODE_PRIVATE);
+            prefs.edit().putBoolean("isControl", Factory.isControl).commit();
         }
     }
 }

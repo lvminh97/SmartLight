@@ -34,6 +34,7 @@ public final class RotaryKnobView extends RelativeLayout implements OnGestureLis
     private float divider;
     private float prevDegree;
     private boolean enable = true;
+    private boolean lock = false;
 
     public RotaryKnobView(@NotNull Context context) {
         super(context);
@@ -94,7 +95,17 @@ public final class RotaryKnobView extends RelativeLayout implements OnGestureLis
         this.setKnobPosition (deg);
     }
 
+    public boolean isLock() {
+        return lock;
+    }
+
+    public void setLock(boolean lock) {
+        this.lock = lock;
+    }
+
     public boolean onScroll(@NotNull MotionEvent e1, @NotNull MotionEvent e2, float distanceX, float distanceY) {
+        if(lock == true)
+            return false;
 //        float startDegress = this.calculateAngle(e1.getX(), e1.getY());
         float rotationDegrees = this.calculateAngle(e2.getX(), e2.getY());
         if (rotationDegrees <= 310 || rotationDegrees >= 350) {

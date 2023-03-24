@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -244,8 +245,13 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-        int progress = seekBar.getProgress();
-        powerTv.setText(progress + "W");
+        if(Factory.isControl) {
+            int progress = seekBar.getProgress();
+            powerTv.setText(progress + "W");
+        }
+        else {
+           seekBar.setProgress(Factory.device.getPower());
+        }
     }
 
     @Override
@@ -256,6 +262,9 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         int progress = seekBar.getProgress();
-        setControl(progress);
+        if(Factory.isControl)
+            setControl(progress);
+        else
+            Toast.makeText(getContext(), "Quyền điều khiển từ App đã bị khóa, mở khóa để tiếp tục", Toast.LENGTH_SHORT).show();
     }
 }

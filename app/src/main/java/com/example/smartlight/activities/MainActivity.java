@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initUI() {
         Factory.displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(Factory.displayMetrics);
-        Log.d("MinhLV", "Screen size = " + Factory.displayMetrics.widthPixels + "x" + Factory.displayMetrics.heightPixels);
 
         mainLayout = (FrameLayout) findViewById(R.id.layout_main);
 
@@ -56,6 +55,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         addBtn.setOnTouchListener(this);
         userBtn.setOnClickListener(this);
         userBtn.setOnTouchListener(this);
+
+        SharedPreferences prefs = getSharedPreferences("SMARTLIGHT", MODE_PRIVATE);
+        Factory.isControl = prefs.getBoolean("isControl", true);
 
         loadFragment(new HomeFragment());
     }

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -85,6 +86,7 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
         backBtn.setOnClickListener(this);
 
         lightKnob = (RotaryKnobView) view.findViewById(R.id.knob_light);
+        lightKnob.setLock(!Factory.isControl);
         lightKnob.setListener(this);
         lightKnob.setValue(Factory.device.getLight());
 
@@ -232,7 +234,10 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
     @Override
     public void onTouch(@NonNull MotionEvent e) {
         if(e.getAction() == MotionEvent.ACTION_UP) {
-            setControl();
+            if(Factory.isControl)
+                setControl();
+            else
+                Toast.makeText(getContext(), "Quyền điều khiển từ App đã bị khóa, mở khóa để tiếp tục", Toast.LENGTH_SHORT).show();
         }
     }
 
