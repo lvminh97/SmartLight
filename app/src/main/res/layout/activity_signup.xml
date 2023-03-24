@@ -52,6 +52,7 @@
             android:paddingBottom="15dp"
             android:background="#FFFFFF"
             android:hint="Email"
+            android:textColor="@color/black"
             android:singleLine="true"
             android:maxLines="1"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -89,6 +90,7 @@
             android:paddingBottom="15dp"
             android:background="#FFFFFF"
             android:hint="Họ tên"
+            android:textColor="@color/black"
             android:singleLine="true"
             android:maxLines="1"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -126,6 +128,7 @@
             android:paddingBottom="15dp"
             android:background="#FFFFFF"
             android:hint="Số điện thoại"
+            android:textColor="@color/black"
             android:singleLine="true"
             android:maxLines="1"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -163,6 +166,7 @@
             android:paddingBottom="15dp"
             android:background="#FFFFFF"
             android:hint="Password"
+            android:textColor="@color/black"
             android:inputType="textPassword"
             android:singleLine="true"
             android:maxLines="1"/>

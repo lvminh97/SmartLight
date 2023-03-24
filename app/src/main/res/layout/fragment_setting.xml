@@ -15,6 +15,8 @@
         android:fontFamily="sans-serif"
         android:gravity="start"
         android:text="Device Update"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         android:textAllCaps="false"
         android:textSize="16sp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -30,9 +32,10 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="15dp"
         android:fontFamily="sans-serif"
+        android:textStyle="bold"
         android:textSize="16sp"
         android:textColor="@color/black"
-        android:text="Âm thanh"/>
+        android:text="Âm thanh:"/>
 
     <Switch
         android:id="@+id/sw_sound"
@@ -54,6 +57,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="40dp"
         android:fontFamily="sans-serif"
+        android:textStyle="bold"
         android:textSize="16sp"
         android:textColor="@color/black"
         android:text="Thông báo tin nhắn từ ứng dụng"/>
@@ -69,12 +73,37 @@
         android:thumb="@drawable/switch_thumb"
         android:track="@drawable/switch_track"/>
 
+    <TextView
+        android:id="@+id/tv_lbl_control"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_lbl_notify"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        android:fontFamily="sans-serif"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:text="Điều khiển từ App"/>
+
+    <Switch
+        android:id="@+id/sw_control"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/sw_notify"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="40dp"
+        android:thumb="@drawable/switch_thumb"
+        android:track="@drawable/switch_track"/>
+
     <View
         android:id="@+id/v_line"
         android:layout_width="match_parent"
         android:layout_height="3dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_lbl_notify"
+        app:layout_constraintTop_toBottomOf="@id/tv_lbl_control"
         android:layout_marginTop="60dp"
         android:background="#000000"/>
 
@@ -87,6 +116,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="50dp"
         android:fontFamily="sans-serif"
+        android:textStyle="bold"
         android:textSize="16sp"
         android:textColor="@color/black"
         android:text="Giới thiệu"/>
@@ -110,6 +140,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="45dp"
         android:fontFamily="sans-serif"
+        android:textStyle="bold"
         android:textSize="16sp"
         android:textColor="@color/black"
         android:text="Privacy Settings" />
@@ -128,14 +159,17 @@
         android:id="@+id/btn_cache"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="start"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_lbl_privacy"
+        android:gravity="left|center_vertical"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="40dp"
-        android:background="#00000000"
+        android:layout_marginTop="35dp"
+        android:layout_marginRight="50dp"
+        android:paddingLeft="10dp"
+        android:background="@drawable/bg_control_button"
         android:textAllCaps="false"
         android:fontFamily="sans-serif"
+        android:textStyle="bold"
         android:textSize="16sp"
         android:text="Xóa bộ nhớ đệm"/>
 

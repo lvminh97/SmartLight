@@ -1,5 +1,11 @@
 package com.example.smartlight.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.smartlight.Factory;
 import com.example.smartlight.R;
+import com.example.smartlight.activities.LoginActivity;
 import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.adapters.RoomAdapter;
 import com.example.smartlight.interfaces.MyFragment;
@@ -27,7 +34,7 @@ public class HomeFragment extends Fragment implements MyFragment, AdapterView.On
 
     private View view;
     private GridView gridview;
-    private Button settingBtn;
+    private Button settingBtn, logoutBtn;
     private ImageButton homeMenuBtn;
     private RoomAdapter roomAdapter;
 
@@ -61,6 +68,8 @@ public class HomeFragment extends Fragment implements MyFragment, AdapterView.On
 
         settingBtn = (Button) view.findViewById(R.id.btn_setting);
         settingBtn.setOnClickListener(this);
+        logoutBtn = (Button) view.findViewById(R.id.btn_logout);
+        logoutBtn.setOnClickListener(this);
     }
 
     @Override
@@ -88,6 +97,24 @@ public class HomeFragment extends Fragment implements MyFragment, AdapterView.On
     public void onClick(View view) {
         if(view.getId() == R.id.btn_setting) {
             loadFragment(new SettingFragment());
+        }
+        else if(view.getId() == R.id.btn_logout){
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("Thông báo")
+                    .setMessage("Bạn có chắc chắn muốn đăng xuất?")
+                    .setPositiveButton("Đăng xuất", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            SharedPreferences prefs = getActivity().getSharedPreferences("SMARTLIGHT", MODE_PRIVATE);
+                            prefs.edit().putStringSet("password", null).commit();
+                            Factory.user = null;
+                            MainActivity.FRAG_ID = "";
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("Bỏ qua", null)
+                    .show();
         }
     }
 }

@@ -27,7 +27,7 @@
         android:textStyle="bold"
         android:textSize="20sp"
         android:textColor="@color/black"
-        android:text="Tài khoàn người dùng"/>
+        android:text="Tài khoản người dùng"/>
 
     <TextView
         android:id="@+id/tv_lbl_username"

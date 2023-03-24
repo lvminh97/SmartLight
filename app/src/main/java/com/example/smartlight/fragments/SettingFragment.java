@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.Switch;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -18,11 +20,12 @@ import com.example.smartlight.R;
 import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.interfaces.MyFragment;
 
-public class SettingFragment extends Fragment implements MyFragment, View.OnClickListener {
+public class SettingFragment extends Fragment implements MyFragment, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private View view;
     private ImageButton settingMenuBtn;
     private Button introBtn;
+    private Switch controlSw;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,10 @@ public class SettingFragment extends Fragment implements MyFragment, View.OnClic
         //
         introBtn = (Button) view.findViewById(R.id.btn_intro);
         introBtn.setOnClickListener(this);
+
+        controlSw = (Switch) view.findViewById(R.id.sw_control);
+        controlSw.setChecked(Factory.isControl);
+        controlSw.setOnCheckedChangeListener(this);
     }
 
     private void loadFragment(Fragment fragment) {
@@ -70,6 +77,13 @@ public class SettingFragment extends Fragment implements MyFragment, View.OnClic
                     .setTitle("")
                     .setMessage("Smart Light\nVersion: " + Factory.version)
                     .show();
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(buttonView.getId() == R.id.sw_control){
+            Factory.isControl = isChecked;
         }
     }
 }

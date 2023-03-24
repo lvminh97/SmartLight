@@ -45,7 +45,7 @@ public class RoomAdapter extends BaseAdapter {
         View gridView = inflater.inflate(R.layout.item_room, null, true);
 
         ImageView img = gridView.findViewById(R.id.img_room);
-        img.setImageResource(R.drawable.building);
+        img.setBackground(roomList.get(i).getImg());
         if(Factory.displayMetrics.heightPixels < 1600) {
             img.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
         }

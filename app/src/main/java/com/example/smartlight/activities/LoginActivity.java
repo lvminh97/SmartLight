@@ -3,6 +3,7 @@ package com.example.smartlight.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -106,7 +108,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Factory.roomList = new ArrayList<Room>();
                             for(int i = 0; i < roomJsonArray.length(); i++) {
                                 JSONObject roomJson = roomJsonArray.getJSONObject(i);
-                                Factory.roomList.add(new Room(Integer.parseInt(roomJson.getString("id")), null, roomJson.getString("name")));
+                                int[] imgIds = {R.drawable.meeting_room, R.drawable.class_room, R.drawable.conference_room, R.drawable.building};
+                                Drawable roomImg = ContextCompat.getDrawable(getBaseContext(), imgIds[i]);
+                                Factory.roomList.add(new Room(Integer.parseInt(roomJson.getString("id")), roomImg, roomJson.getString("name")));
                             }// add 'Customize' item
                             Intent intent = new Intent(getBaseContext(), MainActivity.class);
                             startActivity(intent);
