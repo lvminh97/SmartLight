@@ -13,12 +13,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -46,6 +40,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 public class LightFragment extends Fragment implements MyFragment, View.OnClickListener, RotaryKnobView.RotaryKnobListener {
 
@@ -86,7 +86,7 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
         backBtn.setOnClickListener(this);
 
         lightKnob = (RotaryKnobView) view.findViewById(R.id.knob_light);
-        lightKnob.setLock(!Factory.isControl);
+        lightKnob.setLock(!Factory.user.isAppControl());
         lightKnob.setListener(this);
         lightKnob.setValue(Factory.device.getLight());
 
@@ -234,7 +234,7 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
     @Override
     public void onTouch(@NonNull MotionEvent e) {
         if(e.getAction() == MotionEvent.ACTION_UP) {
-            if(Factory.isControl)
+            if(Factory.user.isAppControl())
                 setControl();
             else
                 Toast.makeText(getContext(), "Quyền điều khiển từ App đã bị khóa, mở khóa để tiếp tục", Toast.LENGTH_SHORT).show();

@@ -14,12 +14,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -42,6 +36,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 public class ControlFragment extends Fragment implements MyFragment, View.OnClickListener, RotaryKnobView.RotaryKnobListener, AdapterView.OnItemSelectedListener {
 
@@ -78,7 +78,7 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         roomNameTv = (TextView) view.findViewById(R.id.tv_room_name);
         roomNameTv.setText(Factory.room.getName());
         tempKnob = (RotaryKnobView) view.findViewById(R.id.knob);
-        tempKnob.setLock(!Factory.isControl);
+        tempKnob.setLock(!Factory.user.isAppControl());
         tempKnob.setListener(this);
         tempKnob.setValue(0);
         tempTv = (TextView) view.findViewById(R.id.tv_temp);
@@ -139,7 +139,7 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
 
     @Override
     public void onRotate(int value) {
-        if(Factory.isControl == true) {
+        if(Factory.user.isAppControl() == true) {
             tempTv.setText(value + " °C");
         }
     }
@@ -147,7 +147,7 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
     @Override
     public void onTouch(@NonNull MotionEvent e) {
         if(e.getAction() == MotionEvent.ACTION_UP) {
-            if(Factory.isControl)
+            if(Factory.user.isAppControl())
                 setControl();
             else
                 Toast.makeText(getContext(), "Quyền điều khiển từ App đã bị khóa, mở khóa để tiếp tục", Toast.LENGTH_SHORT).show();

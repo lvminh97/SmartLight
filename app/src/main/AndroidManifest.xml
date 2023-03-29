@@ -29,6 +29,8 @@
             android:exported="true" />
         <activity android:name=".activities.SignupActivity"
             android:exported="true"/>
+        <activity android:name=".activities.SetDomainActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>

@@ -9,6 +9,9 @@
     $route->post("action", "update_info", "ActionController@updateInfoAction");
     $route->post("action", "change_pass", "ActionController@changePassAction");
 
+    $route->post("action", "set_app_control", "ActionController@setAppControl");
+    $route->get("action", "get_app_control", "ActionController@getAppControl");
+
     $route->post("action", "setparam", "ActionController@setParamAction");
 
     $route->get("action", "get_devices", "ActionController@getDevices");

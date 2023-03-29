@@ -7,15 +7,10 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.smartlight.Factory;
 import com.example.smartlight.R;
@@ -24,6 +19,10 @@ import com.example.smartlight.fragments.HomeFragment;
 import com.example.smartlight.fragments.SettingFragment;
 import com.example.smartlight.fragments.UserFragment;
 import com.example.smartlight.interfaces.MyFragment;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
@@ -55,9 +54,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         addBtn.setOnTouchListener(this);
         userBtn.setOnClickListener(this);
         userBtn.setOnTouchListener(this);
-
-        SharedPreferences prefs = getSharedPreferences("SMARTLIGHT", MODE_PRIVATE);
-        Factory.isControl = prefs.getBoolean("isControl", true);
 
         loadFragment(new HomeFragment());
     }

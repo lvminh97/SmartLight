@@ -13,11 +13,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -45,6 +40,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 public class PowerFragment extends Fragment implements MyFragment, View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
@@ -245,7 +245,7 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-        if(Factory.isControl) {
+        if(Factory.user.isAppControl()) {
             int progress = seekBar.getProgress();
             powerTv.setText(progress + "W");
         }
@@ -262,7 +262,7 @@ public class PowerFragment extends Fragment implements MyFragment, View.OnClickL
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         int progress = seekBar.getProgress();
-        if(Factory.isControl)
+        if(Factory.user.isAppControl())
             setControl(progress);
         else
             Toast.makeText(getContext(), "Quyền điều khiển từ App đã bị khóa, mở khóa để tiếp tục", Toast.LENGTH_SHORT).show();

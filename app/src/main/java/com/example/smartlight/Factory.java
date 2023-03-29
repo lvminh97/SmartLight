@@ -15,8 +15,7 @@ public class Factory {
     public static boolean debug = true;
     public static DisplayMetrics displayMetrics = null;
 
-//    public static String HOST = "http://smartlight.c1.biz";
-    public static String HOST = "https://aqua-iot.xyz";
+    public static String HOST = "";
 
     public static User user = null;
     public static List<Room> roomList = null;
@@ -25,6 +24,4 @@ public class Factory {
     public static Device device = null;
 
     public static List<Type> types = null;
-
-    public static boolean isControl = true;
 }

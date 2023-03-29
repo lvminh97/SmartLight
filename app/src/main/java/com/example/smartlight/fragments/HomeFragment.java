@@ -1,7 +1,5 @@
 package com.example.smartlight.fragments;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,11 +13,6 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.example.smartlight.Factory;
 import com.example.smartlight.R;
 import com.example.smartlight.activities.LoginActivity;
@@ -29,6 +22,13 @@ import com.example.smartlight.interfaces.MyFragment;
 import com.example.smartlight.models.Room;
 
 import java.util.ArrayList;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class HomeFragment extends Fragment implements MyFragment, AdapterView.OnItemClickListener, View.OnClickListener {
 

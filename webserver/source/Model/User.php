@@ -25,7 +25,8 @@ class User extends DB{
                 "id" => $check[0]["id"],
                 "fullname" => $check[0]["fullname"],
                 "email" => $check[0]["email"],
-                "mobile" => $check[0]["mobile"]
+                "mobile" => $check[0]["mobile"],
+                "app_control" => $check[0]["app_control"]
             ];
         }
         else 
@@ -69,6 +70,43 @@ class User extends DB{
         }
         else {
             $resp["response"] = "WrongPass";
+        }
+        return $resp;
+    }
+
+    public function setAppControl($data){
+        $resp = [];
+        $check = $this->select("user", "*", "email='{$data['email']}' AND id='{$data['uid']}'");
+        if(count($check) == 1){
+            $this->update("user", [
+                "app_control" => $data["app_control"]
+            ], "id='{$data['uid']}'");
+            $resp["response"] = "OK";
+        }
+        else{
+            $resp["response"] = "Fail";
+        }
+        return $resp;
+    }
+
+    public function getAppControl($data){
+        $resp = [];
+
+        if(isset($data["uid"]))
+            $check = $this->select("user", "*", "id='{$data['uid']}'");
+        elseif(isset($data["id"]))
+            $check = $this->execute("SELECT * FROM device JOIN room JOIN user WHERE device.id='{$data['id']}' AND device.room_id=room.id AND room.user_id=user.id");
+        else
+            $resp["response"] = "Fail";
+
+        if(!isset($resp["response"])){
+            if(count($check) == 1){
+                $resp["response"] = "OK";
+                $resp["app_control"] = $check[0]["app_control"];
+            }
+            else{
+                $resp["response"] = "Fail";
+            }
         }
         return $resp;
     }

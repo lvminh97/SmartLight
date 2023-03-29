@@ -40,6 +40,16 @@ class ActionController extends Controller{
         echo json_encode($resp);
     }
 
+    public function setAppControl($data){
+        $resp = $this->userObj->setAppControl($data);
+        echo json_encode($resp);
+    }
+
+    public function getAppControl($data){
+        $resp = $this->userObj->getAppControl($data);
+        echo json_encode($resp);
+    }
+
     public function setParamAction($data) {
         $this->deviceObj->setControl($data["apikey"], $data["param"], $data["value"]);
         echo json_encode(["response" => "OK"]);

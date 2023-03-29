@@ -1,7 +1,5 @@
 package com.example.smartlight.fragments;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,9 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -33,6 +28,11 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class ChangePassFragment extends Fragment implements MyFragment, View.OnClickListener {
 

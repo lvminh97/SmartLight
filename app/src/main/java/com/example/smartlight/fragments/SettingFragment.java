@@ -1,8 +1,8 @@
 package com.example.smartlight.fragments;
 
 import android.app.AlertDialog;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,18 +10,30 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.smartlight.Factory;
+import com.example.smartlight.NukeSSLCerts;
+import com.example.smartlight.R;
+import com.example.smartlight.activities.MainActivity;
+import com.example.smartlight.interfaces.MyFragment;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
-import com.example.smartlight.Factory;
-import com.example.smartlight.R;
-import com.example.smartlight.activities.MainActivity;
-import com.example.smartlight.interfaces.MyFragment;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class SettingFragment extends Fragment implements MyFragment, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -56,7 +68,7 @@ public class SettingFragment extends Fragment implements MyFragment, View.OnClic
         introBtn.setOnClickListener(this);
 
         controlSw = (Switch) view.findViewById(R.id.sw_control);
-        controlSw.setChecked(Factory.isControl);
+        controlSw.setChecked(Factory.user.isAppControl());
         controlSw.setOnCheckedChangeListener(this);
     }
 
@@ -86,9 +98,54 @@ public class SettingFragment extends Fragment implements MyFragment, View.OnClic
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if(buttonView.getId() == R.id.sw_control){
-            Factory.isControl = isChecked;
-            SharedPreferences prefs = getActivity().getSharedPreferences("SMARTLIGHT", MODE_PRIVATE);
-            prefs.edit().putBoolean("isControl", Factory.isControl).commit();
+            Factory.user.setAppControl(isChecked);
+            new NukeSSLCerts().nuke();
+            RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, Factory.HOST + "/?action=set_app_control",
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                if(Factory.debug) {
+                                    Log.d("MinhLV", response);
+                                }
+                                JSONObject jsonObject = new JSONObject(response);
+                                if(jsonObject.getString("response") != null && jsonObject.getString("response").equals("OK")){
+                                    //
+                                }
+                                else {
+                                    Toast.makeText(getActivity().getBaseContext(), "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
+                                    controlSw.setChecked(!isChecked);
+                                }
+                            } catch (JSONException e) {
+                                if(Factory.debug) {
+                                    Log.d("MinhLV", e.getMessage());
+                                }
+                                Toast.makeText(getActivity().getBaseContext(), "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
+                                controlSw.setChecked(!isChecked);
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+//                    Log.d("MinhLV", error.getMessage());
+                            Toast.makeText(getActivity().getBaseContext(), "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
+                            controlSw.setChecked(!isChecked);
+                        }
+                    })
+            {
+                @Override
+                protected Map<String,String> getParams(){
+                    Map<String,String> params = new HashMap<String, String>();
+                    params.put("uid", "" + Factory.user.getId());
+                    params.put("email", Factory.user.getEmail());
+                    params.put("app_control", Factory.user.isAppControl() ? "1" : "0");
+                    return params;
+                }
+            };
+            queue.add(stringRequest);
         }
     }
 }

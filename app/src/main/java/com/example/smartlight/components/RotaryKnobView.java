@@ -14,12 +14,12 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 
-import androidx.core.view.GestureDetectorCompat;
-
 import com.example.smartlight.R;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import androidx.core.view.GestureDetectorCompat;
 
 public final class RotaryKnobView extends RelativeLayout implements OnGestureListener {
     private View view;

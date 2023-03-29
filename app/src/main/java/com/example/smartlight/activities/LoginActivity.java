@@ -9,10 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -35,11 +33,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ProgressDialog loadingDialog = null;
     private EditText usernameEd, passwordEd;
     private Button loginBtn, signupBtn;
+    private ImageView mainIconImg;
+    private int mainIconClickCnt = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initUI() {
+        SharedPreferences prefs = getSharedPreferences("SMARTLIGHT", MODE_PRIVATE);
+
+        // get server domain
+        Factory.HOST = prefs.getString("host", null);
+        if(Factory.HOST == null) {
+            Factory.HOST = "http://smartlight.c1.biz";
+        }
+
         usernameEd = (EditText) findViewById(R.id.ed_username);
         passwordEd = (EditText) findViewById(R.id.ed_password);
 
@@ -57,7 +68,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             usernameEd.setText(this.getIntent().getStringExtra("email"));
         }
         else {
-            SharedPreferences prefs = getSharedPreferences("SMARTLIGHT", MODE_PRIVATE);
             String username = prefs.getString("username", null);
             String password = prefs.getString("password", null);
             if (username != null)
@@ -70,6 +80,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         signupBtn = (Button) findViewById(R.id.btn_signup);
         loginBtn.setOnClickListener(this);
         signupBtn.setOnClickListener(this);
+        mainIconImg = (ImageView) findViewById(R.id.img_main_icon);
+        mainIconImg.setOnClickListener(this);
     }
 
     @Override
@@ -80,6 +92,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         else if(view.getId() == R.id.btn_signup) {
             Intent intent = new Intent(this, SignupActivity.class);
             startActivity(intent);
+        }
+        else if(view.getId() == R.id.img_main_icon) {
+            mainIconClickCnt++;
+            if(mainIconClickCnt == 10) {
+                mainIconClickCnt = 0;
+                Intent intent = new Intent(this, SetDomainActivity.class);
+                startActivity(intent);
+            }
         }
     }
 
@@ -102,7 +122,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Factory.user = new User(Integer.parseInt(userData.getString("id")),
                                                     userData.getString("fullname"),
                                                     userData.getString("mobile"),
-                                                    userData.getString("email"));
+                                                    userData.getString("email"),
+                                                    userData.getString("app_control").equals("1"));
 
                             JSONArray roomJsonArray = jsonObject.getJSONArray("roomList");
                             Factory.roomList = new ArrayList<Room>();
@@ -169,7 +190,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //                    Log.d("MinhLV", error.getMessage());
+                        Log.d("MinhLV", "Get types error => " + error.getMessage());
                     }
                 }) {
             @Override
