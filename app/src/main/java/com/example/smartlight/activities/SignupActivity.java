@@ -85,7 +85,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                                 startActivity(intent);
                             }
                         } catch (JSONException e) {
-                            Log.d("MinhLV", e.getMessage());
+                            if(Factory.debug)
+                                Log.d("SmartLight_Debug", e.getMessage());
                             e.printStackTrace();
                         }
                     }
@@ -93,7 +94,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("MinhLV", error.getMessage());
+                        if(Factory.debug)
+                            Log.d("SmartLight_Debug", error.getMessage());
                     }
                 })
         {

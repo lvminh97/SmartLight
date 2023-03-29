@@ -111,6 +111,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onResponse(String response) {
                     try {
+                        loadingDialog.dismiss();
                         JSONObject jsonObject = new JSONObject(response);
                         String resp = jsonObject.getString("response");
                         if(resp.equals("OK")){
@@ -144,7 +145,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
 
                     } catch (JSONException e) {
-                        Log.d("MinhLV", e.getMessage());
+                        if(Factory.debug)
+                            Log.d("SmartLight_Debug", e.getMessage());
+
+                        Toast.makeText(getBaseContext(), "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
+                        loadingDialog.dismiss();
                         e.printStackTrace();
                     }
                 }
@@ -152,7 +157,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.d("MinhLV", "" + error.getMessage());
+                    if(Factory.debug)
+                        Log.d("SmartLight_Debug", "" + error.getMessage());
+                    Toast.makeText(getBaseContext(), "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
+                    loadingDialog.dismiss();
                 }
             })
         {
@@ -169,9 +177,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onResponse(String response) {
                         try {
-                            loadingDialog.dismiss();
                             if (Factory.debug) {
-                                Log.d("MinhLV", response);
+                                Log.d("SmartLight_Debug", response);
                             }
                             JSONArray jsonArray = new JSONArray(response);
                             Factory.types = new ArrayList<>();
@@ -181,7 +188,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             }
                         } catch (JSONException e) {
                             if (Factory.debug) {
-                                Log.d("MinhLV", e.getMessage());
+                                Log.d("SmartLight_Debug", e.getMessage());
                             }
                             e.printStackTrace();
                         }
@@ -190,7 +197,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("MinhLV", "Get types error => " + error.getMessage());
+//                        Log.d("SmartLight_Debug", "" + error.getMessage());
                     }
                 }) {
             @Override

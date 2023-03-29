@@ -11,8 +11,8 @@ import java.util.List;
 
 public class Factory {
 
-    public static String version = "1.0.7";
-    public static boolean debug = true;
+    public static String version = "1.0.8";
+    public static boolean debug = false;
     public static DisplayMetrics displayMetrics = null;
 
     public static String HOST = "";

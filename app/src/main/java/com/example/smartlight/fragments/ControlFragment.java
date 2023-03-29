@@ -165,7 +165,7 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
                             try {
                                 loadingDialog.dismiss();
                                 if (Factory.debug) {
-                                    Log.d("MinhLV", response);
+                                    Log.d("SmartLight_Debug", response);
                                 }
                                 JSONArray jsonArray = new JSONArray(response);
                                 if(Factory.deviceList == null) {
@@ -193,7 +193,7 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
                                 deviceSpn.setAdapter(adapter);
                             } catch (JSONException e) {
                                 if (Factory.debug) {
-                                    Log.d("MinhLV", e.getMessage());
+                                    Log.d("SmartLight_Debug", e.getMessage());
                                 }
                                 e.printStackTrace();
                             }
@@ -202,7 +202,7 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            //                    Log.d("MinhLV", error.getMessage());
+                            //                    Log.d("SmartLight_Debug", error.getMessage());
                         }
                     }) {
                 @Override
@@ -243,12 +243,12 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
                     public void onResponse(String response) {
                         try {
                             if(Factory.debug) {
-                                Log.d("MinhLV", response);
+                                Log.d("SmartLight_Debug", response);
                             }
                             JSONObject jsonObject = new JSONObject(response);
                         } catch (JSONException e) {
                             if(Factory.debug) {
-                                Log.d("MinhLV", e.getMessage());
+                                Log.d("SmartLight_Debug", e.getMessage());
                             }
                             e.printStackTrace();
                         }
@@ -257,7 +257,7 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-//                    Log.d("MinhLV", error.getMessage());
+//                    Log.d("SmartLight_Debug", error.getMessage());
                     }
                 })
         {

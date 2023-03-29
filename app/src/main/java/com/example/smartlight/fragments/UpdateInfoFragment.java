@@ -85,7 +85,7 @@ public class UpdateInfoFragment extends Fragment implements MyFragment, View.OnC
                     public void onResponse(String response) {
                         try {
                             if(Factory.debug) {
-                                Log.d("MinhLV", response);
+                                Log.d("SmartLight_Debug", response);
                             }
                             loadingDialog.dismiss();
                             JSONObject jsonObject = new JSONObject(response);
@@ -100,7 +100,7 @@ public class UpdateInfoFragment extends Fragment implements MyFragment, View.OnC
                             }
                         } catch (JSONException e) {
                             if(Factory.debug) {
-                                Log.d("MinhLV", e.getMessage());
+                                Log.d("SmartLight_Debug", e.getMessage());
                             }
                             loadingDialog.dismiss();
                             Toast.makeText(getActivity().getBaseContext(), "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
@@ -111,7 +111,7 @@ public class UpdateInfoFragment extends Fragment implements MyFragment, View.OnC
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-//                    Log.d("MinhLV", error.getMessage());
+//                    Log.d("SmartLight_Debug", error.getMessage());
                         loadingDialog.dismiss();
                         Toast.makeText(getActivity().getBaseContext(), "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
                     }

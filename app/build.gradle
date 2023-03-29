@@ -9,8 +9,8 @@ android {
         applicationId "com.example.smartlight"
         minSdk 26
         targetSdk 33
-        versionCode 2
-        versionName "1.0.7"
+        versionCode 1
+        versionName "1.0.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -94,7 +94,7 @@ public class AddDeviceFragment extends Fragment implements MyFragment, View.OnCl
                             try {
                                 loadingDialog.dismiss();
                                 if (Factory.debug) {
-                                    Log.d("MinhLV", response);
+                                    Log.d("SmartLight_Debug", response);
                                 }
                                 JSONArray jsonArray = new JSONArray(response);
                                 Factory.types = new ArrayList<>();
@@ -109,7 +109,7 @@ public class AddDeviceFragment extends Fragment implements MyFragment, View.OnCl
                                 typeSpinner.setAdapter(adapter);
                             } catch (JSONException e) {
                                 if (Factory.debug) {
-                                    Log.d("MinhLV", e.getMessage());
+                                    Log.d("SmartLight_Debug", e.getMessage());
                                 }
                                 e.printStackTrace();
                             }
@@ -118,7 +118,7 @@ public class AddDeviceFragment extends Fragment implements MyFragment, View.OnCl
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            //                    Log.d("MinhLV", error.getMessage());
+                            //                    Log.d("SmartLight_Debug", error.getMessage());
                         }
                     }) {
                 @Override
@@ -150,7 +150,7 @@ public class AddDeviceFragment extends Fragment implements MyFragment, View.OnCl
                     public void onResponse(String response) {
                         try {
                             if(Factory.debug) {
-                                Log.d("MinhLV", response);
+                                Log.d("SmartLight_Debug", response);
                             }
                             loadingDialog.dismiss();
                             JSONObject jsonObject = new JSONObject(response);
@@ -169,7 +169,7 @@ public class AddDeviceFragment extends Fragment implements MyFragment, View.OnCl
                             }
                         } catch (JSONException e) {
                             if(Factory.debug) {
-                                Log.d("MinhLV", e.getMessage());
+                                Log.d("SmartLight_Debug", e.getMessage());
                             }
                             e.printStackTrace();
                         }
@@ -178,7 +178,7 @@ public class AddDeviceFragment extends Fragment implements MyFragment, View.OnCl
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-//                    Log.d("MinhLV", error.getMessage());
+//                    Log.d("SmartLight_Debug", error.getMessage());
                     }
                 })
         {
