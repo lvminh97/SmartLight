@@ -106,11 +106,15 @@ class Device extends DB{
                 $data["power"] = 0;
 
             $this->insert("device_data", [
-                "id" => $data["id"],
+                "id" => $id,
                 "time" => $data["time"],
                 "light" => $data["light"],
                 "power" => $data["power"]
             ]);
+            return ["response" => "OK"];
+        }
+        else {
+            return ["response" => "Fail"];
         }
     }
 
@@ -119,6 +123,8 @@ class Device extends DB{
         if(count($check) == 1) {
             $id = $check[0]["id"];
             $control = $this->select("device_control", "*", "id='$id'")[0];
+            $user_check = $this->execute("SELECT * FROM device JOIN room JOIN user WHERE device.id='$id' AND device.room_id=room.id AND room.user_id=user.id");
+            $control["app_control"] = $user_check[0]["app_control"];
             return $control;
         }
         else{

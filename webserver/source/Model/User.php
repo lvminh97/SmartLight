@@ -88,27 +88,5 @@ class User extends DB{
         }
         return $resp;
     }
-
-    public function getAppControl($data){
-        $resp = [];
-
-        if(isset($data["uid"]))
-            $check = $this->select("user", "*", "id='{$data['uid']}'");
-        elseif(isset($data["id"]))
-            $check = $this->execute("SELECT * FROM device JOIN room JOIN user WHERE device.id='{$data['id']}' AND device.room_id=room.id AND room.user_id=user.id");
-        else
-            $resp["response"] = "Fail";
-
-        if(!isset($resp["response"])){
-            if(count($check) == 1){
-                $resp["response"] = "OK";
-                $resp["app_control"] = $check[0]["app_control"];
-            }
-            else{
-                $resp["response"] = "Fail";
-            }
-        }
-        return $resp;
-    }
 }
 ?>
