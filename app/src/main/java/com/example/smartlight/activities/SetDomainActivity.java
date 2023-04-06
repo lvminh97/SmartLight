@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SetDomainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private final String[] HOST_LIST = {"http://smartlight.c1.biz", "http://aqua-iot.xyz"};
+    private final String[] HOST_LIST = {"http://smartlight.c1.biz", "http://denthongminh.pro"};
 
     private RadioGroup radioGroup;
     private RadioButton domain1Radio, domain2Radio;

@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // get server domain
         Factory.HOST = prefs.getString("host", null);
         if(Factory.HOST == null) {
-            Factory.HOST = "http://smartlight.c1.biz";
+            Factory.HOST = "http://denthongminh.pro";
         }
 
         usernameEd = (EditText) findViewById(R.id.ed_username);

@@ -47,7 +47,7 @@
             android:paddingLeft="20dp"
             android:textSize="16dp"
             android:textColor="@color/black"
-            android:text="http://aqua-iot.xyz"/>
+            android:text="http://denthongminh.pro"/>
     </RadioGroup>
 
     <Button
