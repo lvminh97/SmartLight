@@ -41,7 +41,10 @@ class Device extends DB{
     }
 
     public function getList($room_id) {
-        $deviceList = $this->execute("SELECT * from device JOIN device_control ON device.id=device_control.id WHERE device.room_id='$room_id' ORDER BY device.id");
+        $deviceList = $this->execute("SELECT device.*,device_control.*,device_type.name from device JOIN device_control JOIN device_type ON device.id=device_control.id AND device.type=device_type.id WHERE device.room_id='$room_id' ORDER BY device.id");
+        for($i = 0; $i < count($deviceList); $i++) {
+            $deviceList[$i]["name"] = $deviceList[$i]["id"]." - ".$deviceList[$i]["name"];
+        }
         return $deviceList;
     }
 
@@ -67,7 +70,7 @@ class Device extends DB{
     }
 
     public function getLight($id){
-        $data = $this->execute("SELECT time,light FROM device_data WHERE id='$id' ORDER BY time DESC LIMIT 50");
+        $data = $this->execute("SELECT time,light FROM device_data WHERE id='$id' ORDER BY time DESC LIMIT 400");
         $data = array_reverse($data);
         return $data;
     }
@@ -118,8 +121,8 @@ class Device extends DB{
         }
     }
 
-    public function getControl($data){
-        $check = $this->select("device", "*", "api_key='{$data['apikey']}'");
+    public function getControl($apikey){
+        $check = $this->select("device", "*", "api_key='$apikey'");
         if(count($check) == 1) {
             $id = $check[0]["id"];
             $control = $this->select("device_control", "*", "id='$id'")[0];

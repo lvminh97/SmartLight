@@ -5,7 +5,10 @@
     $route->get("site", "home", "ViewController@getIndex");
 
     $route->post("action", "signup", "ActionController@signupAction");
+    $route->get("site", "register", "ViewController@getRegisterPage");
     $route->post("action", "login", "ActionController@loginAction");
+    $route->get("site", "login", "ViewController@getLoginPage");
+    $route->get("action", "logout", "ActionController@logoutAction");
     $route->post("action", "update_info", "ActionController@updateInfoAction");
     $route->post("action", "change_pass", "ActionController@changePassAction");
 
@@ -22,6 +25,10 @@
 
     $route->get("action", "get_types", "ActionController@getTypes");
     $route->post("action", "add_device", "ActionController@addDevice");
+
+
+    // web view
+    $route->get("site", "light_design", "ViewController@getLightDesignPage");
 
     $route->process();
 ?>  

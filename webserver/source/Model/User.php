@@ -9,7 +9,7 @@ class User extends DB{
     }
 
     public function signup($data){
-        $data["password"] = _hash($data["password"]);
+        $data["password"] = sha1(sha1($data["password"]));
         $this->insert("user", $data);
         $check = $this->select("user", "*", "email='{$data["email"]}'");
         return ["response" => "OK", "id" => $check[0]["id"]];
@@ -17,7 +17,7 @@ class User extends DB{
 
     public function login($data) {
         $resp = [];
-        $data["password"] = _hash($data["password"]);
+        $data["password"] = sha1(sha1($data["password"]));
         $check = $this->select("user", "*", "email='{$data['username']}' AND password='{$data['password']}'");
         if(count($check) == 1){
             $resp["response"] = "OK";
@@ -66,7 +66,7 @@ class User extends DB{
                     "password" => $newPass
                 ], "id='{$data['id']}'");
                 $resp["response"] = "OK";
-            }
+            } 
         }
         else {
             $resp["response"] = "WrongPass";

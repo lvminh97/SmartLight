@@ -7,27 +7,85 @@ class ActionController extends Controller{
     }
     
     public function signupAction($data) {
-        $resp = $this->userObj->signup($data);
-        $uid = $resp["id"];
-        // create room and device
-        $roomResp = $this->roomObj->create(["name" => "Meeting Room", "user_id" => $uid]);
-        $this->deviceObj->create(["room_id" => $roomResp["id"], "type" => "1"]);
-        $roomResp = $this->roomObj->create(["name" => "Classroom", "user_id" => $uid]);
-        $this->deviceObj->create(["room_id" => $roomResp["id"], "type" => "1"]);
-        $roomResp = $this->roomObj->create(["name" => "Conference Room", "user_id" => $uid]);
-        $this->deviceObj->create(["room_id" => $roomResp["id"], "type" => "1"]);
-        $roomResp = $this->roomObj->create(["name" => "Customize", "user_id" => $uid]);
-        $this->deviceObj->create(["room_id" => $roomResp["id"], "type" => "1"]);
-        echo json_encode($resp);
+        $platform = "app";
+        if(isset($data['platform']) && $data['platform'] == "web"){     // web
+            $platform = "web";
+            if(strlen($data["password"]) < 8) 
+                $resp["response"] = "shortpassword";
+            else if($data["password"] != $data["cpassword"])
+                $resp["response"] = "mismatch";
+            
+            unset($data["platform"]);
+            unset($data["cpassword"]);
+            unset($data["submit"]);
+        }
+        if(!isset($resp)) {
+            $resp = $this->userObj->signup($data);
+            $uid = $resp["id"];
+            // create room and device
+            $roomResp = $this->roomObj->create(["name" => "Meeting Room", "user_id" => $uid]);
+            $this->deviceObj->create(["room_id" => $roomResp["id"], "type" => "1"]);
+            $roomResp = $this->roomObj->create(["name" => "Classroom", "user_id" => $uid]);
+            $this->deviceObj->create(["room_id" => $roomResp["id"], "type" => "1"]);
+            $roomResp = $this->roomObj->create(["name" => "Conference Room", "user_id" => $uid]);
+            $this->deviceObj->create(["room_id" => $roomResp["id"], "type" => "1"]);
+            $roomResp = $this->roomObj->create(["name" => "Customize", "user_id" => $uid]);
+            $this->deviceObj->create(["room_id" => $roomResp["id"], "type" => "1"]);
+        }
+        if($platform == "web") {
+            if($resp["response"] == "OK"){
+                notice_and_nextpage("Đăng ký thành công. Mời bạn đăng nhập", "/");
+            }
+            else{
+                $errors = [];
+                if($resp["response"] == "shortpassword")
+                    $errors[] = "Mật khẩu quá ngắn. Độ dài tối thiểu 8 ký tự";
+                if($resp["response"] == "mismatch")
+                    $errors[] = "Mật khẩu nhập lại không khớp";
+
+                getView("register", [
+                    "error" => $errors
+                ]);
+            }
+        }
+        else {
+            echo json_encode($resp);
+        }
     }
 
     public function loginAction($data){
-        $resp = $this->userObj->login($data);
-        if($resp["response"] == "OK"){
-            $roomList = $this->roomObj->getList($resp["user"]["id"]);
-            $resp["roomList"] = $roomList;
+        if(isset($data['platform']) && $data['platform'] == "web"){     // web
+            $resp = $this->userObj->login($data);
+            if($resp["response"] == "OK"){
+                $_SESSION["smlgt_user"] = [
+                    "email" => $resp["user"]["email"],
+                    "name" => $resp["user"]["fullname"],
+                    "id" => $resp["user"]["id"]
+                ];
+                nextpage("/");
+            }
+            else{
+                getView("login", [
+                    "error" => ['Incorrect email or password!'],
+                    "username" => $data["username"]
+                ]);
+            }
         }
-        echo json_encode($resp);
+        else{   // app
+            $resp = $this->userObj->login($data);
+            if($resp["response"] == "OK"){
+                $roomList = $this->roomObj->getList($resp["user"]["id"]);
+                $resp["roomList"] = $roomList;
+            }
+            echo json_encode($resp);
+        }
+    }
+
+    public function logoutAction(){
+        if(isset($_SESSION["smlgt_user"])){
+            unset($_SESSION["smlgt_user"]);
+        }
+        nextpage("/");
     }
 
     public function updateInfoAction($data){
@@ -71,7 +129,7 @@ class ActionController extends Controller{
     }
 
     public function getControlAction($data) {
-        $control = $this->deviceObj->getControl($data);
+        $control = $this->deviceObj->getControl($data["apikey"]);
         echo json_encode($control);
     }
 
