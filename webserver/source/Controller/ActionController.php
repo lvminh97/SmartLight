@@ -119,7 +119,7 @@ class ActionController extends Controller{
     }
 
     public function getPowerData($data){
-        $powerData = $this->deviceObj->getPower($data["id"]);
+        $powerData = $this->deviceObj->getPower($data["id"], isset($data["type"]) ? $data["type"] : "");
         echo json_encode($powerData);
     }
 
@@ -138,7 +138,7 @@ class ActionController extends Controller{
         $end = $start + 4 * 86400;
         while($start < $end) {
             $this->deviceObj->setData([
-                "id" => $data["id"],
+                "apikey" => $data["apikey"],
                 "time" => date("Y-m-d H:i:s", $start),
                 "light" => rand($data["min_light"], $data["max_light"]),
                 "power" => rand($data["min_power"], $data["max_power"])

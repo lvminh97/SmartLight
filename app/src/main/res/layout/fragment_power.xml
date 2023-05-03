@@ -38,22 +38,34 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/tv_power"
+        android:id="@+id/tv_power_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_power_header"
+        app:layout_constraintBottom_toTopOf="@id/seek_power"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:text="Công suất"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tv_power"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/layout_power_header"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@id/seek_power"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginRight="0dp"
-        android:textAlignment="center"
+        android:layout_marginRight="35dp"
+        android:text="20W"
         android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:text="20W"/>
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <SeekBar
         android:id="@+id/seek_power"
@@ -62,41 +74,197 @@
         app:layout_constraintTop_toBottomOf="@id/tv_power"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tv_light_graph"
-        android:layout_marginTop="20sp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        app:layout_constraintBottom_toTopOf="@id/tv_light_chart"
+        android:layout_marginTop="10sp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:progressDrawable="@drawable/seekbar_style"
         android:thumb="@drawable/seekbar_thumb"/>
 
     <TextView
-        android:id="@+id/tv_light_graph"
+        android:id="@+id/tv_light_chart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/seek_power"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/graph_power"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="40dp"
         android:layout_marginRight="0dp"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/black"
-        android:text="Biểu đồ tiêu thụ điện"/>
+        android:text="Biểu đồ tiêu thụ điện (VND)"/>
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_power_chart_tab"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_light_chart"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/bg_power_tabmenu">
+
+        <Button
+            android:id="@+id/btn_tab_daily"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.33"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btn_tab_monthly"
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/bg_power_tab"
+            android:text="Daily"
+            android:textAllCaps="false"
+            android:textColor="#51B8E6"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/btn_tab_monthly"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.34"
+            app:layout_constraintLeft_toRightOf="@id/btn_tab_daily"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btn_tab_yearly"
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="#00FFFFFF"
+            android:text="Monthly"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/btn_tab_yearly"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.33"
+            app:layout_constraintLeft_toRightOf="@id/btn_tab_monthly"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="#00FFFFFF"
+            android:text="Yearly"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/graph_power"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_light_graph"
+        app:layout_constraintTop_toBottomOf="@id/layout_power_chart_tab"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/layout_total_power"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="20dp"
         android:background="#FFFFFF"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_total_power"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.45"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/graph_power"
+        app:layout_constraintRight_toLeftOf="@id/layout_total_cost"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="25dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:background="@drawable/bg_total_power">
+
+        <TextView
+            android:id="@+id/tv_total_power"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tv_total_power_value"
+            android:textAlignment="center"
+            android:text="Tổng số điện"
+            android:textColor="@color/black"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/tv_total_power_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_total_power"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="10dp"
+            android:textAlignment="center"
+            android:text="100kWh"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_total_cost"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.45"
+        app:layout_constraintLeft_toRightOf="@id/layout_total_power"
+        app:layout_constraintTop_toBottomOf="@id/graph_power"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="25dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:background="@drawable/bg_total_cost">
+
+        <TextView
+            android:id="@+id/tv_total_cost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tv_total_cost_value"
+            android:textAlignment="center"
+            android:text="Tổng số tiền"
+            android:textColor="@color/black"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/tv_total_cost_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_total_cost"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="10dp"
+            android:textAlignment="center"
+            android:text="113500VND"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -53,7 +53,7 @@ class ViewController extends Controller{
                 }
             }
             $light_data = $this->deviceObj->getLight($device["id"]);
-            $power_data = $this->deviceObj->getPower($device["id"]);
+            $power_data = $this->deviceObj->getPower($device["id"], "daily");
             $control = $this->deviceObj->getControl($device["api_key"]);
             //
             getView('light_design', [
@@ -62,7 +62,7 @@ class ViewController extends Controller{
                 "room" => $room,
                 "device" => $device,
                 "lights" => $light_data,
-                "powers" => $power_data,
+                "powers" => $power_data["data"],
                 "control" => $control
             ]);
         }

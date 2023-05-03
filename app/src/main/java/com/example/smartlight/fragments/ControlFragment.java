@@ -147,17 +147,25 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         }
         else if(view.getId() == R.id.btn_tone_warm) {
             if(Factory.device.getLight() != 50) {
-                lightSeek.setProgress(50);
-                setToneGlow(true);
-                Factory.device.setLight(50);
-                setControl("light", 50);
+                if(Factory.user.isAppControl()) {
+                    lightSeek.setProgress(50);
+                    setToneGlow(true);
+                    Factory.device.setLight(50);
+                    setControl("light", 50);
+                }
+                else
+                    Toast.makeText(getContext(), "Quyền điều khiển từ App đã bị khóa, mở khóa để tiếp tục", Toast.LENGTH_SHORT).show();
             }
         }
         else if(view.getId() == R.id.btn_tone_cold) {
-            lightSeek.setProgress(30);
-            setToneGlow(false);
-            Factory.device.setLight(30);
-            setControl("light", 30);
+            if(Factory.user.isAppControl()) {
+                lightSeek.setProgress(30);
+                setToneGlow(false);
+                Factory.device.setLight(30);
+                setControl("light", 30);
+            }
+            else
+                Toast.makeText(getContext(), "Quyền điều khiển từ App đã bị khóa, mở khóa để tiếp tục", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -171,9 +179,10 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
     @Override
     public void onTouch(@NonNull MotionEvent e) {
         if(e.getAction() == MotionEvent.ACTION_UP) {
-            Factory.device.setTemp(tempKnob.getValue());
-            if(Factory.user.isAppControl())
+            if(Factory.user.isAppControl()) {
+                Factory.device.setTemp(tempKnob.getValue());
                 setControl("temp", Factory.device.getTemp());
+            }
             else
                 Toast.makeText(getContext(), "Quyền điều khiển từ App đã bị khóa, mở khóa để tiếp tục", Toast.LENGTH_SHORT).show();
         }
@@ -250,13 +259,15 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
             }
             tempKnob.setValue(Factory.device.getTemp());
             tempTv.setText(Factory.device.getTemp() + " °C");
-            int id = 0;
-            int select = 0;
-            for(Device dev: Factory.deviceList) {
-                if(dev.getId() == Factory.device.getId()){
-                    select = id;
-                }
-            }
+            lightSeek.setProgress(Factory.device.getLight());
+
+//            int id = 0;
+//            int select = 0;
+//            for(Device dev: Factory.deviceList) {
+//                if(dev.getId() == Factory.device.getId()){
+//                    select = id;
+//                }
+//            }
 //            DeviceAdapter adapter = new DeviceAdapter(getActivity(), (ArrayList<Device>) Factory.deviceList);
 //            deviceSpn.setAdapter(adapter);
 //            deviceSpn.setSelection(select);
@@ -349,13 +360,18 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        lightTv.setText(progress + "%");
-        lightRayColor(progress);
-        //
-        if(progress <= 30)
-            setToneGlow(false);
-        if(progress >= 50)
-            setToneGlow(true);
+        if(Factory.user.isAppControl()) {
+            lightTv.setText(progress + "%");
+            lightRayColor(progress);
+            //
+            if (progress <= 30)
+                setToneGlow(false);
+            if (progress >= 50)
+                setToneGlow(true);
+        }
+        else {
+            seekBar.setProgress(Factory.device.getLight());
+        }
     }
 
     @Override
@@ -366,9 +382,10 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         int progress = seekBar.getProgress();
-        Factory.device.setLight(progress);
-        if(Factory.user.isAppControl())
+        if(Factory.user.isAppControl()) {
+            Factory.device.setLight(progress);
             setControl("light", Factory.device.getLight());
+        }
         else
             Toast.makeText(getContext(), "Quyền điều khiển từ App đã bị khóa, mở khóa để tiếp tục", Toast.LENGTH_SHORT).show();
     }

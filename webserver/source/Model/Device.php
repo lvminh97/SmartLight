@@ -75,24 +75,52 @@ class Device extends DB{
         return $data;
     }
 
-    public function getPower($id){
-        $last_day = $this->execute("SELECT time from device_data ORDER BY time DESC LIMIT 1");
-        if(count($last_day) > 0)
-            $last_day = strtotime($last_day[0]["time"]);
-        else 
-            $last_day = strtotime(date("Y-m-d"));
-        $start_day = date("Y-m-d", $last_day - 4 * 86400);
+    public function getPower($id, $type){
         $data = [];
-        $buffer = $this->select("device_data", "time,power", "id='$id' AND time >= '$start_day'");
-        foreach($buffer as $row){
-            $cur_day = explode(" ", $row["time"])[0];
-            $cur_day = date("d/m/Y", strtotime($cur_day));
-            if(!isset($data[$cur_day]))
-                $data[$cur_day] = 0;
-            $data[$cur_day] += $row["power"] * 30;
+        if($type == "monthly") {
+            $data['type'] = "monthly";
+            $cur_year = date("Y");
+            $query = $this->select("device_data", "*", "id='$id' AND time LIKE '$cur_year-%'", "time");
+            $data['data'] = [];
+            for($i = 1; $i <= 12; $i++) {
+                $m = ($i < 10) ? "0$i" : $i;
+                $data['data']["$m/".date("Y")] = 0;
+            }
+            foreach($query as $row) {
+                $cur_month = date("m/Y", strtotime($row['time']));
+                $data['data'][$cur_month] += $row['power'] * 30;
+            }
         }
-        foreach(array_keys($data) as $key){
-            $data[$key] /= 3600000;
+        else if($type == "yearly") {
+            $data['type'] = "yearly";
+            $cur_year = date("Y") - 4;
+            $query = $this->select("device_data", "*", "id='$id' AND time >= '$cur_year-01-01'", "time");
+            $data['data'] = [];
+            for($i = $cur_year; $i <= date("Y"); $i++) {
+                $data['data'][$i] = 0;
+            }
+            foreach($query as $row) {
+                $cur_year = date("Y", strtotime($row['time']));
+                $data['data'][$cur_year] += $row['power'] * 30;
+            }
+        }
+        else {
+            $data['type'] = "daily";
+            $cur_month = date("Y-m");
+            $query = $this->select("device_data", "*", "id='$id' AND time LIKE '$cur_month-%'", "time");
+            $data['data'] = [];
+            for($i = 1; $i <= date("t"); $i++) {
+                $d = ($i < 10) ? "0$i" : $i;
+                $data['data']["$d/".date("m/Y")] = 0;
+            }
+            foreach($query as $row) {
+                $cur_day = date("d/m/Y", strtotime($row['time']));
+                $data['data'][$cur_day] += $row['power'] * 30;
+            }
+        }
+        //
+        foreach(array_keys($data['data']) as $key){
+            $data['data'][$key] /= 3600000;
         }
         return $data;
     }
