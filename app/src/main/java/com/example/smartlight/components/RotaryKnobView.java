@@ -106,7 +106,7 @@ public final class RotaryKnobView extends RelativeLayout implements OnGestureLis
     public boolean onScroll(@NotNull MotionEvent e1, @NotNull MotionEvent e2, float distanceX, float distanceY) {
         if(lock == true)
             return false;
-//        float startDegress = this.calculateAngle(e1.getX(), e1.getY());
+
         float rotationDegrees = this.calculateAngle(e2.getX(), e2.getY());
         if (rotationDegrees <= 310 || rotationDegrees >= 350) {
             if(rotationDegrees <= 300) {
