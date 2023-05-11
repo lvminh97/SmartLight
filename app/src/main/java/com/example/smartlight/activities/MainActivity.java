@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .setNegativeButton("Bỏ qua", null)
                     .show();
         }
-        else if(FRAG_ID.equals("Control") || FRAG_ID.equals("Setting")){
+        else if(FRAG_ID.equals("Control") || FRAG_ID.equals("Customize") || FRAG_ID.equals("Setting")){
             loadFragment(new HomeFragment());
         }
         else if(FRAG_ID.equals("Light") || FRAG_ID.equals("Power") || FRAG_ID.equals("AddDevice")) {

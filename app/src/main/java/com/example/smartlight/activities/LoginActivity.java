@@ -132,7 +132,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 JSONObject roomJson = roomJsonArray.getJSONObject(i);
                                 int[] imgIds = {R.drawable.meeting_room, R.drawable.class_room, R.drawable.conference_room, R.drawable.building};
                                 Drawable roomImg = ContextCompat.getDrawable(getBaseContext(), imgIds[i]);
-                                Factory.roomList.add(new Room(Integer.parseInt(roomJson.getString("id")), roomImg, roomJson.getString("name")));
+                                Factory.roomList.add(new Room(
+                                        Integer.parseInt(roomJson.getString("id")),
+                                        roomImg,
+                                        roomJson.getString("name")));
                             }// add 'Customize' item
                             Intent intent = new Intent(getBaseContext(), MainActivity.class);
                             startActivity(intent);
