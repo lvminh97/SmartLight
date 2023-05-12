@@ -25,6 +25,8 @@
 
     $route->get("action", "get_types", "ActionController@getTypes");
     $route->post("action", "add_device", "ActionController@addDevice");
+    $route->post("action", "del_device", "ActionController@delDevice");
+    $route->post("action", "update_position", "ActionController@updatePosition");
 
 
     // web view

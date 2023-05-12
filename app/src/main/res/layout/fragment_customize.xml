@@ -4,24 +4,67 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:id="@+id/img_meeting"
-        android:layout_width="wrap_content"
+    <com.example.smartlight.components.CustomizeRoomView
+        android:id="@+id/view_meeting"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.8"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/layout_meeting_btn"
-        android:background="@drawable/meeting"/>
+        app:layout_constraintBottom_toTopOf="@id/layout_meeting_btn"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_meeting_btn"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintHeight_percent="0.2"
         app:layout_constraintRight_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/img_meeting"
+        app:layout_constraintTop_toBottomOf="@id/view_meeting"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/tv_device_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_update"
+            android:layout_marginTop="20dp"
+            android:text=""
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+        <Button
+            android:id="@+id/btn_update"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.4"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_device_name"
+            app:layout_constraintRight_toLeftOf="@id/btn_del_device"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/bg_control_button"
+            android:text="Cập nhật"
+            android:textAllCaps="false"/>
+
+        <Button
+            android:id="@+id/btn_del_device"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.4"
+            app:layout_constraintLeft_toRightOf="@id/btn_update"
+            app:layout_constraintTop_toBottomOf="@id/tv_device_name"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/bg_control_button"
+            android:text="Xóa"
+            android:textAllCaps="false"/>
+        
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

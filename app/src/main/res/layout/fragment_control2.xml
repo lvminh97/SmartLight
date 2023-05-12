@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_control_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_header"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0dp"
+            android:background="@drawable/ic_baseline_back_24"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_room_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Meeting Room"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.example.smartlight.components.RotaryKnobView
+        android:id="@+id/knob"
+        android:layout_width="@dimen/knob_width"
+        android:layout_height="@dimen/knob_height"
+        app:initialValue="0"
+        app:knobDrawable="@drawable/ic_rotary_knob"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/img_lamp"
+        app:layout_constraintTop_toBottomOf="@id/layout_control_header"
+        android:layout_marginTop="50dp"
+        app:maxValue="70"
+        app:minValue="0" />
+
+    <TextView
+        android:id="@+id/tv_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="0dp"
+        android:text="0 °C"
+        android:textAlignment="center"
+        android:textColor="#F44336"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/knob"
+        app:layout_constraintLeft_toLeftOf="@id/knob"
+        app:layout_constraintRight_toRightOf="@id/knob"
+        app:layout_constraintTop_toTopOf="@id/knob" />
+
+    <ImageView
+        android:id="@+id/img_lamp"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        app:layout_constraintWidth_percent="0.4"
+        android:background="@drawable/lamp1"
+        app:layout_constraintLeft_toRightOf="@id/knob"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_control_header"
+        android:layout_marginTop="50dp"/>
+
+    <ImageView
+        android:id="@+id/img_lightray"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintLeft_toRightOf="@id/knob"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/img_lamp"
+        android:background="@drawable/light_ray" />
+
+    <TextView
+        android:id="@+id/tv_toneglow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/layout_tone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/img_lightray"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Tông sáng"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_tone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintBottom_toTopOf="@id/tv_light"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_toneglow"
+        android:layout_marginTop="10dp">
+
+        <Button
+            android:id="@+id/btn_tone_warm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.5"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btn_tone_cold"
+            app:layout_constraintTop_toTopOf="parent"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/bg_tone_light_left"
+            android:text="Ấm"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/btn_tone_cold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.5"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/btn_tone_warm"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/bg_tone_light_right"
+            android:text="Lạnh"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="15sp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/seek_light"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_tone"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="30dp"
+        android:text="Cường độ sáng"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tv_light_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/seek_light"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_tone"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="35dp"
+        android:layout_marginTop="30dp"
+        android:text="30%"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+
+    <SeekBar
+        android:id="@+id/seek_light"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_light"
+        android:layout_marginTop="10sp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:progressDrawable="@drawable/seekbar_style"
+        android:thumb="@drawable/seekbar_thumb"/>
+
+    <Button
+        android:id="@+id/btn_power"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/seek_light"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_control_button"
+        android:paddingTop="25dp"
+        android:paddingBottom="25dp"
+        android:text="Công suất tiêu thụ"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

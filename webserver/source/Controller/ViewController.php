@@ -46,7 +46,6 @@ class ViewController extends Controller{
             $device = $device_list[0];
             if(isset($data["device"])) {
                 foreach($device_list as $item) {
-                    $item["name"] = $item["id"]." - ".$types[$item["type"] - 1];
                     if($item["id"] == $data["device"]) {
                         $device = $item;
                     }

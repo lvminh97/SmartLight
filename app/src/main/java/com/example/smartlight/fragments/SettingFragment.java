@@ -107,7 +107,7 @@ public class SettingFragment extends Fragment implements MyFragment, View.OnClic
                         public void onResponse(String response) {
                             try {
                                 if(Factory.debug) {
-                                    Log.d("SmartLight_Debug", response);
+                                    Log.d(Factory.debugTag, response);
                                 }
                                 JSONObject jsonObject = new JSONObject(response);
                                 if(jsonObject.getString("response") != null && jsonObject.getString("response").equals("OK")){
@@ -119,7 +119,7 @@ public class SettingFragment extends Fragment implements MyFragment, View.OnClic
                                 }
                             } catch (JSONException e) {
                                 if(Factory.debug) {
-                                    Log.d("SmartLight_Debug", e.getMessage());
+                                    Log.d(Factory.debugTag, e.getMessage());
                                 }
                                 Toast.makeText(getActivity().getBaseContext(), "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
                                 controlSw.setChecked(!isChecked);
@@ -130,7 +130,7 @@ public class SettingFragment extends Fragment implements MyFragment, View.OnClic
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-//                    Log.d("SmartLight_Debug", error.getMessage());
+//                    Log.d(Factory.debugTag, error.getMessage());
                             Toast.makeText(getActivity().getBaseContext(), "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
                             controlSw.setChecked(!isChecked);
                         }

@@ -148,7 +148,7 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
                         }
                     } catch (JSONException e) {
                         if(Factory.debug) {
-                            Log.d("SmartLight_Debug", e.getMessage());
+                            Log.d(Factory.debugTag, e.getMessage());
                         }
                         e.printStackTrace();
                     }
@@ -157,7 +157,7 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
             new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-//                    Log.d("SmartLight_Debug", error.getMessage());
+//                    Log.d(Factory.debugTag, error.getMessage());
                 }
             })
         {
@@ -181,12 +181,12 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
                 public void onResponse(String response) {
                     try {
                         if(Factory.debug) {
-                            Log.d("SmartLight_Debug", response);
+                            Log.d(Factory.debugTag, response);
                         }
                         JSONObject jsonObject = new JSONObject(response);
                     } catch (JSONException e) {
                         if(Factory.debug) {
-                            Log.d("SmartLight_Debug", e.getMessage());
+                            Log.d(Factory.debugTag, e.getMessage());
                         }
                         e.printStackTrace();
                     }
@@ -195,7 +195,7 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
             new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-//                    Log.d("SmartLight_Debug", error.getMessage());
+//                    Log.d(Factory.debugTag, error.getMessage());
                 }
             })
         {

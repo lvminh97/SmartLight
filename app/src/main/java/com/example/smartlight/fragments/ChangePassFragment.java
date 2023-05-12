@@ -87,7 +87,7 @@ public class ChangePassFragment extends Fragment implements MyFragment, View.OnC
                     public void onResponse(String response) {
                         try {
                             if(Factory.debug) {
-                                Log.d("SmartLight_Debug", response);
+                                Log.d(Factory.debugTag, response);
                             }
                             loadingDialog.dismiss();
                             JSONObject jsonObject = new JSONObject(response);
@@ -113,7 +113,7 @@ public class ChangePassFragment extends Fragment implements MyFragment, View.OnC
                             }
                         } catch (JSONException e) {
                             if(Factory.debug) {
-                                Log.d("SmartLight_Debug", e.getMessage());
+                                Log.d(Factory.debugTag, e.getMessage());
                             }
                             loadingDialog.dismiss();
                             Toast.makeText(getActivity().getBaseContext(), "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
@@ -124,7 +124,7 @@ public class ChangePassFragment extends Fragment implements MyFragment, View.OnC
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-//                    Log.d("SmartLight_Debug", error.getMessage());
+//                    Log.d(Factory.debugTag, error.getMessage());
                         loadingDialog.dismiss();
                         Toast.makeText(getActivity().getBaseContext(), "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
                     }

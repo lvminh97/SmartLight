@@ -110,7 +110,7 @@ class ActionController extends Controller{
 
     public function getDevices($data) {
         $deviceList = $this->deviceObj->getList($data["room_id"]);
-        echo json_encode($deviceList);
+        echo json_encode($deviceList, JSON_UNESCAPED_UNICODE);
     }
 
     public function getLightData($data){
@@ -156,6 +156,16 @@ class ActionController extends Controller{
         $this->deviceObj->create($data);
         $device = $this->deviceObj->getLastDevice($data["room_id"]);
         echo json_encode(["response" => "OK", "device" => $device]);
+    }
+
+    public function delDevice($data) {
+        $resp = $this->deviceObj->remove($data["apikey"]);
+        echo json_encode($resp);
+    }
+
+    public function updatePosition($data) {
+        $resp = $this->deviceObj->setPosition($data);
+        echo json_encode($resp);
     }
 }
 ?>

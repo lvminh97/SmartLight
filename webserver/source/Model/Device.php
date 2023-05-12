@@ -26,10 +26,21 @@ class Device extends DB{
     }
 
     public function create($data) {
+        // generate position
+        $pos = rand(0, 9).";".rand(0, 14);
+        do{
+            $checkDuplicate = $this->select("device", "*", "room_id='{$data["room_id"]}' AND position='$pos'");
+            if(count($checkDuplicate) == 0)
+                break;
+            else
+                $pos = rand(0, 9).";".rand(0, 14);
+        }
+        while(true);
         $this->insert("device", [
             "room_id" => $data["room_id"],
             "type" => $data["type"],
-            "api_key" => $this->generateApiKey()
+            "api_key" => $this->generateApiKey(),
+            "position" => $pos
         ]);
         $check = $this->select("device", "*", "1", "id DESC");
         $this->insert("device_control", [
@@ -38,6 +49,20 @@ class Device extends DB{
             "light" => 0,
             "power" => 0
         ]);
+    }
+
+    public function remove($apikey) {
+        $check = $this->select("device", "*", "api_key='$apikey'");
+        if(count($check) == 1){
+            $id = $check[0]["id"];
+            $this->delete("device_control", "id='$id'");
+            $this->delete("device_data", "id='$id'");
+            $this->delete("device", "id='$id'");
+            return ["response" => "OK"];
+        }
+        else {
+            return ["response" => "NotExist"];
+        }
     }
 
     public function getList($room_id) {
@@ -160,6 +185,21 @@ class Device extends DB{
         }
         else{
             return null;
+        }
+    }
+
+    public function setPosition($data) {
+        $check = $this->select("device", "*", "api_key='{$data["apikey"]}'");
+        if(count($check) == 1) {
+            $id = $check[0]["id"];
+            $this->update("device", [
+                "position" => $data["x"].";".$data["y"]
+            ],
+            "id='$id'");
+            return ["response" => "OK"];
+        }
+        else{
+            return ["response" => "NotExist"];
         }
     }
 }

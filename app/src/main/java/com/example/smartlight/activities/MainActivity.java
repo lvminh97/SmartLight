@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import com.example.smartlight.Factory;
 import com.example.smartlight.R;
 import com.example.smartlight.fragments.ControlFragment;
+import com.example.smartlight.fragments.CustomizeFragment;
 import com.example.smartlight.fragments.HomeFragment;
 import com.example.smartlight.fragments.SettingFragment;
 import com.example.smartlight.fragments.UserFragment;
@@ -115,8 +116,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if(FRAG_ID.equals("Control") || FRAG_ID.equals("Customize") || FRAG_ID.equals("Setting")){
             loadFragment(new HomeFragment());
         }
-        else if(FRAG_ID.equals("Light") || FRAG_ID.equals("Power") || FRAG_ID.equals("AddDevice")) {
+        else if(FRAG_ID.equals("Light") || FRAG_ID.equals("Power")) {
             loadFragment(new ControlFragment());
+        }
+        else if(FRAG_ID.equals("AddDevice") || FRAG_ID.equals("Control2")) {
+            loadFragment(new CustomizeFragment());
         }
         else if(FRAG_ID.equals("User")) {
             loadFragment(new SettingFragment());

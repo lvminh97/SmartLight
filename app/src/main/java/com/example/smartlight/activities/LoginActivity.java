@@ -149,7 +149,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     } catch (JSONException e) {
                         if(Factory.debug)
-                            Log.d("SmartLight_Debug", e.getMessage());
+                            Log.d(Factory.debugTag, e.getMessage());
 
                         Toast.makeText(getBaseContext(), "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
                         loadingDialog.dismiss();
@@ -161,7 +161,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     if(Factory.debug)
-                        Log.d("SmartLight_Debug", "" + error.getMessage());
+                        Log.d(Factory.debugTag, "" + error.getMessage());
                     Toast.makeText(getBaseContext(), "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
                     loadingDialog.dismiss();
                 }
@@ -181,7 +181,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onResponse(String response) {
                         try {
                             if (Factory.debug) {
-                                Log.d("SmartLight_Debug", response);
+                                Log.d(Factory.debugTag, response);
                             }
                             JSONArray jsonArray = new JSONArray(response);
                             Factory.types = new ArrayList<>();
@@ -191,7 +191,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             }
                         } catch (JSONException e) {
                             if (Factory.debug) {
-                                Log.d("SmartLight_Debug", e.getMessage());
+                                Log.d(Factory.debugTag, e.getMessage());
                             }
                             e.printStackTrace();
                         }
@@ -200,7 +200,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-//                        Log.d("SmartLight_Debug", "" + error.getMessage());
+//                        Log.d(Factory.debugTag, "" + error.getMessage());
                     }
                 }) {
             @Override

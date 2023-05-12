@@ -46,7 +46,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-public class ControlFragment extends Fragment implements MyFragment, View.OnClickListener, RotaryKnobView.RotaryKnobListener, AdapterView.OnItemSelectedListener, SeekBar.OnSeekBarChangeListener {
+public class ControlFragment2 extends Fragment implements MyFragment, View.OnClickListener, RotaryKnobView.RotaryKnobListener, AdapterView.OnItemSelectedListener, SeekBar.OnSeekBarChangeListener {
 
     private ProgressDialog loadingDialog = null;
     private View view;
@@ -111,22 +111,19 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
             powerBtnLayoutParam.setMargins(20 * px, 0, 20* px, 10 * px);
         }
         else {
-//            ViewGroup.MarginLayoutParams lightBtnLayoutParam = (ViewGroup.MarginLayoutParams) lightBtn.getLayoutParams();
-//            lightBtnLayoutParam.setMargins(20 * px, 50 * px, 20 * px, 20 * px);
-//            ViewGroup.MarginLayoutParams powerBtnLayoutParam = (ViewGroup.MarginLayoutParams) powerBtn.getLayoutParams();
-//            powerBtnLayoutParam.setMargins(20 * px, 0, 20* px, 50 * px);
+
         }
 
         loadingDialog = new ProgressDialog(getActivity());
         loadingDialog.setMessage("");
         loadingDialog.setIndeterminate(true);
 
-        getDeviceList();
+        getDevice();
     }
 
     @Override
     public String getTAG() {
-        return "Control";
+        return "Control2";
     }
 
     @Override
@@ -188,79 +185,15 @@ public class ControlFragment extends Fragment implements MyFragment, View.OnClic
         }
     }
 
-    private void getDeviceList() {
-        if(Factory.deviceList == null || Factory.deviceList.size() == 0) {
-            new NukeSSLCerts().nuke();
-            RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, Factory.HOST + "/?action=get_devices&room_id=" + Factory.room.getId(),
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            try {
-                                loadingDialog.dismiss();
-                                if (Factory.debug) {
-                                    Log.d(Factory.debugTag, response);
-                                }
-                                JSONArray jsonArray = new JSONArray(response);
-                                if(Factory.deviceList == null) {
-                                    Factory.deviceList = new ArrayList<>();
-                                }
-                                for(int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject deviceJson = jsonArray.getJSONObject(i);
-                                    Device device = new Device(Integer.parseInt(deviceJson.getString("id")),
-                                            Integer.parseInt(deviceJson.getString("room_id")),
-                                            Integer.parseInt(deviceJson.getString("type")));
-
-                                    device.setApiKey(deviceJson.getString("api_key"));
-                                    device.setTemp(Integer.parseInt(deviceJson.getString("temp")));
-                                    device.setLight(Integer.parseInt(deviceJson.getString("light")));
-                                    device.setPower(Integer.parseInt(deviceJson.getString("power")));
-                                    Factory.deviceList.add(device);
-                                }
-
-                                Factory.device = Factory.deviceList.get(0);
-                                tempKnob.setValue(Factory.device.getTemp());
-                                tempTv.setText(Factory.device.getTemp() + " °C");
-                                lightSeek.setProgress(Factory.device.getLight());
-                                lightTv.setText(Factory.device.getLight() + "%");
-                                if(Factory.device.getLight() < 50)
-                                    setToneGlow(false);
-                                else
-                                    setToneGlow(true);
-//                                DeviceAdapter adapter = new DeviceAdapter(getActivity(), (ArrayList<Device>) Factory.deviceList);
-//                                ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, deviceNames);
-//                                deviceSpn.setAdapter(adapter);
-                            } catch (JSONException e) {
-                                if (Factory.debug) {
-                                    Log.d(Factory.debugTag, e.getMessage());
-                                }
-                                e.printStackTrace();
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            //                    Log.d(Factory.debugTag, error.getMessage());
-                        }
-                    }) {
-                @Override
-                protected Map<String, String> getParams() {
-                    Map<String, String> params = new HashMap<String, String>();
-                    return params;
-                }
-            };
-            loadingDialog.show();
-            queue.add(stringRequest);
-        }
-        else {
-            if(Factory.device == null) {
-                Factory.device = Factory.deviceList.get(0);
-            }
-            tempKnob.setValue(Factory.device.getTemp());
-            tempTv.setText(Factory.device.getTemp() + " °C");
-            lightSeek.setProgress(Factory.device.getLight());
-        }
+    private void getDevice() {
+        tempKnob.setValue(Factory.device.getTemp());
+        tempTv.setText(Factory.device.getTemp() + " °C");
+        lightSeek.setProgress(Factory.device.getLight());
+        lightTv.setText(Factory.device.getLight() + "%");
+        if(Factory.device.getLight() < 50)
+            setToneGlow(false);
+        else
+            setToneGlow(true);
     }
 
     private void setControl(String param, int value){

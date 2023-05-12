@@ -1,21 +1,23 @@
 package com.example.smartlight.fragments;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.graphics.Color;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,8 +28,10 @@ import com.android.volley.toolbox.Volley;
 import com.example.smartlight.Factory;
 import com.example.smartlight.NukeSSLCerts;
 import com.example.smartlight.R;
+import com.example.smartlight.activities.LoginActivity;
 import com.example.smartlight.activities.MainActivity;
-import com.example.smartlight.components.RotaryKnobView;
+import com.example.smartlight.components.CustomizeDeviceButton;
+import com.example.smartlight.components.CustomizeRoomView;
 import com.example.smartlight.interfaces.MyFragment;
 import com.example.smartlight.models.Device;
 
@@ -39,17 +43,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
-public class CustomizeFragment extends Fragment implements MyFragment, View.OnClickListener {
+public class CustomizeFragment extends Fragment implements MyFragment, View.OnClickListener, CustomizeRoomView.CustomizeRoomListener, CustomizeDeviceButton.CustomizeDeviceButtonListener {
 
     private ProgressDialog loadingDialog = null;
     private View view;
+    private CustomizeRoomView customizeRoomView;
+    private Button updateBtn, delBtn;
+    private ImageButton addBtn;
+    private TextView deviceNameTv;
+    private ArrayList<CustomizeDeviceButton> deviceButtons;
+    private CustomizeDeviceButton activeDeviceButton;
+    private int btnWidth, btnHeight;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,12 +68,204 @@ public class CustomizeFragment extends Fragment implements MyFragment, View.OnCl
     }
 
     private void initUI() {
+        ConstraintSet set = new ConstraintSet();
+        set.clone((ConstraintLayout) getActivity().findViewById(R.id.menu_bottom));
+        set.constrainPercentWidth(R.id.btn_add, 0.34f);
+        set.constrainPercentWidth(R.id.btn_menu_home, 0.33f);
+        set.constrainPercentWidth(R.id.btn_menu_user, 0.33f);
+        set.applyTo((ConstraintLayout) getActivity().findViewById(R.id.menu_bottom));
 
+        customizeRoomView = (CustomizeRoomView) view.findViewById(R.id.view_meeting);
+        customizeRoomView.setListener(this);
+        deviceNameTv = (TextView) view.findViewById(R.id.tv_device_name);
+        updateBtn = (Button) view.findViewById(R.id.btn_update);
+        updateBtn.setOnClickListener(this);
+        addBtn = (ImageButton) getActivity().findViewById(R.id.btn_add);
+        addBtn.setOnClickListener(this);
+        delBtn = (Button) view.findViewById(R.id.btn_del_device);
+        delBtn.setOnClickListener(this);
 
         loadingDialog = new ProgressDialog(getActivity());
         loadingDialog.setMessage("");
         loadingDialog.setIndeterminate(true);
 
+        getDeviceList();
+    }
+
+    private void getDeviceList() {
+        if(true /*Factory.deviceList == null || Factory.deviceList.size() == 0*/) {
+            new NukeSSLCerts().nuke();
+            RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, Factory.HOST + "/?action=get_devices&room_id=" + Factory.room.getId(),
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+//                                loadingDialog.dismiss();
+                                if (Factory.debug) {
+                                    Log.d(Factory.debugTag, response);
+                                }
+                                JSONArray jsonArray = new JSONArray(response);
+                                if(Factory.deviceList == null) {
+                                    Factory.deviceList = new ArrayList<>();
+                                }
+                                for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject deviceJson = jsonArray.getJSONObject(i);
+                                    Device device = new Device(Integer.parseInt(deviceJson.getString("id")),
+                                            Integer.parseInt(deviceJson.getString("room_id")),
+                                            Integer.parseInt(deviceJson.getString("type")));
+
+                                    device.setName(deviceJson.getString("name"));
+                                    device.setApiKey(deviceJson.getString("api_key"));
+                                    device.setTemp(Integer.parseInt(deviceJson.getString("temp")));
+                                    device.setLight(Integer.parseInt(deviceJson.getString("light")));
+                                    device.setPower(Integer.parseInt(deviceJson.getString("power")));
+                                    String[] pos = deviceJson.getString("position").split(";");
+                                    if(pos.length == 2) {
+                                        device.setX(Integer.parseInt(pos[0]));
+                                        device.setY(Integer.parseInt(pos[1]));
+                                    }
+                                    Factory.deviceList.add(device);
+                                }
+                                getDevices();
+                            } catch (JSONException e) {
+                                if (Factory.debug) {
+                                    Log.d(Factory.debugTag, e.getMessage());
+                                }
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //                    Log.d(Factory.debugTag, error.getMessage());
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    return params;
+                }
+            };
+//            loadingDialog.show();
+            queue.add(stringRequest);
+        }
+//        else {
+//            getDevices();
+//        }
+    }
+
+    private void updatePosition() {
+        new NukeSSLCerts().nuke();
+        RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
+        for(int i = 0; i < deviceButtons.size(); i++) {
+            CustomizeDeviceButton btn = deviceButtons.get(i);
+            int finalI = i;
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, Factory.HOST + "/?action=update_position",
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                if (Factory.debug) {
+                                    Log.d(Factory.debugTag, response);
+                                }
+                                JSONObject jsonData = new JSONObject(response);
+                                if(jsonData.getString("response").equals("OK")) {
+                                    if(finalI == deviceButtons.size() - 1) {
+                                        Toast.makeText(getContext(), "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                if (Factory.debug) {
+                                    Log.d(Factory.debugTag, e.getMessage());
+                                }
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //                    Log.d(Factory.debugTag, error.getMessage());
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("apikey", btn.getDevice().getApiKey());
+                    params.put("x", btn.getCurX() + "");
+                    params.put("y", btn.getCurY() + "");
+                    return params;
+                }
+            };
+            queue.add(stringRequest);
+        }
+    }
+
+    private void deleteDevice() {
+        new NukeSSLCerts().nuke();
+        RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Factory.HOST + "/?action=del_device",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            if (Factory.debug) {
+                                Log.d(Factory.debugTag, response);
+                            }
+                            JSONObject jsonData = new JSONObject(response);
+                            if(jsonData.getString("response").equals("OK")) {
+                                deviceButtons.remove(activeDeviceButton);
+                                customizeRoomView.removeView(activeDeviceButton);
+                                activeDeviceButton = null;
+                            }
+                        } catch (JSONException e) {
+                            if (Factory.debug) {
+                                Log.d(Factory.debugTag, e.getMessage());
+                            }
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //                    Log.d(Factory.debugTag, error.getMessage());
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("apikey", activeDeviceButton.getDevice().getApiKey());
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+    }
+
+    private void getDevices() {
+        btnWidth = customizeRoomView.getWidth() / 10;
+        btnHeight = customizeRoomView.getHeight() / 15;
+        deviceButtons = new ArrayList<>();
+        for(Device dev: Factory.deviceList) {
+            CustomizeDeviceButton button = new CustomizeDeviceButton(getContext());
+            button.setSize(btnWidth, btnHeight);
+            button.setPosition(dev.getX() * btnWidth, dev.getY() * btnHeight);
+            button.setImage(R.drawable.lamp2);
+            button.setListener(this);
+            button.setDevice(dev);
+            deviceButtons.add(button);
+            customizeRoomView.addView(button);
+        }
+    }
+
+    private void loadFragment(Fragment fragment) {
+        MainActivity.FRAG_ID = ((MyFragment) fragment).getTAG();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.layout_main, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
@@ -79,14 +275,52 @@ public class CustomizeFragment extends Fragment implements MyFragment, View.OnCl
 
     @Override
     public void onClick(View view) {
-
+        if(view.getId() == R.id.btn_add) {
+            if(MainActivity.FRAG_ID.equals("Customize")) {
+                loadFragment(new AddDeviceFragment());
+            }
+        }
+        else if(view.getId() == R.id.btn_update) {
+            updatePosition();
+        }
+        else if(view.getId() == R.id.btn_del_device) {
+            if(activeDeviceButton != null) {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Thông báo")
+                        .setMessage("Bạn có chắc chắn muốn xóa thiết bị này?")
+                        .setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteDevice();
+                            }
+                        })
+                        .setNegativeButton("Bỏ qua", null)
+                        .show();
+            }
+        }
     }
 
-    private void loadFragment(Fragment fragment) {
-        MainActivity.FRAG_ID = ((MyFragment) fragment).getTAG();
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.layout_main, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+    @Override
+    public void onScroll(float x, float y) {
+        Log.d(Factory.debugTag, "CustomizeFragment cur pos => " + x + ";" + y);
+        if(activeDeviceButton != null && x >= 0 && x <= 9 * btnWidth && y >= 0 && y <= 14 * btnHeight) {
+            activeDeviceButton.setPosition((int) x, (int) y);
+        }
+    }
+
+    @Override
+    public void onTap(CustomizeDeviceButton button) {
+        Factory.device = button.getDevice();
+        loadFragment(new ControlFragment2());
+    }
+
+    @Override
+    public void onHold(CustomizeDeviceButton button) {
+        activeDeviceButton = button;
+        for(CustomizeDeviceButton btn: deviceButtons) {
+            btn.setActive(false);
+        }
+        activeDeviceButton.setActive(true);
+        deviceNameTv.setText(activeDeviceButton.getDevice().getName());
     }
 }

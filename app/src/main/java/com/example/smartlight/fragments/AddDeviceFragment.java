@@ -94,7 +94,7 @@ public class AddDeviceFragment extends Fragment implements MyFragment, View.OnCl
                             try {
                                 loadingDialog.dismiss();
                                 if (Factory.debug) {
-                                    Log.d("SmartLight_Debug", response);
+                                    Log.d(Factory.debugTag, response);
                                 }
                                 JSONArray jsonArray = new JSONArray(response);
                                 Factory.types = new ArrayList<>();
@@ -109,7 +109,7 @@ public class AddDeviceFragment extends Fragment implements MyFragment, View.OnCl
                                 typeSpinner.setAdapter(adapter);
                             } catch (JSONException e) {
                                 if (Factory.debug) {
-                                    Log.d("SmartLight_Debug", e.getMessage());
+                                    Log.d(Factory.debugTag, e.getMessage());
                                 }
                                 e.printStackTrace();
                             }
@@ -118,7 +118,7 @@ public class AddDeviceFragment extends Fragment implements MyFragment, View.OnCl
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            //                    Log.d("SmartLight_Debug", error.getMessage());
+                            //                    Log.d(Factory.debugTag, error.getMessage());
                         }
                     }) {
                 @Override
@@ -150,7 +150,7 @@ public class AddDeviceFragment extends Fragment implements MyFragment, View.OnCl
                     public void onResponse(String response) {
                         try {
                             if(Factory.debug) {
-                                Log.d("SmartLight_Debug", response);
+                                Log.d(Factory.debugTag, response);
                             }
                             loadingDialog.dismiss();
                             JSONObject jsonObject = new JSONObject(response);
@@ -165,11 +165,11 @@ public class AddDeviceFragment extends Fragment implements MyFragment, View.OnCl
                                 newDevice.setPower(0);
                                 Factory.deviceList.add(newDevice);
                                 Toast.makeText(getActivity().getBaseContext(), "Thêm thiết bị thành công", Toast.LENGTH_SHORT).show();
-                                loadFragment(new ControlFragment());
+                                loadFragment(new CustomizeFragment());
                             }
                         } catch (JSONException e) {
                             if(Factory.debug) {
-                                Log.d("SmartLight_Debug", e.getMessage());
+                                Log.d(Factory.debugTag, e.getMessage());
                             }
                             e.printStackTrace();
                         }
@@ -178,7 +178,7 @@ public class AddDeviceFragment extends Fragment implements MyFragment, View.OnCl
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-//                    Log.d("SmartLight_Debug", error.getMessage());
+//                    Log.d(Factory.debugTag, error.getMessage());
                     }
                 })
         {
@@ -186,7 +186,7 @@ public class AddDeviceFragment extends Fragment implements MyFragment, View.OnCl
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("room_id", "" + Factory.room.getId());
-                params.put("type", "" + typeSpinner.getSelectedItemId());
+                params.put("type", "" + Factory.types.get((int) typeSpinner.getSelectedItemId()).getId());
                 return params;
             }
         };

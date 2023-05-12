@@ -86,7 +86,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                             }
                         } catch (JSONException e) {
                             if(Factory.debug)
-                                Log.d("SmartLight_Debug", e.getMessage());
+                                Log.d(Factory.debugTag, e.getMessage());
                             e.printStackTrace();
                         }
                     }
@@ -95,7 +95,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         if(Factory.debug)
-                            Log.d("SmartLight_Debug", error.getMessage());
+                            Log.d(Factory.debugTag, error.getMessage());
                     }
                 })
         {

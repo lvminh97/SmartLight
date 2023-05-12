@@ -4,10 +4,12 @@ public class Device {
     private int id;
     private int room_id;
     private String apiKey = "";
+    private String name = "";
     private int type;
     private int light;
     private int temp;
     private int power;
+    private int x, y;
 
     public Device(int id, int room_id, int type) {
         this.id = id;
@@ -37,6 +39,14 @@ public class Device {
 
     public void setApiKey(String apiKey) {
         this.apiKey = apiKey;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getType() {
@@ -69,5 +79,21 @@ public class Device {
 
     public void setPower(int power) {
         this.power = power;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 }

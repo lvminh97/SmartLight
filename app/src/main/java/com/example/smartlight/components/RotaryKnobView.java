@@ -32,7 +32,6 @@ public final class RotaryKnobView extends RelativeLayout implements OnGestureLis
     private ImageView imgView;
     private Drawable knobDrawable;
     private float divider;
-    private float prevDegree;
     private boolean enable = true;
     private boolean lock = false;
 
@@ -56,7 +55,7 @@ public final class RotaryKnobView extends RelativeLayout implements OnGestureLis
         this.value = 0;
         this.divider = 300.0F / (float)(this.maxValue - this.minValue);
 
-        view = LayoutInflater.from(context).inflate(R.layout.rotary_knob_view, (ViewGroup)this, true);
+        view = LayoutInflater.from(context).inflate(R.layout.view_rotary_knob, (ViewGroup)this, true);
         imgView = (ImageView)this.findViewById(R.id.knobImageView);
         imgView.setScaleType(ScaleType.MATRIX);
 
