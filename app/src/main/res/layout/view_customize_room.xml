@@ -4,4 +4,9 @@
     android:layout_height="wrap_content"
     android:background="@drawable/meeting">
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/layout_customize_room"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

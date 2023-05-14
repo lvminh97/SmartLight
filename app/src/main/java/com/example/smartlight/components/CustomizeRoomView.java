@@ -20,6 +20,7 @@ import com.example.smartlight.R;
 public class CustomizeRoomView extends CoordinatorLayout implements OnGestureListener {
 
     private View view;
+    private CoordinatorLayout roomLayout;
     private GestureDetectorCompat gestureDetector;
     private CustomizeRoomListener listener;
 
@@ -35,7 +36,12 @@ public class CustomizeRoomView extends CoordinatorLayout implements OnGestureLis
 
     private void init(@NonNull Context context, @Nullable AttributeSet attrs) {
         view = LayoutInflater.from(context).inflate(R.layout.view_customize_room, (ViewGroup) this, true);
+        roomLayout = view.findViewById(R.id.layout_customize_room);
         this.gestureDetector = new GestureDetectorCompat(context, (OnGestureListener)this);
+    }
+
+    public CoordinatorLayout getRoomLayout() {
+        return roomLayout;
     }
 
     public final CustomizeRoomListener getListener() {

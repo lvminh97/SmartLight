@@ -129,7 +129,7 @@ public class ControlFragment2 extends Fragment implements MyFragment, View.OnCli
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.btn_back){
-            loadFragment(new HomeFragment());
+            loadFragment(new CustomizeFragment());
         }
         else if(view.getId() == R.id.btn_add) {
             if(MainActivity.FRAG_ID.equals("Control")) {

@@ -11,11 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -106,9 +108,7 @@ public class CustomizeFragment extends Fragment implements MyFragment, View.OnCl
                                     Log.d(Factory.debugTag, response);
                                 }
                                 JSONArray jsonArray = new JSONArray(response);
-                                if(Factory.deviceList == null) {
-                                    Factory.deviceList = new ArrayList<>();
-                                }
+                                Factory.deviceList = new ArrayList<>();
                                 for(int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject deviceJson = jsonArray.getJSONObject(i);
                                     Device device = new Device(Integer.parseInt(deviceJson.getString("id")),
@@ -256,7 +256,7 @@ public class CustomizeFragment extends Fragment implements MyFragment, View.OnCl
             button.setListener(this);
             button.setDevice(dev);
             deviceButtons.add(button);
-            customizeRoomView.addView(button);
+            customizeRoomView.getRoomLayout().addView(button);
         }
     }
 
