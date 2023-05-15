@@ -5,12 +5,14 @@ public class User {
     private String fullname;
     private String mobile;
     private String email;
+    private boolean appControl;
 
-    public User(int id, String fullname, String mobile, String email) {
+    public User(int id, String fullname, String mobile, String email, boolean appControl) {
         this.id = id;
         this.fullname = fullname;
         this.mobile = mobile;
         this.email = email;
+        this.appControl = appControl;
     }
 
     public int getId() {
@@ -43,5 +45,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isAppControl() {
+        return appControl;
+    }
+
+    public void setAppControl(boolean appControl) {
+        this.appControl = appControl;
     }
 }

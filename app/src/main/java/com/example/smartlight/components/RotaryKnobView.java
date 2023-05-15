@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,12 +14,12 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 
-import androidx.core.view.GestureDetectorCompat;
-
 import com.example.smartlight.R;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import androidx.core.view.GestureDetectorCompat;
 
 public final class RotaryKnobView extends RelativeLayout implements OnGestureListener {
     private View view;
@@ -33,6 +32,8 @@ public final class RotaryKnobView extends RelativeLayout implements OnGestureLis
     private ImageView imgView;
     private Drawable knobDrawable;
     private float divider;
+    private boolean enable = true;
+    private boolean lock = false;
 
     public RotaryKnobView(@NotNull Context context) {
         super(context);
@@ -54,7 +55,7 @@ public final class RotaryKnobView extends RelativeLayout implements OnGestureLis
         this.value = 0;
         this.divider = 300.0F / (float)(this.maxValue - this.minValue);
 
-        view = LayoutInflater.from(context).inflate(R.layout.rotary_knob_view, (ViewGroup)this, true);
+        view = LayoutInflater.from(context).inflate(R.layout.view_rotary_knob, (ViewGroup)this, true);
         imgView = (ImageView)this.findViewById(R.id.knobImageView);
         imgView.setScaleType(ScaleType.MATRIX);
 
@@ -93,16 +94,35 @@ public final class RotaryKnobView extends RelativeLayout implements OnGestureLis
         this.setKnobPosition (deg);
     }
 
+    public boolean isLock() {
+        return lock;
+    }
+
+    public void setLock(boolean lock) {
+        this.lock = lock;
+    }
+
     public boolean onScroll(@NotNull MotionEvent e1, @NotNull MotionEvent e2, float distanceX, float distanceY) {
+        if(lock == true)
+            return false;
+
         float rotationDegrees = this.calculateAngle(e2.getX(), e2.getY());
-        if (rotationDegrees >= -150 && rotationDegrees <= 150) {
-            this.setKnobPosition(rotationDegrees);
-            float valueRangeDegrees = rotationDegrees + 150;
-            this.value = (int)(valueRangeDegrees / this.divider + (float)this.minValue);
-            if (this.listener != null) {
-                RotaryKnobView.RotaryKnobListener listener = this.listener;
-                listener.onRotate(this.value);
+        if (rotationDegrees <= 310 || rotationDegrees >= 350) {
+            if(rotationDegrees <= 300) {
+                if (enable == false) {
+                    return false;
+                }
+                int tmpValue = (int) (rotationDegrees / this.divider + (float) this.minValue);
+                this.value = tmpValue;
+                this.setKnobPosition(rotationDegrees - 150);
+                if (this.listener != null) {
+                    RotaryKnobView.RotaryKnobListener listener = this.listener;
+                    listener.onRotate(this.value);
+                }
             }
+        }
+        else {
+            enable = false;
         }
 
         return true;
@@ -114,6 +134,12 @@ public final class RotaryKnobView extends RelativeLayout implements OnGestureLis
         float angle = -((float)Math.toDegrees(Math.atan2(py, px))) + 90;
         if (angle > 180) {
             angle -= 360;
+        }
+        if(angle >= -150) {
+            angle += 150;
+        }
+        else{
+            angle += 510;
         }
 
         return angle;
@@ -129,6 +155,9 @@ public final class RotaryKnobView extends RelativeLayout implements OnGestureLis
     }
 
     public boolean onTouchEvent(@NotNull MotionEvent event) {
+        if(event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_DOWN){
+            enable = true;
+        }
         if(this.listener != null){
             RotaryKnobView.RotaryKnobListener listener = this.listener;
             listener.onTouch(event);

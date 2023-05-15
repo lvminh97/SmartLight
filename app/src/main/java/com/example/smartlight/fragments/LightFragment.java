@@ -11,10 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.smartlight.Factory;
+import com.example.smartlight.NukeSSLCerts;
 import com.example.smartlight.R;
 import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.components.RotaryKnobView;
@@ -42,6 +40,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 public class LightFragment extends Fragment implements MyFragment, View.OnClickListener, RotaryKnobView.RotaryKnobListener {
 
@@ -68,26 +72,21 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
         return view;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_24);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_selected_24);
-    }
 
     private void initUI() {
-        lightningMenuBtn = getActivity().findViewById(R.id.btn_menu_lightning);
-        lightningMenuBtn.setImageResource(R.drawable.ic_baseline_bolt_selected_24);
+        // rearrange the bottom menu
+        ConstraintSet set = new ConstraintSet();
+        set.clone((ConstraintLayout) getActivity().findViewById(R.id.menu_bottom));
+        set.constrainPercentWidth(R.id.btn_add, 0.0f);
+        set.constrainPercentWidth(R.id.btn_menu_home, 0.5f);
+        set.constrainPercentWidth(R.id.btn_menu_user, 0.5f);
+        set.applyTo((ConstraintLayout) getActivity().findViewById(R.id.menu_bottom));
 
         backBtn = (Button) view.findViewById(R.id.btn_back);
         backBtn.setOnClickListener(this);
 
         lightKnob = (RotaryKnobView) view.findViewById(R.id.knob_light);
+        lightKnob.setLock(!Factory.user.isAppControl());
         lightKnob.setListener(this);
         lightKnob.setValue(Factory.device.getLight());
 
@@ -130,6 +129,7 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
     }
 
     private void getData() {
+        new NukeSSLCerts().nuke();
         RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Factory.HOST + "/?action=get_light&id=" + Factory.device.getId(),
             new Response.Listener<String>() {
@@ -148,7 +148,7 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
                         }
                     } catch (JSONException e) {
                         if(Factory.debug) {
-                            Log.d("MinhLV", e.getMessage());
+                            Log.d(Factory.debugTag, e.getMessage());
                         }
                         e.printStackTrace();
                     }
@@ -157,7 +157,7 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
             new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-//                    Log.d("MinhLV", error.getMessage());
+//                    Log.d(Factory.debugTag, error.getMessage());
                 }
             })
         {
@@ -173,6 +173,7 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
 
     private void setControl(){
         Factory.device.setLight(lightKnob.getValue());
+        new NukeSSLCerts().nuke();
         RequestQueue queue = Volley.newRequestQueue(getActivity().getBaseContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Factory.HOST + "/?action=setparam",
             new Response.Listener<String>() {
@@ -180,12 +181,12 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
                 public void onResponse(String response) {
                     try {
                         if(Factory.debug) {
-                            Log.d("MinhLV", response);
+                            Log.d(Factory.debugTag, response);
                         }
                         JSONObject jsonObject = new JSONObject(response);
                     } catch (JSONException e) {
                         if(Factory.debug) {
-                            Log.d("MinhLV", e.getMessage());
+                            Log.d(Factory.debugTag, e.getMessage());
                         }
                         e.printStackTrace();
                     }
@@ -194,7 +195,7 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
             new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-//                    Log.d("MinhLV", error.getMessage());
+//                    Log.d(Factory.debugTag, error.getMessage());
                 }
             })
         {
@@ -233,7 +234,10 @@ public class LightFragment extends Fragment implements MyFragment, View.OnClickL
     @Override
     public void onTouch(@NonNull MotionEvent e) {
         if(e.getAction() == MotionEvent.ACTION_UP) {
-            setControl();
+            if(Factory.user.isAppControl())
+                setControl();
+            else
+                Toast.makeText(getContext(), "Quyền điều khiển từ App đã bị khóa, mở khóa để tiếp tục", Toast.LENGTH_SHORT).show();
         }
     }
 

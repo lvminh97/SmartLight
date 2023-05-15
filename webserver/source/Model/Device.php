@@ -26,10 +26,21 @@ class Device extends DB{
     }
 
     public function create($data) {
+        // generate position
+        $pos = rand(0, 9).";".rand(0, 14);
+        do{
+            $checkDuplicate = $this->select("device", "*", "room_id='{$data["room_id"]}' AND position='$pos'");
+            if(count($checkDuplicate) == 0)
+                break;
+            else
+                $pos = rand(0, 9).";".rand(0, 14);
+        }
+        while(true);
         $this->insert("device", [
             "room_id" => $data["room_id"],
             "type" => $data["type"],
-            "api_key" => $this->generateApiKey()
+            "api_key" => $this->generateApiKey(),
+            "position" => $pos
         ]);
         $check = $this->select("device", "*", "1", "id DESC");
         $this->insert("device_control", [
@@ -40,9 +51,36 @@ class Device extends DB{
         ]);
     }
 
+    public function remove($apikey) {
+        $check = $this->select("device", "*", "api_key='$apikey'");
+        if(count($check) == 1){
+            $id = $check[0]["id"];
+            $this->delete("device_control", "id='$id'");
+            $this->delete("device_data", "id='$id'");
+            $this->delete("device", "id='$id'");
+            return ["response" => "OK"];
+        }
+        else {
+            return ["response" => "NotExist"];
+        }
+    }
+
     public function getList($room_id) {
-        $deviceList = $this->execute("SELECT * from device JOIN device_control ON device.id=device_control.id WHERE device.room_id='$room_id' ORDER BY device.id");
+        $deviceList = $this->execute("SELECT device.*,device_control.*,device_type.name from device JOIN device_control JOIN device_type ON device.id=device_control.id AND device.type=device_type.id WHERE device.room_id='$room_id' ORDER BY device.id");
+        for($i = 0; $i < count($deviceList); $i++) {
+            $deviceList[$i]["name"] = $deviceList[$i]["id"]." - ".$deviceList[$i]["name"];
+        }
         return $deviceList;
+    }
+
+    public function getLastDevice($room_id) {
+        $deviceList = $this->execute("SELECT * from device JOIN device_control ON device.id=device_control.id WHERE device.room_id='$room_id' ORDER BY device.id DESC");
+        if(count($deviceList) > 0) {
+            return $deviceList[0];
+        }
+        else {
+            return null;
+        }
     }
 
     public function setControl($apikey, $param, $value) {
@@ -57,29 +95,57 @@ class Device extends DB{
     }
 
     public function getLight($id){
-        $data = $this->execute("SELECT time,light FROM device_data WHERE id='$id' ORDER BY time DESC LIMIT 50");
+        $data = $this->execute("SELECT time,light FROM device_data WHERE id='$id' ORDER BY time DESC LIMIT 400");
         $data = array_reverse($data);
         return $data;
     }
 
-    public function getPower($id){
-        $last_day = $this->execute("SELECT time from device_data ORDER BY time DESC LIMIT 1");
-        if(count($last_day) > 0)
-            $last_day = strtotime($last_day[0]["time"]);
-        else 
-            $last_day = strtotime(date("Y-m-d"));
-        $start_day = date("Y-m-d", $last_day - 4 * 86400);
+    public function getPower($id, $type){
         $data = [];
-        $buffer = $this->select("device_data", "time,power", "id='$id' AND time >= '$start_day'");
-        foreach($buffer as $row){
-            $cur_day = explode(" ", $row["time"])[0];
-            $cur_day = date("d/m/Y", strtotime($cur_day));
-            if(!isset($data[$cur_day]))
-                $data[$cur_day] = 0;
-            $data[$cur_day] += $row["power"] * 30;
+        if($type == "monthly") {
+            $data['type'] = "monthly";
+            $cur_year = date("Y");
+            $query = $this->select("device_data", "*", "id='$id' AND time LIKE '$cur_year-%'", "time");
+            $data['data'] = [];
+            for($i = 1; $i <= 12; $i++) {
+                $m = ($i < 10) ? "0$i" : $i;
+                $data['data']["$m/".date("Y")] = 0;
+            }
+            foreach($query as $row) {
+                $cur_month = date("m/Y", strtotime($row['time']));
+                $data['data'][$cur_month] += $row['power'] * 30;
+            }
         }
-        foreach(array_keys($data) as $key){
-            $data[$key] /= 3600000;
+        else if($type == "yearly") {
+            $data['type'] = "yearly";
+            $cur_year = date("Y") - 4;
+            $query = $this->select("device_data", "*", "id='$id' AND time >= '$cur_year-01-01'", "time");
+            $data['data'] = [];
+            for($i = $cur_year; $i <= date("Y"); $i++) {
+                $data['data'][$i] = 0;
+            }
+            foreach($query as $row) {
+                $cur_year = date("Y", strtotime($row['time']));
+                $data['data'][$cur_year] += $row['power'] * 30;
+            }
+        }
+        else {
+            $data['type'] = "daily";
+            $cur_month = date("Y-m");
+            $query = $this->select("device_data", "*", "id='$id' AND time LIKE '$cur_month-%'", "time");
+            $data['data'] = [];
+            for($i = 1; $i <= date("t"); $i++) {
+                $d = ($i < 10) ? "0$i" : $i;
+                $data['data']["$d/".date("m/Y")] = 0;
+            }
+            foreach($query as $row) {
+                $cur_day = date("d/m/Y", strtotime($row['time']));
+                $data['data'][$cur_day] += $row['power'] * 30;
+            }
+        }
+        //
+        foreach(array_keys($data['data']) as $key){
+            $data['data'][$key] /= 3600000;
         }
         return $data;
     }
@@ -96,11 +162,44 @@ class Device extends DB{
                 $data["power"] = 0;
 
             $this->insert("device_data", [
-                "id" => $data["id"],
+                "id" => $id,
                 "time" => $data["time"],
                 "light" => $data["light"],
                 "power" => $data["power"]
             ]);
+            return ["response" => "OK"];
+        }
+        else {
+            return ["response" => "Fail"];
+        }
+    }
+
+    public function getControl($apikey){
+        $check = $this->select("device", "*", "api_key='$apikey'");
+        if(count($check) == 1) {
+            $id = $check[0]["id"];
+            $control = $this->select("device_control", "*", "id='$id'")[0];
+            $user_check = $this->execute("SELECT * FROM device JOIN room JOIN user WHERE device.id='$id' AND device.room_id=room.id AND room.user_id=user.id");
+            $control["app_control"] = $user_check[0]["app_control"];
+            return $control;
+        }
+        else{
+            return null;
+        }
+    }
+
+    public function setPosition($data) {
+        $check = $this->select("device", "*", "api_key='{$data["apikey"]}'");
+        if(count($check) == 1) {
+            $id = $check[0]["id"];
+            $this->update("device", [
+                "position" => $data["x"].";".$data["y"]
+            ],
+            "id='$id'");
+            return ["response" => "OK"];
+        }
+        else{
+            return ["response" => "NotExist"];
         }
     }
 }

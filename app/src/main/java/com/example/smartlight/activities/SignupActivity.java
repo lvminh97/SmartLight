@@ -9,9 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -19,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.smartlight.Factory;
+import com.example.smartlight.NukeSSLCerts;
 import com.example.smartlight.R;
 
 import org.json.JSONException;
@@ -28,6 +26,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -70,6 +71,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             return;
         }
         //
+        new NukeSSLCerts().nuke();
         RequestQueue queue = Volley.newRequestQueue(getBaseContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Factory.HOST + "/?action=signup",
                 new Response.Listener<String>() {
@@ -83,7 +85,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                                 startActivity(intent);
                             }
                         } catch (JSONException e) {
-                            Log.d("MinhLV", e.getMessage());
+                            if(Factory.debug)
+                                Log.d(Factory.debugTag, e.getMessage());
                             e.printStackTrace();
                         }
                     }
@@ -91,7 +94,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("MinhLV", error.getMessage());
+                        if(Factory.debug)
+                            Log.d(Factory.debugTag, error.getMessage());
                     }
                 })
         {

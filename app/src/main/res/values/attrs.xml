@@ -6,4 +6,8 @@
         <attr name="initialValue" format="integer" />
         <attr name="knobDrawable" format="reference" />
     </declare-styleable>
+
+<!--    <declare-styleable name="CustomizeDeviceButton">-->
+<!--        <attr name="height" -->
+<!--    </declare-styleable>-->
 </resources>

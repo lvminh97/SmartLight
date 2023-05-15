@@ -27,7 +27,7 @@
         android:textStyle="bold"
         android:textSize="20sp"
         android:textColor="@color/black"
-        android:text="Tài khoàn người dùng"/>
+        android:text="Tài khoản người dùng"/>
 
     <TextView
         android:id="@+id/tv_lbl_username"
@@ -123,6 +123,34 @@
         android:layout_marginTop="20dp"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:text="********"/>
+        android:text="****************"/>
+
+    <Button
+        android:id="@+id/btn_updateinfo"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintWidth_percent="0.4"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_lbl_password"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_control_button"
+        android:textSize="15sp"
+        android:textAllCaps="false"
+        android:text="Cập nhật thông tin"/>
+
+    <Button
+        android:id="@+id/btn_changepass"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintWidth_percent="0.4"
+        app:layout_constraintLeft_toRightOf="@id/btn_updateinfo"
+        app:layout_constraintTop_toBottomOf="@id/tv_lbl_password"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_control_button"
+        android:textSize="15sp"
+        android:textAllCaps="false"
+        android:text="Đổi mật khẩu"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

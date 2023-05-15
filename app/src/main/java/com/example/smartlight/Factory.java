@@ -1,6 +1,6 @@
 package com.example.smartlight;
 
-import android.widget.ProgressBar;
+import android.util.DisplayMetrics;
 
 import com.example.smartlight.models.Device;
 import com.example.smartlight.models.Room;
@@ -11,9 +11,12 @@ import java.util.List;
 
 public class Factory {
 
+    public static String version = "1.0.8";
     public static boolean debug = true;
+    public static String debugTag = "SmartLight_debug";
+    public static DisplayMetrics displayMetrics = null;
 
-    public static String HOST = "http://smartlight.c1.biz";
+    public static String HOST = "";
 
     public static User user = null;
     public static List<Room> roomList = null;

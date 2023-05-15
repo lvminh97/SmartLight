@@ -25,12 +25,67 @@ class User extends DB{
                 "id" => $check[0]["id"],
                 "fullname" => $check[0]["fullname"],
                 "email" => $check[0]["email"],
-                "mobile" => $check[0]["mobile"]
+                "mobile" => $check[0]["mobile"],
+                "app_control" => $check[0]["app_control"]
             ];
         }
         else 
             $resp["response"] = "Failed";
         
+        return $resp;
+    }
+
+    public function updateInfo($data){
+        $resp = [];
+        $check = $this->select("user", "*", "email='{$data['email']}' AND id='{$data['uid']}'");
+        if(count($check) == 1){
+            $this->update("user", [
+                "fullname" => $data["fullname"],
+                "mobile" => $data["mobile"]
+            ], "id='{$data['uid']}'");
+            $resp["response"] = "OK";
+        }
+        else{
+            $resp["response"] = "Fail";
+        }
+        return $resp;
+    }
+
+    public function changePass($data){
+        $resp = [];
+        $oldPass = _hash($data["pass1"]);
+        $check = $this->select("user", "*", "id='{$data['id']}' AND password='$oldPass'");
+        if(count($check) == 1){
+            if(strlen($data["pass2"]) < 8)
+                $resp["response"] = "ShortPass";
+            else if($data["pass2"] != $data["pass3"])
+                $resp["response"] = "Mismatch";
+            else{
+                $newPass = _hash($data["pass2"]);
+                $this->update("user", [
+                    "password" => $newPass
+                ], "id='{$data['id']}'");
+                $resp["response"] = "OK";
+            } 
+        }
+        else {
+            $resp["response"] = "WrongPass";
+        }
+        return $resp;
+    }
+
+    public function setAppControl($data){
+        $resp = [];
+        $check = $this->select("user", "*", "email='{$data['email']}' AND id='{$data['uid']}'");
+        if(count($check) == 1){
+            $this->update("user", [
+                "app_control" => $data["app_control"]
+            ], "id='{$data['uid']}'");
+            $resp["response"] = "OK";
+        }
+        else{
+            $resp["response"] = "Fail";
+        }
         return $resp;
     }
 }

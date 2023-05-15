@@ -7,10 +7,9 @@
             <size
                 android:height="22dp"
                 android:width="22dp" />
-            <corners android:radius="2dp"/>
+            <corners android:radius="8dp"/>
             <solid android:color="@color/teal_700" />
         </shape>
     </item>
-    <!--    <item android:drawable="@drawable/balance_icon_48px"/>-->
 
 </layer-list>
