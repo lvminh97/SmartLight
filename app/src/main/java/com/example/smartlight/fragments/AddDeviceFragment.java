@@ -211,7 +211,7 @@ public class AddDeviceFragment extends Fragment implements MyFragment, View.OnCl
             loadFragment(new ControlFragment());
         }
         else if(view.getId() == R.id.btn_back) {
-            loadFragment(new ControlFragment());
+            loadFragment(new CustomizeFragment());
         }
     }
 

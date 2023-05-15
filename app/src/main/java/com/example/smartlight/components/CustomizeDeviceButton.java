@@ -58,10 +58,18 @@ public class CustomizeDeviceButton extends RelativeLayout implements View.OnClic
         view.setLayoutParams(layoutParams);
     }
 
+    public int[] getPosition() {
+        int[] res = {0, 0};
+        ViewGroup.MarginLayoutParams marginLayoutParams = (MarginLayoutParams) view.getLayoutParams();
+        res[0] = marginLayoutParams.leftMargin;
+        res[1] = marginLayoutParams.topMargin;
+        return res;
+    }
+
     public void setPosition(int x, int y) {
         ViewGroup.MarginLayoutParams marginLayoutParams = (MarginLayoutParams) view.getLayoutParams();
-        curX = x / width;
-        curY = y / height;
+        curX = Math.round((float) x / width);
+        curY = Math.round((float) y / height);
         marginLayoutParams.setMargins(x, y, 0, 0);
         view.setLayoutParams(marginLayoutParams);
     }

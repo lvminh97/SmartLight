@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +22,7 @@ public class CustomizeRoomView extends CoordinatorLayout implements OnGestureLis
 
     private View view;
     private CoordinatorLayout roomLayout;
+    private ImageView hintImg;
     private GestureDetectorCompat gestureDetector;
     private CustomizeRoomListener listener;
 
@@ -37,6 +39,7 @@ public class CustomizeRoomView extends CoordinatorLayout implements OnGestureLis
     private void init(@NonNull Context context, @Nullable AttributeSet attrs) {
         view = LayoutInflater.from(context).inflate(R.layout.view_customize_room, (ViewGroup) this, true);
         roomLayout = view.findViewById(R.id.layout_customize_room);
+        hintImg = (ImageView) view.findViewById(R.id.img_hint);
         this.gestureDetector = new GestureDetectorCompat(context, (OnGestureListener)this);
     }
 
@@ -52,8 +55,29 @@ public class CustomizeRoomView extends CoordinatorLayout implements OnGestureLis
         this.listener = listener;
     }
 
+    public void showHint(boolean show) {
+        if(show){
+            hintImg.setVisibility(View.VISIBLE);
+        }
+        else{
+            hintImg.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void setHintPosition(int x, int y) {
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) hintImg.getLayoutParams();
+        if(layoutParams != null) {
+            layoutParams.leftMargin = x;
+            layoutParams.topMargin = y;
+            hintImg.setLayoutParams(layoutParams);
+        }
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent e) {
+        if(listener != null) {
+            listener.onTouch(e);
+        }
         return this.gestureDetector.onTouchEvent(e) ? true : super.onTouchEvent(e);
     }
 
@@ -69,13 +93,16 @@ public class CustomizeRoomView extends CoordinatorLayout implements OnGestureLis
 
     @Override
     public boolean onSingleTapUp(@NonNull MotionEvent e) {
-        return false;
+        if(listener != null) {
+            listener.onSingleTapUp();
+        }
+        return true;
     }
 
     @Override
     public boolean onScroll(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float distanceX, float distanceY) {
         if(listener != null) {
-            listener.onScroll(e2.getX(), e2.getY());
+            listener.onScroll(distanceX, distanceY);
         }
         return true;
     }
@@ -92,5 +119,7 @@ public class CustomizeRoomView extends CoordinatorLayout implements OnGestureLis
 
     public interface CustomizeRoomListener {
         void onScroll(float x, float y);
+        void onSingleTapUp();
+        void onTouch(MotionEvent e);
     }
 }

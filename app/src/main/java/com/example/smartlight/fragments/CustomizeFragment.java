@@ -3,21 +3,19 @@ package com.example.smartlight.fragments;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -30,7 +28,6 @@ import com.android.volley.toolbox.Volley;
 import com.example.smartlight.Factory;
 import com.example.smartlight.NukeSSLCerts;
 import com.example.smartlight.R;
-import com.example.smartlight.activities.LoginActivity;
 import com.example.smartlight.activities.MainActivity;
 import com.example.smartlight.components.CustomizeDeviceButton;
 import com.example.smartlight.components.CustomizeRoomView;
@@ -56,6 +53,8 @@ public class CustomizeFragment extends Fragment implements MyFragment, View.OnCl
     private ArrayList<CustomizeDeviceButton> deviceButtons;
     private CustomizeDeviceButton activeDeviceButton;
     private int btnWidth, btnHeight;
+    private int prevX, prevY;
+    private boolean[][] matrix = new boolean[15][10];
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -252,11 +251,15 @@ public class CustomizeFragment extends Fragment implements MyFragment, View.OnCl
             CustomizeDeviceButton button = new CustomizeDeviceButton(getContext());
             button.setSize(btnWidth, btnHeight);
             button.setPosition(dev.getX() * btnWidth, dev.getY() * btnHeight);
-            button.setImage(R.drawable.lamp2);
+            if(dev.getType() == 1)
+                button.setImage(R.drawable.lamp2);
+            else
+                button.setImage(R.drawable.device_icon);
             button.setListener(this);
             button.setDevice(dev);
             deviceButtons.add(button);
             customizeRoomView.getRoomLayout().addView(button);
+            matrix[dev.getY()][dev.getX()] = true;
         }
     }
 
@@ -297,14 +300,49 @@ public class CustomizeFragment extends Fragment implements MyFragment, View.OnCl
                         .setNegativeButton("Bỏ qua", null)
                         .show();
             }
+            else {
+                Toast.makeText(getContext(), "Chưa chọn thiết bị cần xóa", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
     @Override
     public void onScroll(float x, float y) {
-        Log.d(Factory.debugTag, "CustomizeFragment cur pos => " + x + ";" + y);
-        if(activeDeviceButton != null && x >= 0 && x <= 9 * btnWidth && y >= 0 && y <= 14 * btnHeight) {
-            activeDeviceButton.setPosition((int) x, (int) y);
+        if(activeDeviceButton != null) {
+            int[] curPos = activeDeviceButton.getPosition();
+            int newX = Math.round(curPos[0] - x);
+            int newY = Math.round(curPos[1] - y);
+            if(newX >= 0 && newX <= 9 * btnWidth && newY >= 0 && newY <= 14 * btnHeight) {
+                activeDeviceButton.setPosition(newX, newY);
+                customizeRoomView.showHint(true);
+                customizeRoomView.setHintPosition(Math.round((float) newX / btnWidth) * btnWidth, Math.round((float) newY / btnHeight) * btnHeight);
+            }
+        }
+    }
+
+    @Override
+    public void onSingleTapUp() {
+        if(activeDeviceButton != null) {
+            activeDeviceButton.setActive(false);
+            activeDeviceButton = null;
+            deviceNameTv.setText("");
+        }
+    }
+
+    @Override
+    public void onTouch(MotionEvent e) {
+        if(e.getAction() == MotionEvent.ACTION_UP && activeDeviceButton != null) {
+            if(matrix[activeDeviceButton.getCurY()][activeDeviceButton.getCurX()] == false) {
+                activeDeviceButton.setPosition(activeDeviceButton.getCurX() * btnWidth, activeDeviceButton.getCurY() * btnHeight);
+                matrix[prevY][prevX] = false;
+                prevX = activeDeviceButton.getCurX();
+                prevY = activeDeviceButton.getCurY();
+                matrix[prevY][prevX] = true;
+            }
+            else {
+                activeDeviceButton.setPosition(prevX * btnWidth, prevY * btnHeight);
+            }
+            customizeRoomView.showHint(false);
         }
     }
 
@@ -317,6 +355,8 @@ public class CustomizeFragment extends Fragment implements MyFragment, View.OnCl
     @Override
     public void onHold(CustomizeDeviceButton button) {
         activeDeviceButton = button;
+        prevX = activeDeviceButton.getCurX();
+        prevY = activeDeviceButton.getCurY();
         for(CustomizeDeviceButton btn: deviceButtons) {
             btn.setActive(false);
         }
