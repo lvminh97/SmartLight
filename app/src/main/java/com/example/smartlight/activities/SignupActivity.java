@@ -33,7 +33,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener{
 
     private ProgressDialog loadingDialog = null;
-    private EditText emailEd, fullnameEd, phoneEd, passwordEd;
+    private EditText emailEd, fullnameEd, phoneEd, passwordEd, passwordEd2;
     private Button signupBtn;
 
     @Override
@@ -48,6 +48,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         fullnameEd = (EditText) findViewById(R.id.ed_fullname);
         phoneEd = (EditText) findViewById(R.id.ed_mobile);
         passwordEd = (EditText) findViewById(R.id.ed_password);
+        passwordEd2 = (EditText) findViewById(R.id.ed_password2);
         signupBtn = (Button) findViewById(R.id.btn_signup);
         signupBtn.setOnClickListener(this);
     }
@@ -68,6 +69,10 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         }
         if(passwordEd.getText().toString().length() < 8) {
             Toast.makeText(getBaseContext(), "Mật khẩu quá ngắn, độ dài tối thiểu 8 ký tự", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(passwordEd.getText().toString().equals(passwordEd2.getText().toString()) == false) {
+            Toast.makeText(getBaseContext(), "Mật khẩu xác nhận không khớp", Toast.LENGTH_SHORT).show();
             return;
         }
         //

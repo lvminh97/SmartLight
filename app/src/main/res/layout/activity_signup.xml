@@ -51,7 +51,7 @@
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:background="#FFFFFF"
-            android:hint="Email"
+            android:hint="Địa chỉ mail"
             android:textColor="@color/black"
             android:singleLine="true"
             android:maxLines="1"/>
@@ -140,7 +140,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_mobile"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_signup"
+        app:layout_constraintBottom_toTopOf="@id/layout_password2"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="30dp"
@@ -165,18 +165,59 @@
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:background="#FFFFFF"
-            android:hint="Password"
+            android:hint="Mật khẩu"
             android:textColor="@color/black"
             android:inputType="textPassword"
             android:singleLine="true"
             android:maxLines="1"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/layout_password2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/bg_login_edittext"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toTopOf="@id/btn_signup"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_password">
+
+        <ImageView
+            android:id="@+id/img_password2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_baseline_lock_24" />
+
+        <EditText
+            android:id="@+id/ed_password2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="8"
+            android:background="#FFFFFF"
+            android:hint="Xác nhận mật khẩu"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:paddingLeft="15dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:singleLine="true"
+            android:textColor="@color/black" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
     <Button
         android:id="@+id/btn_signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_password"
+        app:layout_constraintTop_toBottomOf="@id/layout_password2"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="30dp"
@@ -187,6 +228,7 @@
         android:paddingBottom="12dp"
         android:background="@drawable/bg_login_button"
         android:textSize="16sp"
-        android:text="Đăng ký"/>
+        android:text="Đăng ký"
+        android:textAllCaps="false"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

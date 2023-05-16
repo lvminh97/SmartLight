@@ -47,7 +47,7 @@ public class CustomizeFragment extends Fragment implements MyFragment, View.OnCl
     private ProgressDialog loadingDialog = null;
     private View view;
     private CustomizeRoomView customizeRoomView;
-    private Button updateBtn, delBtn;
+    private Button updateBtn, delBtn, backBtn;
     private ImageButton addBtn;
     private TextView deviceNameTv;
     private ArrayList<CustomizeDeviceButton> deviceButtons;
@@ -85,6 +85,8 @@ public class CustomizeFragment extends Fragment implements MyFragment, View.OnCl
         addBtn.setOnClickListener(this);
         delBtn = (Button) view.findViewById(R.id.btn_del_device);
         delBtn.setOnClickListener(this);
+        backBtn = (Button) view.findViewById(R.id.btn_back);
+        backBtn.setOnClickListener(this);
 
         loadingDialog = new ProgressDialog(getActivity());
         loadingDialog.setMessage("");
@@ -303,6 +305,9 @@ public class CustomizeFragment extends Fragment implements MyFragment, View.OnCl
             else {
                 Toast.makeText(getContext(), "Chưa chọn thiết bị cần xóa", Toast.LENGTH_SHORT).show();
             }
+        }
+        else if(view.getId() == R.id.btn_back) {
+            loadFragment(new HomeFragment());
         }
     }
 

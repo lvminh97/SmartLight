@@ -29,7 +29,7 @@
         android:textSize="30sp"
         android:textStyle="bold"
         android:textColor="#FFFFFF"
-        android:text="SMART LIGHT"/>
+        android:text="DENTHONGMINH.PRO"/>
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/layout_username"
         android:layout_width="match_parent"
@@ -63,7 +63,7 @@
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:background="#FFFFFF"
-            android:hint="Email"
+            android:hint="Địa chỉ email"
             android:textColor="@color/black"
             android:singleLine="true"
             android:maxLines="1"/>
@@ -101,7 +101,7 @@
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:background="#FFFFFF"
-            android:hint="Password"
+            android:hint="Mật khẩu"
             android:textColor="@color/black"
             android:inputType="textPassword"
             android:singleLine="true"
@@ -122,7 +122,8 @@
         android:paddingBottom="12dp"
         android:background="@drawable/bg_login_button"
         android:textSize="16sp"
-        android:text="LOGIN"/>
+        android:text="Đăng nhập"
+        android:textAllCaps="false"/>
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/layout_signup"
         android:layout_width="match_parent"
@@ -144,7 +145,7 @@
             android:layout_weight="6"
             android:textAlignment="textEnd"
             android:textColor="#FFFFFF"
-            android:text="Don't have an account?"/>
+            android:text="Chưa có tài khoản?"/>
         <Button
             android:id="@+id/btn_signup"
             android:layout_width="wrap_content"
@@ -156,7 +157,7 @@
             android:textAlignment="textStart"
             android:textStyle="bold|italic"
             android:textColor="#FFFFFF"
-            android:text="Sign up here"/>
+            android:text="Đăng ký ngay"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

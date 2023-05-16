@@ -81,7 +81,7 @@ public class ControlFragment2 extends Fragment implements MyFragment, View.OnCli
         set.applyTo((ConstraintLayout) getActivity().findViewById(R.id.menu_bottom));
 
         roomNameTv = (TextView) view.findViewById(R.id.tv_room_name);
-        roomNameTv.setText(Factory.room.getName());
+        roomNameTv.setText(Factory.room.getDisplayName());
         tempKnob = (RotaryKnobView) view.findViewById(R.id.knob);
         tempKnob.setLock(!Factory.user.isAppControl());
         tempKnob.setListener(this);

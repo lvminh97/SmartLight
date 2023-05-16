@@ -56,7 +56,7 @@ public class RoomAdapter extends BaseAdapter {
             layoutParams.setMargins(0, 0, 0, 0);
             name.setLayoutParams(layoutParams);
         }
-        name.setText(roomList.get(i).getName());
+        name.setText(roomList.get(i).getDisplayName());
 
         return gridView;
     }

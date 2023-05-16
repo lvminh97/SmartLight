@@ -4,13 +4,44 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_control_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_header"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0dp"
+            android:background="@drawable/ic_baseline_back_24"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_room_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cá nhân hóa"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <com.example.smartlight.components.CustomizeRoomView
         android:id="@+id/view_meeting"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.8"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_control_header"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@id/layout_meeting_btn"/>
 

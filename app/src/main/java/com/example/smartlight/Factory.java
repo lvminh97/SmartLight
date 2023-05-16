@@ -7,6 +7,7 @@ import com.example.smartlight.models.Room;
 import com.example.smartlight.models.Type;
 import com.example.smartlight.models.User;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class Factory {
@@ -25,4 +26,11 @@ public class Factory {
     public static Device device = null;
 
     public static List<Type> types = null;
+
+    public static HashMap<String, String> engToVi = new HashMap<>() {{
+        put("Meeting Room", "Phòng họp");
+        put("Classroom", "Phòng học");
+        put("Conference Room", "Phòng hội nghị");
+        put("Customize", "Cá nhân hóa");
+    }};
 }

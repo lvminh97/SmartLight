@@ -87,7 +87,7 @@
         android:layout_marginTop="20dp"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:text="Email: "/>
+        android:text="Địa chỉ email: "/>
 
     <TextView
         android:id="@+id/tv_email"

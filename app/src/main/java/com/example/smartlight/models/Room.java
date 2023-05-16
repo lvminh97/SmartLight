@@ -2,6 +2,8 @@ package com.example.smartlight.models;
 
 import android.graphics.drawable.Drawable;
 
+import com.example.smartlight.Factory;
+
 public class Room {
     private int id;
     private Drawable img;
@@ -35,5 +37,9 @@ public class Room {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDisplayName() {
+        return Factory.engToVi.getOrDefault(name, name);
     }
 }
